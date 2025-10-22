@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Shopping starts from",
+    "subtitle": "PhoneFactory",
+    "text": "Mobile phone, USIM/ESIM cards, LG, KT, SKT",
+    "image": "/slider/welcome.jpg",
+    "url": "/shop-grid-standard"
+  },
+  {
+    "id": 3,
+    "title": "Hurry Up",
+    "subtitle": "Get 50% Offer",
+    "text": "All Electronic Products & Instrument For This Summer.",
+    "image": "/slider/airpodsslide.jpg",
+    "url": "/shop-grid-standard"
+  },
+  {
+    "id": 2,
+    "title": "Hurry Up",
+    "subtitle": "Get 30% Offer",
+    "text": "for all SimCards and some tariffs",
+    "image": "/slider/simcards.jpg",
+    "url": "/shop-grid-standard"
+  }
+]
