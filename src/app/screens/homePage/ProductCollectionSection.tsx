@@ -74,7 +74,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
                         className="col-xl-3 col-md-6 col-lg-4 col-sm-6"
                         key={ele._id}
                       >
-                        <SingleProduct ele={ele} />
+                        <SingleProduct ele={ele} onAdd={onAdd} />
                       </div>
                     );
                   })
@@ -92,7 +92,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
                         className="col-xl-3 col-md-6 col-lg-4 col-sm-6"
                         key={ele._id}
                       >
-                        <SingleProduct ele={ele} />
+                        <SingleProduct ele={ele} onAdd={onAdd} />
                       </div>
                     );
                   })
@@ -109,7 +109,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
                         className="col-xl-3 col-md-6 col-lg-4 col-sm-6"
                         key={ele._id}
                       >
-                        <SingleProduct ele={ele} />
+                        <SingleProduct ele={ele} onAdd={onAdd} />
                       </div>
                     );
                   })
@@ -122,7 +122,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
       </div>
 
       <div className="view-more text-center mt-20 toggle-btn6 col-12">
-        <Link className="loadMore6" to="/products">VIEW MORE PRODUCTS</Link>
+        <Link className="loadMore6" to="/shop">VIEW MORE PRODUCTS</Link>
       </div>
     </div>
   );
