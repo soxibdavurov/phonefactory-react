@@ -6,7 +6,7 @@ import {
   getDefaultMiddleware,
 } from "@reduxjs/toolkit";
 import HomePageReducer from "./screens/homePage/slice";
-import ProductPageReducer from "./screens/productsPage2/slice";
+import ProductPageReducer from "./screens/shopPage/slice";
 import reduxLogger from "redux-logger";
 import OrdersPageReducer from "./screens/ordersPage/slice";
 import {

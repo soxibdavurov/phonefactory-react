@@ -11,8 +11,9 @@ import { retrieveNewProducts, retrievePopularProducts, retrieveSaleItems } from 
 import { Product } from "../../../lib/types/product";
 import { Link } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
-import { retrieveProducts } from "../productsPage2/selector";
-import SingleProduct from "../../components/product/SingleProductGrid";
+import { retrieveProducts } from "../shopPage/selector";
+import SingleProductGrid from "../../components/product/SingleProductGrid";
+import { Box } from "@mui/material";
 /* REDUX SLIC & SELECTOR */
 const productsRetriever = createSelector(retrieveProducts, (products) => ({ products, }));
 const newProductsRetriever = createSelector(retrieveNewProducts, (newProducts) => ({ newProducts, }));
@@ -74,11 +75,13 @@ export default function ProductCollectionSection(props: ProductsProps) {
                         className="col-xl-3 col-md-6 col-lg-4 col-sm-6"
                         key={ele._id}
                       >
-                        <SingleProduct ele={ele} onAdd={onAdd} />
+                        <SingleProductGrid ele={ele} onAdd={onAdd} />
                       </div>
                     );
                   })
-                  : null}
+                  : (
+                    <Box className="no-data">Product are not available</Box>
+                  )}
               </div>
             </Tab.Pane>
 
@@ -92,11 +95,13 @@ export default function ProductCollectionSection(props: ProductsProps) {
                         className="col-xl-3 col-md-6 col-lg-4 col-sm-6"
                         key={ele._id}
                       >
-                        <SingleProduct ele={ele} onAdd={onAdd} />
+                        <SingleProductGrid ele={ele} onAdd={onAdd} />
                       </div>
                     );
                   })
-                  : null}
+                  : (
+                    <Box className="no-data">Product are not available</Box>
+                  )}
               </div>
 
             </Tab.Pane>
@@ -109,11 +114,13 @@ export default function ProductCollectionSection(props: ProductsProps) {
                         className="col-xl-3 col-md-6 col-lg-4 col-sm-6"
                         key={ele._id}
                       >
-                        <SingleProduct ele={ele} onAdd={onAdd} />
+                        <SingleProductGrid ele={ele} onAdd={onAdd} />
                       </div>
                     );
                   })
-                  : null}
+                  : (
+                    <Box className="no-data">Product are not available</Box>
+                  )}
               </div>
 
             </Tab.Pane>

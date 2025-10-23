@@ -9,12 +9,14 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Badge } from "@mui/material";
 
 import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
 type Props = {
     ele: Product;
     imageHeight?: string;
+    onAdd: (item: CartItem) => void;
 };
 
-const SingleProductColumns = ({ ele, imageHeight }: Props) => {
+const SingleProductColumns = ({ ele, imageHeight, onAdd }: Props) => {
     const [modalShow, setModalShow] = useState(false);
     const imagePath = `${serverApi}/${ele.productImages[0]}`;
     const imagePath2 = `${serverApi}/${ele.productImages[1]}`;
@@ -28,7 +30,7 @@ const SingleProductColumns = ({ ele, imageHeight }: Props) => {
         <>
             <div className="product-wrap mb-25" >
                 <div className="product-img">
-                    <Link to={`/shop/${ele._id}`} onClick={() => chooSeSMARTPHONEHandler(ele._id)}>
+                    <Link to={`/shop/${ele._id}`} >
                         <img alt={ele.productName} loading="lazy"
                             className="default-img"
                             src={imagePath}
@@ -64,7 +66,17 @@ const SingleProductColumns = ({ ele, imageHeight }: Props) => {
                         </div>
                         <div className="pro-same-action pro-cart">
                             <button
-                                onClick={() => dispatch(addToCart(ele._id))}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onAdd({
+                                        _id: ele._id,
+                                        quantity: 1,
+                                        discount: ele.productDiscount,
+                                        name: ele.productName,
+                                        price: ele.productPrice,
+                                        image: ele.productImages[0],
+                                    });
+                                }}
                             >
                                 <i className="pe-7s-cart"></i>{" "}
                             </button>
@@ -95,7 +107,7 @@ const SingleProductColumns = ({ ele, imageHeight }: Props) => {
                 <div className="product-content text-center">
                     {/* <div className="title-price-wrap-2"> */}
                     <h3>
-                        <Link to={`/shop/${ele._id}`}>
+                        <Link to={`/shop/${ele._id}`} onClick={() => chooSeSMARTPHONEHandler(ele._id)}>
                             {ele.productName}
                         </Link>
                     </h3>

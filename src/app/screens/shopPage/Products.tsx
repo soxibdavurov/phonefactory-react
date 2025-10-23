@@ -13,6 +13,8 @@ import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import SingleProductList from "../../components/product/SingleProducList";
 import SingleProductColumns from "../../components/product/SingleProductColumns";
+import SingleProductGrid from "../../components/product/SingleProductGrid";
+import ProductsFragment from "./product/ProductsFragment";
 
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -29,6 +31,7 @@ interface ProductsProps {
 
 
 export default function Products(props: ProductsProps) {
+  const [layout, setLayout] = useState("grid three-column");
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
@@ -98,6 +101,17 @@ export default function Products(props: ProductsProps) {
   const chooSeSMARTPHONEHandler = (id: string) => {
     history.push(`/shop/${id}`);
   };
+  const getLayout = (layout: any) => {
+    setLayout(layout);
+  };
+
+  const setActiveLayout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const gridSwitchBtn = document.querySelectorAll(".shop-tab button");
+    gridSwitchBtn.forEach(item => {
+      item.classList.remove("active");
+    });
+    e.currentTarget.classList.add("active");
+  };
 
   return (
     <>
@@ -105,6 +119,7 @@ export default function Products(props: ProductsProps) {
         <div className="container">
           <div className="row">
             <div className="col-lg-3 order-2 order-lg-1">
+              {/* shop sidebar */}
               <div className="sidebar-style mr-30">
                 <div className="sidebar-widget">
                   <h4 className="pro-sidebar-title">Search </h4>
@@ -299,6 +314,7 @@ export default function Products(props: ProductsProps) {
               </div>
             </div>
             <div className="col-lg-9 order-1 order-lg-2">
+              {/* shop topBarAction default */}
               <div className="shop-top-bar mb-35">
                 <div className="select-shoing-wrap">
                   <div className="shop-select">
@@ -312,106 +328,35 @@ export default function Products(props: ProductsProps) {
                 </div>
 
                 <div className="shop-tab">
-                  <a
-                    href="#two-column"
-                    className={activeTab === "two-column" ? "active" : ""}
-                    onClick={(e) => { e.preventDefault(); setActiveTab("two-column"); }}
+                  <button
+                    onClick={e => {
+                      getLayout("grid two-column");
+                      setActiveLayout(e);
+                    }}
                   >
                     <i className="fa fa-th-large" />
-                  </a>
-                  <a
-                    href="#three-column"
-                    className={activeTab === "three-column" ? "active" : ""}
-                    onClick={(e) => { e.preventDefault(); setActiveTab("three-column"); }}
+                  </button>
+                  <button
+                    onClick={e => {
+                      getLayout("grid three-column");
+                      setActiveLayout(e);
+                    }}
                   >
                     <i className="fa fa-th" />
-                  </a>
-                  <a
-                    href="#list-ul"
-                    className={activeTab === "list-ul" ? "active" : ""}
-                    onClick={(e) => { e.preventDefault(); setActiveTab("list-ul"); }}
+                  </button>
+                  <button
+                    onClick={e => {
+                      getLayout("list");
+                      setActiveLayout(e);
+                    }}
                   >
                     <i className="fa fa-list-ul" />
-                  </a>
+                  </button>
                 </div>
               </div>
-              <div className="shop-bottom-area mt-35">
-                <div className="tab-content jump">
-                  {/* List */}
-                  <div
-                    id="list-ul"
-                    className={`tab-pane ${activeTab === "list-ul" ? "active" : "d-none"}`}
-                  >
-                    <div className="shop-list-wrap mb-30">
-                      {products.length !== 0
-                        ? products.map((ele: Product) => {
-                          return (
-                            <div className="row" key={ele._id}>
+              {/* Productlar qatori */}
+              <ProductsFragment layout={layout} products={products} onAdd={onAdd} />
 
-                              <SingleProductList ele={ele} />
-                            </div>
-                          );
-                        })
-                        : (
-                          <Box className="no-data">Product are not available</Box>
-                        )}
-                    </div>
-                  </div>
-
-                  {/* TwoColumns */}
-                  <div
-                    id="two-column"
-                    className={`tab-pane ${activeTab === "two-column" ? "active" : "d-none"}`}
-                  >
-
-                    <div className="shop-list-wrap mb-25">
-                      <div className={`row grid ${activeTab}`}>
-                        {products.length !== 0
-                          ? products.map((ele: Product) => {
-                            return (
-
-                              <div className="col-xl-4 col-sm-6" key={ele._id}>
-
-                                <SingleProductColumns ele={ele} imageHeight={activeTab === "two-column" ? "450px" : "300px"} />
-
-                              </div>
-                            );
-                          })
-                          : (
-                            <Box className="no-data">Product are not available</Box>
-                          )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* ThreeColumns */}
-                  <div
-                    id="three-column"
-                    className={`tab-pane ${activeTab === "three-column" ? "active" : "d-none"}`}
-                  >
-
-                    <div className="shop-list-wrap mb-25">
-                      <div className={`row grid ${activeTab}`}>
-                        {products.length !== 0
-                          ? products.map((ele: Product) => {
-                            return (
-
-                              <div className="col-xl-4 col-sm-6" key={ele._id}>
-
-                                <SingleProductColumns ele={ele} imageHeight={"300px"} />
-
-                              </div>
-                            );
-                          })
-                          : (
-                            <Box className="no-data">Product are not available</Box>
-                          )}
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
               <div className="pro-pagination-style text-center mt-30">
                 <ul>
                   {/* Oldingi sahifa */}
@@ -475,6 +420,8 @@ export default function Products(props: ProductsProps) {
           </div>
         </div>
       </div>
+
+
 
     </>
   );

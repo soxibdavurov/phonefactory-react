@@ -6,11 +6,13 @@ import Rating from "../../screens/homePage/ProductRating";
 import { useDispatch } from "react-redux";
 
 import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
 type Props = {
     ele: Product;
+    onAdd: (item: CartItem) => void;
 };
 
-const SingleProductList = ({ ele }: Props) => {
+const SingleProductList = ({ ele, onAdd }: Props) => {
     const [modalShow, setModalShow] = useState(false);
     const imagePath = `${serverApi}/${ele.productImages[0]}`;
     const imagePath2 = `${serverApi}/${ele.productImages[1]}`;
@@ -44,7 +46,7 @@ const SingleProductList = ({ ele }: Props) => {
                         {ele.productDiscount || ele.isNew ? (
                             <div className="product-img-badges">
                                 {ele.productDiscount ? (
-                                    <span className="pink">-{ele.productDiscount}</span>
+                                    <span className="pink">-{ele.productDiscount.toLocaleString()}₩</span>
                                 ) : (
                                     ""
                                 )}
@@ -67,13 +69,13 @@ const SingleProductList = ({ ele }: Props) => {
                     <div className="product-list-price">
                         {ele.productDiscount !== 0 || null ? (
                             <Fragment>
-                                <span>{ele.productPrice - ele.productDiscount}₩</span>{" "}
+                                <span>{(ele.productPrice - ele.productDiscount).toLocaleString()}₩</span>{" "}
                                 <span className="old">
-                                    {ele.productPrice}₩
+                                    {ele.productPrice.toLocaleString()}₩
                                 </span>
                             </Fragment>
                         ) : (
-                            <span>{ele.productPrice}₩</span>
+                            <span>{ele.productPrice.toLocaleString()}₩</span>
                         )}
                     </div>
                     <div className="rating-review">
@@ -89,7 +91,21 @@ const SingleProductList = ({ ele }: Props) => {
 
                     <div className="shop-list-actions d-flex align-items-center">
                         <div className="shop-list-btn btn-hover">
-                            <a href="#">ADD TO CART</a>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onAdd({
+                                        _id: ele._id,
+                                        quantity: 1,
+                                        discount: ele.productDiscount,
+                                        name: ele.productName,
+                                        price: ele.productPrice,
+                                        image: ele.productImages[0],
+                                    });
+                                }}
+                            >
+                                Add to cart
+                            </button>
                         </div>
 
                         {/* <div className="shop-list-wishlist ml-10">

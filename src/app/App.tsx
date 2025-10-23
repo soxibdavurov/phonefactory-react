@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
-import ProductsPage from "./screens/productsPage2";
+import ProductsPage from "./screens/shopPage";
 import OrdersPage from "./screens/ordersPage";
 import UsersPage from "./screens/userPage";
 import HomeNavbar from "./components/headers/HomeNavbar";
@@ -92,9 +92,6 @@ function App() {
       {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
       <Switch>
-        <Route path="/products">
-          <ProductsPage onAdd={onAdd} />
-        </Route>
         <Route path="/shop">
           <ShopPage onAdd={onAdd} />
         </Route>

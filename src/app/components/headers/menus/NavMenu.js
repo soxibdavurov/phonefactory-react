@@ -6,16 +6,10 @@ const NavMenu = () => {
       <nav>
         <ul>
           <li>
-            <Link to={"/"} activeClassName={"underline"}>Home</Link>
+            <Link to={"/"} >Home</Link>
           </li>
           <li>
             <Link to={"/shop"}>Shop</Link>
-          </li>
-          <li>
-            <Link to={"/products"}>Products</Link>
-          </li>
-          <li>
-            <Link to={"/product/1"}>ProductDetails</Link>
           </li>
           <li>
             <Link to={"/not-found"}>404</Link>

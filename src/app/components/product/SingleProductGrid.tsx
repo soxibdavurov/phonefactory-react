@@ -20,7 +20,6 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
     const [modalShow, setModalShow] = useState(false);
     const imagePath = `${serverApi}/${ele.productImages[0]}`;
     const imagePath2 = `${serverApi}/${ele.productImages[1]}`;
-    const finalProductPrice = (ele.productPrice - ele.productDiscount).toFixed(2);
     const dispatch = useDispatch();
     const history = useHistory();
     const chooSeSMARTPHONEHandler = (id: string) => {
@@ -31,15 +30,16 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
             <div className="product-img" >
 
                 <img alt={ele.productName} loading="lazy"
-                    height={"300px"}
                     className="default-img"
                     src={imagePath}
+
+                    height={"300px"}
                 />
                 {ele.productImages.length > 1 ? (
                     <img alt={ele.productName} loading="lazy"
                         className="hover-img"
-                        height={"300px"}
                         src={imagePath2}
+                        height={"300px"}
                     />
                 ) : (
                     ""
@@ -47,7 +47,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                 {ele.productDiscount || ele.isNew ? (
                     <div className="product-img-badges">
                         {ele.productDiscount ? (
-                            <span className="pink">-{ele.productDiscount}</span>
+                            <span className="pink">-{ele.productDiscount.toLocaleString()}₩</span>
                         ) : (
                             ""
                         )}
@@ -117,13 +117,13 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                 <div className="product-price">
                     {ele.productDiscount !== 0 || null ? (
                         <Fragment>
-                            <span>{ele.productPrice - ele.productDiscount}₩</span>{" "}
+                            <span>{(ele.productPrice - ele.productDiscount).toLocaleString()}₩</span>{" "}
                             <span className="old">
-                                {ele.productPrice}₩
+                                {ele.productPrice.toLocaleString()}₩
                             </span>
                         </Fragment>
                     ) : (
-                        <span>{ele.productPrice}₩</span>
+                        <span>{ele.productPrice.toLocaleString()}₩</span>
                     )}
                 </div>
                 {/* </div> */}
