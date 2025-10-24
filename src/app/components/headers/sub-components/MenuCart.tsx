@@ -74,16 +74,22 @@ export default function MenuCart(props: MenuCartProps) {
 
                   <div className="shopping-cart-title">
                     <h4>
-                      <Link to={`/product/${item._id}`}>{item.name}</Link>
+                      <Link to={`/shop/${item._id}`}>{item.name}</Link>
                     </h4>
 
-                    <h6>
+                    <h6 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                       Qty:
-                      <button onClick={() => onRemove(item)} className="remove">
+                      <button
+                        onClick={() => onRemove(item)}
+                        style={{ position: "relative", top: "2px" }}
+                      >
                         -
                       </button>
                       {item.quantity}
-                      <button onClick={() => onAdd(item)} className="add">
+                      <button
+                        onClick={() => onAdd(item)}
+                        style={{ position: "relative", top: "2px" }}
+                      >
                         +
                       </button>
                     </h6>
@@ -115,7 +121,7 @@ export default function MenuCart(props: MenuCartProps) {
           </ul>
 
           {/* 🔹 Chegirmalar va total summani ko‘rsatish qismi */}
-          <div className="shopping-cart-total" style={{ marginTop: "20px" }}>
+          <div className="shopping-cart-total">
             <h4>
               Subtotal:{" "}
               <span className="shop-total">
@@ -143,15 +149,18 @@ export default function MenuCart(props: MenuCartProps) {
 
             <hr />
 
-            <h3>
-              Total After Discount:{" "}
+            <h4>
+              Total
               <span className="shop-total" style={{ fontWeight: 700 }}>
                 {grandTotal.toLocaleString()} ₩
               </span>
-            </h3>
+            </h4>
           </div>
 
-          <div className="shopping-cart-btn btn-hover text-center">
+          <div
+            className="shopping-cart-btn btn-hover text-center"
+            style={{ display: "flex", justifyContent: "center", gap: "5px" }}
+          >
             <Link className="default-btn" to="/cart">
               View Cart
             </Link>

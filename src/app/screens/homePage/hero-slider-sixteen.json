@@ -8,7 +8,7 @@
     "url": "/shop-grid-standard"
   },
   {
-    "id": 3,
+    "id": 2,
     "title": "Hurry Up",
     "subtitle": "Get 50% Offer",
     "text": "All Electronic Products & Instrument For This Summer.",
@@ -16,7 +16,15 @@
     "url": "/shop-grid-standard"
   },
   {
-    "id": 2,
+    "id": 3,
+    "title": "Our new",
+    "subtitle": "Shop in",
+    "text": "화성시 조암로 14",
+    "image": "/slider/joam1.jpg",
+    "url": "/gallery"
+  },
+  {
+    "id": 4,
     "title": "Hurry Up",
     "subtitle": "Get 30% Offer",
     "text": "for all SimCards and some tariffs",
