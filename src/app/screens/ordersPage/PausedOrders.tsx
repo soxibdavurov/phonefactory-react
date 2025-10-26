@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import TabPanel from "@mui/lab/TabPanel";
 import { Box, Stack } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import { retrievePausedOrders } from "./selector"; 
+import { retrievePausedOrders } from "./selector";
 import { Product } from "../../../lib/types/product";
 import { Messages, serverApi } from "../../../lib/config";
 import { Order, OrderItem, OrderUpdateInput } from "../../../lib/types/order";
@@ -13,13 +13,14 @@ import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrdersService";
+import { Link } from "react-router-dom";
 
 
 /* REDUX SLIC & SELECTOR */
 
-const pausedOrdersRetriever = createSelector (
-  retrievePausedOrders,
-  (pausedOrders) => ({pausedOrders})
+const pausedOrdersRetriever = createSelector(
+   retrievePausedOrders,
+   (pausedOrders) => ({ pausedOrders })
 );
 
 interface PausedOrdersProps {
@@ -28,22 +29,22 @@ interface PausedOrdersProps {
 
 export default function PausedOrders(props: PausedOrdersProps) {
    const { setValue } = props;
-   const {authMember, setOrderBuilder} = useGlobals();
-   const {pausedOrders} = useSelector(pausedOrdersRetriever);
-   
+   const { authMember, setOrderBuilder } = useGlobals();
+   const { pausedOrders } = useSelector(pausedOrdersRetriever);
+
    /** HANDLERS */
 
    const deleteOrderHandler = async (e: T) => {
       try {
-         if(!authMember) throw new Error(Messages.error2);
+         if (!authMember) throw new Error(Messages.error2);
          const orderId = e.target.value;
          const input: OrderUpdateInput = {
-            orderId: orderId, 
+            orderId: orderId,
             orderStatus: OrderStatus.DELETE,
          };
-         
+
          const confirmation = window.confirm("Do you want to delete order?");
-         if(confirmation) {
+         if (confirmation) {
             const order = new OrderService();
             await order.updateOrder(input);
 
@@ -51,36 +52,36 @@ export default function PausedOrders(props: PausedOrdersProps) {
             //ORDER REBUILD
          }
       }
-      catch(err) {
+      catch (err) {
          console.log(err);
          sweetErrorHandling(err).then();
       }
    };
 
-      const processOrderHandler = async (e: T) => {
+   const processOrderHandler = async (e: T) => {
       try {
-         if(!authMember) throw new Error(Messages.error2);
-         
+         if (!authMember) throw new Error(Messages.error2);
+
          /* PAYMENT PROCESS*/
 
          const orderId = e.target.value;
          const input: OrderUpdateInput = {
-            orderId: orderId, 
+            orderId: orderId,
             orderStatus: OrderStatus.PROCESS,
          };
-         
+
          const confirmation = window.confirm("Do you want to proceed with payment?");
-         if(confirmation) {
+         if (confirmation) {
             const order = new OrderService();
             await order.updateOrder(input);
-            
+
             setValue("2");
 
             setOrderBuilder(new Date());
             //ORDER REBUILD
          }
       }
-      catch(err) {
+      catch (err) {
          console.log(err);
          sweetErrorHandling(err).then();
       }
@@ -95,27 +96,27 @@ export default function PausedOrders(props: PausedOrdersProps) {
                      <Box className="order-box-scroll">
                         {order?.orderItems?.map((item: OrderItem) => {
                            const product: Product = order.productData.filter((ele: Product) =>
-                           item.productId === ele._id
+                              item.productId === ele._id
                            )[0];
                            const imagePath = `${serverApi}/${product.productImages[0]}`;
                            return (
                               <Box key={item._id} className={"order-name-price"}>
                                  <img src={imagePath} className={"order-dish-img"} />
-                                 <Stack sx={{ 
+                                 <Stack sx={{
                                     width: 650,
                                     display: "flex",
                                     flexDirection: "row",
-                                    justifyContent: "space-between",   
+                                    justifyContent: "space-between",
                                  }}>
-                                    
-                                 <p className={"title-dish"}>{product.productName}</p>
-                                 <Box className={"price-box"}>
-                                    <p>${item.itemPrice}</p>   
-                                    < img src={"/icons/close.svg"} />
-                                    <p>{item.itemQuantity}</p>
-                                    < img src={"/icons/pause.svg"} />
-                                    <p style={{marginLeft: "15px" }}>${item.itemQuantity * item.itemPrice}</p>
-                                 </Box>
+
+                                    <p className={"title-dish"}>{product.productName}</p>
+                                    <Box className={"price-box"}>
+                                       <p>${item.itemPrice}</p>
+                                       < img src={"/icons/close.svg"} />
+                                       <p>{item.itemQuantity}</p>
+                                       < img src={"/icons/pause.svg"} />
+                                       <p style={{ marginLeft: "15px" }}>${item.itemQuantity * item.itemPrice}</p>
+                                    </Box>
                                  </Stack>
                               </Box>
                            );
@@ -126,16 +127,16 @@ export default function PausedOrders(props: PausedOrdersProps) {
                         <Box className={"box-total"}>
                            <p>Product price</p>
                            <p>${order.orderTotal - order.orderDelivery}</p>
-                           <img src={"/icons/plus.svg"} style={{ marginLeft: "20px"}} />
+                           <img src={"/icons/plus.svg"} style={{ marginLeft: "20px" }} />
                            <p>${order.orderDelivery}</p>
-                           <img 
+                           <img
                               src={"/icons/pause.svg"}
                               style={{ marginLeft: "20px" }}
                            />
-                           <p>Total</p> 
+                           <p>Total</p>
                            <p>${order.orderTotal}</p>
                         </Box>
-                        <Button 
+                        <Button
                            variant="contained"
                            color="secondary"
                            className={"cancel-button"}
@@ -145,10 +146,10 @@ export default function PausedOrders(props: PausedOrdersProps) {
                            Cancel
                         </Button>
                         <Button
-                        value={order._id}
-                        variant="contained" 
-                        className={"pay-button"}
-                        onClick={processOrderHandler}
+                           value={order._id}
+                           variant="contained"
+                           className={"pay-button"}
+                           onClick={processOrderHandler}
                         >
                            Payment
                         </Button>
@@ -156,17 +157,334 @@ export default function PausedOrders(props: PausedOrdersProps) {
                   </Box>
                );
             })}
-            
+
             {!pausedOrders || (pausedOrders.length === 0 && (
                <Box display={"flex"} flexDirection={"row"} justify-content={"center"}>
-                  <img 
-                     src="/icons/noimage-list.svg"
-                     style={{width: 300, height: 300 }}
-                  />
+
+
+                  <div className="row">
+                     <div className="col-lg-12">
+                        <div className="item-empty-area text-center">
+                           <div className="item-empty-area__icon mb-30">
+                              <i className="pe-7s-cart"></i>
+                           </div>
+                           <div className="item-empty-area__text">
+                              No items found in cart <br />{" "}
+                              <Link to={process.env.PUBLIC_URL + "/shop"}>
+                                 Shop Now
+                              </Link>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </Box>
+
             ))}
 
          </Stack>
+
+
+         {/* <div className="cart-main-area pt-90 pb-100">
+            <div className="container">
+               {cartItems && cartItems.length >= 1 ? (
+                  <Fragment>
+                     <h3 className="cart-page-title">Your cart items</h3>
+                     <div className="row">
+                        <div className="col-12">
+                           <div className="table-content table-responsive cart-table-content">
+                              <table>
+                                 <thead>
+                                    <tr>
+                                       <th>Image</th>
+                                       <th>Product Name</th>
+                                       <th>Unit Price</th>
+                                       <th>Qty</th>
+                                       <th>Subtotal</th>
+                                       <th>action</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    {cartItems.map((cartItem, key) => {
+                                       const discountedPrice = getDiscountPrice(
+                                          cartItem.price,
+                                          cartItem.discount
+                                       );
+                                       const finalProductPrice = (
+                                          cartItem.price * currency.currencyRate
+                                       ).toFixed(2);
+                                       const finalDiscountedPrice = (
+                                          discountedPrice * currency.currencyRate
+                                       ).toFixed(2);
+
+                                       discountedPrice != null
+                                          ? (cartTotalPrice +=
+                                             finalDiscountedPrice * cartItem.quantity)
+                                          : (cartTotalPrice +=
+                                             finalProductPrice * cartItem.quantity);
+                                       return (
+                                          <tr key={key}>
+                                             <td className="product-thumbnail">
+                                                <Link
+                                                   to={
+                                                      process.env.PUBLIC_URL +
+                                                      "/product/" +
+                                                      cartItem.id
+                                                   }
+                                                >
+                                                   <img
+                                                      className="img-fluid"
+                                                      src={
+                                                         process.env.PUBLIC_URL +
+                                                         cartItem.image[0]
+                                                      }
+                                                      alt=""
+                                                   />
+                                                </Link>
+                                             </td>
+
+                                             <td className="product-name">
+                                                <Link
+                                                   to={
+                                                      process.env.PUBLIC_URL +
+                                                      "/product/" +
+                                                      cartItem.id
+                                                   }
+                                                >
+                                                   {cartItem.name}
+                                                </Link>
+                                                {cartItem.selectedProductColor &&
+                                                   cartItem.selectedProductSize ? (
+                                                   <div className="cart-item-variation">
+                                                      <span>
+                                                         Color: {cartItem.selectedProductColor}
+                                                      </span>
+                                                      <span>
+                                                         Size: {cartItem.selectedProductSize}
+                                                      </span>
+                                                   </div>
+                                                ) : (
+                                                   ""
+                                                )}
+                                             </td>
+
+                                             <td className="product-price-cart">
+                                                {discountedPrice !== null ? (
+                                                   <Fragment>
+                                                      <span className="amount old">
+                                                         {currency.currencySymbol +
+                                                            finalProductPrice}
+                                                      </span>
+                                                      <span className="amount">
+                                                         {currency.currencySymbol +
+                                                            finalDiscountedPrice}
+                                                      </span>
+                                                   </Fragment>
+                                                ) : (
+                                                   <span className="amount">
+                                                      {currency.currencySymbol +
+                                                         finalProductPrice}
+                                                   </span>
+                                                )}
+                                             </td>
+
+                                             <td className="product-quantity">
+                                                <div className="cart-plus-minus">
+                                                   <button
+                                                      className="dec qtybutton"
+                                                      onClick={() =>
+                                                         dispatch(decreaseQuantity(cartItem))
+                                                      }
+                                                   >
+                                                      -
+                                                   </button>
+                                                   <input
+                                                      className="cart-plus-minus-box"
+                                                      type="text"
+                                                      value={cartItem.quantity}
+                                                      readOnly
+                                                   />
+                                                   <button
+                                                      className="inc qtybutton"
+                                                      onClick={() =>
+                                                         dispatch(addToCart({
+                                                            ...cartItem,
+                                                            quantity: quantityCount
+                                                         }))
+                                                      }
+                                                      disabled={
+                                                         cartItem !== undefined &&
+                                                         cartItem.quantity &&
+                                                         cartItem.quantity >=
+                                                         cartItemStock(
+                                                            cartItem,
+                                                            cartItem.selectedProductColor,
+                                                            cartItem.selectedProductSize
+                                                         )
+                                                      }
+                                                   >
+                                                      +
+                                                   </button>
+                                                </div>
+                                             </td>
+                                             <td className="product-subtotal">
+                                                {discountedPrice !== null
+                                                   ? currency.currencySymbol +
+                                                   (
+                                                      finalDiscountedPrice * cartItem.quantity
+                                                   ).toFixed(2)
+                                                   : currency.currencySymbol +
+                                                   (
+                                                      finalProductPrice * cartItem.quantity
+                                                   ).toFixed(2)}
+                                             </td>
+
+                                             <td className="product-remove">
+                                                <button
+                                                   onClick={() =>
+                                                      dispatch(deleteFromCart(cartItem.cartItemId))
+                                                   }
+                                                >
+                                                   <i className="fa fa-times"></i>
+                                                </button>
+                                             </td>
+                                          </tr>
+                                       );
+                                    })}
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                     <div className="row">
+                        <div className="col-lg-12">
+                           <div className="cart-shiping-update-wrapper">
+                              <div className="cart-shiping-update">
+                                 <Link
+                                    to={process.env.PUBLIC_URL + "/shop-grid-standard"}
+                                 >
+                                    Continue Shopping
+                                 </Link>
+                              </div>
+                              <div className="cart-clear">
+                                 <button onClick={() => dispatch(deleteAllFromCart())}>
+                                    Clear Shopping Cart
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div className="row">
+                        <div className="col-lg-4 col-md-6">
+                           <div className="cart-tax">
+                              <div className="title-wrap">
+                                 <h4 className="cart-bottom-title section-bg-gray">
+                                    Estimate Shipping And Tax
+                                 </h4>
+                              </div>
+                              <div className="tax-wrapper">
+                                 <p>
+                                    Enter your destination to get a shipping estimate.
+                                 </p>
+                                 <div className="tax-select-wrapper">
+                                    <div className="tax-select">
+                                       <label>* Country</label>
+                                       <select className="email s-email s-wid">
+                                          <option>Bangladesh</option>
+                                          <option>Albania</option>
+                                          <option>Åland Islands</option>
+                                          <option>Afghanistan</option>
+                                          <option>Belgium</option>
+                                       </select>
+                                    </div>
+                                    <div className="tax-select">
+                                       <label>* Region / State</label>
+                                       <select className="email s-email s-wid">
+                                          <option>Bangladesh</option>
+                                          <option>Albania</option>
+                                          <option>Åland Islands</option>
+                                          <option>Afghanistan</option>
+                                          <option>Belgium</option>
+                                       </select>
+                                    </div>
+                                    <div className="tax-select">
+                                       <label>* Zip/Postal Code</label>
+                                       <input type="text" />
+                                    </div>
+                                    <button className="cart-btn-2" type="submit">
+                                       Get A Quote
+                                    </button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div className="col-lg-4 col-md-6">
+                           <div className="discount-code-wrapper">
+                              <div className="title-wrap">
+                                 <h4 className="cart-bottom-title section-bg-gray">
+                                    Use Coupon Code
+                                 </h4>
+                              </div>
+                              <div className="discount-code">
+                                 <p>Enter your coupon code if you have one.</p>
+                                 <form>
+                                    <input type="text" required name="name" />
+                                    <button className="cart-btn-2" type="submit">
+                                       Apply Coupon
+                                    </button>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div className="col-lg-4 col-md-12">
+                           <div className="grand-totall">
+                              <div className="title-wrap">
+                                 <h4 className="cart-bottom-title section-bg-gary-cart">
+                                    Cart Total
+                                 </h4>
+                              </div>
+                              <h5>
+                                 Total products{" "}
+                                 <span>
+                                    {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                                 </span>
+                              </h5>
+
+                              <h4 className="grand-totall-title">
+                                 Grand Total{" "}
+                                 <span>
+                                    {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                                 </span>
+                              </h4>
+                              <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                                 Proceed to Checkout
+                              </Link>
+                           </div>
+                        </div>
+                     </div>
+                  </Fragment>
+               ) : (
+                  <div className="row">
+                     <div className="col-lg-12">
+                        <div className="item-empty-area text-center">
+                           <div className="item-empty-area__icon mb-30">
+                              <i className="pe-7s-cart"></i>
+                           </div>
+                           <div className="item-empty-area__text">
+                              No items found in cart <br />{" "}
+                              <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                                 Shop Now
+                              </Link>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               )}
+            </div>
+         </div> */}
+
       </TabPanel>
    )
 }

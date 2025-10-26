@@ -16,7 +16,7 @@ import { setRestaurant, setChosenProduct } from "./slice";
 import { Product } from "../../../lib/types/product";
 import { createSelector } from "reselect";
 import { retrieveChosenProduct, retrieveRestaurant } from "./selector";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
@@ -30,11 +30,13 @@ import Rating from "../../screens/homePage/ProductRating";
 const actionDispatch = (dispatch: Dispatch) => ({
     setRestaurant: (data: Member) => dispatch(setRestaurant(data)),
     setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
+
 });
 
 const chosenProductRetriever = createSelector(retrieveChosenProduct, (chosenProduct) => ({
     chosenProduct,
 }));
+
 const restaurantRetriever = createSelector(retrieveRestaurant, (restaurant) => ({
     restaurant,
 }));
@@ -45,11 +47,11 @@ interface ChosenProductsProps {
 
 export default function ChosenProduct(props: ChosenProductsProps) {
     const { onAdd } = props;
+    const history = useHistory();
     const { productId } = useParams<{ productId: string }>();
     const { setRestaurant, setChosenProduct } = actionDispatch(useDispatch());
     const { chosenProduct } = useSelector(chosenProductRetriever);
     const { restaurant } = useSelector(restaurantRetriever);
-
     useEffect(() => {
         const product = new ProductService();
         product

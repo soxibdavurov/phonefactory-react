@@ -45,6 +45,7 @@ const useBasket = () => {
       );
       setCartItems(cartUpdate);
       localStorage.setItem("cartData", JSON.stringify(cartUpdate));
+      cogoToast.warn("Product Decremented", { position: "bottom-left" });
     }
   };
   const onDelete = (input: CartItem) => {

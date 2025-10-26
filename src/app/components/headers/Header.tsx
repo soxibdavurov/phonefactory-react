@@ -16,10 +16,16 @@ interface HeaderProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  setSignupOpen: (isOpen: boolean) => void;
+  setLoginOpen: (isOpen: boolean) => void;
 }
 
 export default function Header(props: HeaderProps) {
-  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+  const { cartItems, onAdd, onRemove, onDelete,
+    onDeleteAll,
+    setSignupOpen,
+    setLoginOpen,
+  } = props;
   const [scroll, setScroll] = useState(0);
   const [headerTop, setHeaderTop] = useState(0);
 
@@ -97,6 +103,8 @@ export default function Header(props: HeaderProps) {
                 onRemove={onRemove}
                 onDelete={onDelete}
                 onDeleteAll={onDeleteAll}
+                setSignupOpen={setSignupOpen}
+                setLoginOpen={setLoginOpen}
               />
             </div>
           </div>

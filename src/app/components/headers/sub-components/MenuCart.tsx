@@ -161,7 +161,7 @@ export default function MenuCart(props: MenuCartProps) {
             className="shopping-cart-btn btn-hover text-center"
             style={{ display: "flex", justifyContent: "center", gap: "5px" }}
           >
-            <Link className="default-btn" to="/cart">
+            <Link className="default-btn" to="/orders">
               View Cart
             </Link>
             <Link className="default-btn" to="/checkout">

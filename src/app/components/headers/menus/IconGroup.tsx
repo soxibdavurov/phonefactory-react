@@ -15,6 +15,8 @@ interface IconGroupProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  setSignupOpen: (isOpen: boolean) => void;
+  setLoginOpen: (isOpen: boolean) => void;
 }
 
 export default function IconGroup({
@@ -23,6 +25,8 @@ export default function IconGroup({
   onRemove,
   onDelete,
   onDeleteAll,
+  setSignupOpen,
+  setLoginOpen,
 }: IconGroupProps) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -100,16 +104,16 @@ export default function IconGroup({
 
       {/* Account */}
       <div className="same-style account-setting d-none d-lg-block">
-        {!authMember ? (<> <button className="account-setting-active" onClick={handleClick}>
+        <button className="account-setting-active" onClick={handleClick}>
           <i className="pe-7s-user-female" />
         </button>
-          <div className="account-dropdown">
-            <ul>
-              <li><Link to="/login-register">Login</Link></li>
-              <li><Link to="/login-register">Register</Link></li>
-
-            </ul>
-          </div> </>) : (<li><Link to="/my-account">My Account</Link></li>)}
+        <div className="account-dropdown">
+          <ul>{!authMember ? (<>
+            <li><Link onClick={() => setLoginOpen(true)} to="/login-register">Login</Link></li>
+            <li><Link onClick={() => setSignupOpen(true)} to="/login-register">Register</Link></li>
+          </>) : (<li><Link to="/my-account">My Account</Link></li>)}
+          </ul>
+        </div>
       </div>
 
       {/* Compare */}

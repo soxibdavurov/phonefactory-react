@@ -12,6 +12,7 @@ import MemberService from "../../services/MemberService";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -47,83 +48,83 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
   const classes = useStyles();
 
-  const [memberNick, setMemberNick] =useState<string>("");
+  const [memberNick, setMemberNick] = useState<string>("");
   const [memberPhone, setMemberPhone] = useState<string>("");
   const [memberPassword, setMemberPassword] = useState<string>("");
-  const {setAuthMember} = useGlobals();
+  const { setAuthMember } = useGlobals();
   /** HANDLERS **/
 
-const handleUsername = (e: T) => {
-  setMemberNick(e.target.value);
-}
-
-const handlePhone = (e: T) => {
-  setMemberPhone(e.target.value);
-}
-
-const handlePassword = (e: T) => {
-  setMemberPassword(e.target.value);
-}
-
-const handlePasswordKeyDown = (e: T) => {
-  if(e.key === "Enter" && signupOpen) {
-    handleSignupRequest().then();
-  } else if (e.key === "Enter" && loginOpen) {
-    handleLoginRequest().then();
+  const handleUsername = (e: T) => {
+    setMemberNick(e.target.value);
   }
-}
 
-const handleSignupRequest = async () => {
-  try {
-       const isFulfill = 
-    memberNick !== "" && memberPhone !== "" && memberPassword !== "";
-    if(!isFulfill) throw new Error(Messages.error3);
-  
-    const signupInput: MemberInput = {
-      memberNick: memberNick,
-      memberPhone: memberPhone,
-      memberPassword: memberPassword,
-    };
-
-    const member = new MemberService();
-    const result = await member.signup(signupInput);
-
-    //Saving authenticated user
-    setAuthMember(result);    
-    handleSignupClose();
-  } catch (err) {
-    console.log(err);
-    handleSignupClose();
-    sweetErrorHandling(err).then();
+  const handlePhone = (e: T) => {
+    setMemberPhone(e.target.value);
   }
-}
 
-const handleLoginRequest = async () => {
-  try {
-    const isFulfill = 
-    memberNick !== "" && memberPassword !== "";
-    if(!isFulfill) throw new Error(Messages.error3);
-  
-    const loginInput: LoginInput = {
-      memberNick: memberNick,
-      memberPassword: memberPassword,
-    };
-
-    const member = new MemberService();
-    const result = await member.login(loginInput);
-
-    //Saving authenticated user
-    setAuthMember(result);    
-    handleLoginClose();
-  } catch (err) {
-    console.log(err);
-     handleLoginClose();
-    sweetErrorHandling(err).then();
+  const handlePassword = (e: T) => {
+    setMemberPassword(e.target.value);
   }
-}
+
+  const handlePasswordKeyDown = (e: T) => {
+    if (e.key === "Enter" && signupOpen) {
+      handleSignupRequest().then();
+    } else if (e.key === "Enter" && loginOpen) {
+      handleLoginRequest().then();
+    }
+  }
+
+  const handleSignupRequest = async () => {
+    try {
+      const isFulfill =
+        memberNick !== "" && memberPhone !== "" && memberPassword !== "";
+      if (!isFulfill) throw new Error(Messages.error3);
+
+      const signupInput: MemberInput = {
+        memberNick: memberNick,
+        memberPhone: memberPhone,
+        memberPassword: memberPassword,
+      };
+
+      const member = new MemberService();
+      const result = await member.signup(signupInput);
+
+      //Saving authenticated user
+      setAuthMember(result);
+      handleSignupClose();
+    } catch (err) {
+      console.log(err);
+      handleSignupClose();
+      sweetErrorHandling(err).then();
+    }
+  }
+
+  const handleLoginRequest = async () => {
+    try {
+      const isFulfill =
+        memberNick !== "" && memberPassword !== "";
+      if (!isFulfill) throw new Error(Messages.error3);
+
+      const loginInput: LoginInput = {
+        memberNick: memberNick,
+        memberPassword: memberPassword,
+      };
+
+      const member = new MemberService();
+      const result = await member.login(loginInput);
+
+      //Saving authenticated user
+      setAuthMember(result);
+      handleLoginClose();
+    } catch (err) {
+      console.log(err);
+      handleLoginClose();
+      sweetErrorHandling(err).then();
+    }
+  }
 
   return (
-    <div>
+    <div className="container">
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -172,8 +173,8 @@ const handleLoginRequest = async () => {
                 color="primary"
                 onClick={handleSignupRequest}
               >
-                <LoginIcon sx={{ mr: 1 }} 
-                
+                <LoginIcon sx={{ mr: 1 }}
+
                 />
                 Signup
               </Fab>
@@ -198,42 +199,42 @@ const handleLoginRequest = async () => {
           <Stack
             className={classes.paper}
             direction={"row"}
-            sx={{ width: "700px" }}
+            sx={{ width: "800px" }}
           >
-            <ModalImg src={"/img/auth.webp"} alt="camera" />
-            <Stack
-              sx={{
-                marginLeft: "65px",
-                marginTop: "25px",
-                alignItems: "center",
-              }}
-            >
-              <h2>Login Form</h2>
-              <TextField
-                id="outlined-basic"
-                label="username"
-                variant="outlined"
-                sx={{ my: "10px" }}
-                onChange={handleUsername}
-              />
-              <TextField
-                id={"outlined-basic"}
-                label={"password"}
-                variant={"outlined"}
-                type={"password"}
-                onChange={handlePassword}
-                onKeyDown={handlePasswordKeyDown}
-              />
-              <Fab
-                sx={{ marginTop: "27px", width: "120px" }}
-                variant={"extended"}
-                color={"primary"}
-                onClick={handleLoginRequest}
-              >
-                <LoginIcon sx={{ mr: 1 }} />
-                Login
-              </Fab>
-            </Stack>
+            <div className="col-lg-7 col-md-12 ms-auto me-auto">
+              <div className="login-register-wrapper">
+                <div className="login-form-container">
+                  <div className="login-register-form">
+                    <form>
+                      <input
+                        id="outlined-basic"
+                        placeholder="Username"
+                        onChange={handleUsername}
+                      />
+                      <input
+                        type={"password"}
+                        placeholder="password"
+                        onChange={handlePassword}
+                        onKeyDown={handlePasswordKeyDown}
+                      />
+                      <div className="button-box">
+                        <div className="login-toggle-btn">
+                          <input type="checkbox" />
+                          <label className="ml-10">Remember me</label>
+                          <Link to={process.env.PUBLIC_URL + "/"}>
+                            Forgot Password?
+                          </Link>
+                        </div>
+                        <button
+                          onClick={handleLoginRequest} type="submit">
+                          <span>Login</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </Stack>
         </Fade>
       </Modal>

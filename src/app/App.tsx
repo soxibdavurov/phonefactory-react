@@ -59,7 +59,10 @@ function App() {
         onAdd={onAdd}
         onRemove={onRemove}
         onDelete={onDelete}
-        onDeleteAll={onDeleteAll} />
+        onDeleteAll={onDeleteAll}
+        setSignupOpen={setSignupOpen}
+        setLoginOpen={setLoginOpen}
+      />
       {/* {location.pathname === "/" ? (
         <HomeNavbar
           cartItems={cartItems}

@@ -1,161 +1,161 @@
 /* === Overall Page === */
 .order-page {
-   display: flex;
-   justify-content: center;
-   width: 100%;
-   background-color: #f7f7fb;
-   padding: 30px 0;
- }
- 
- .order-container {
-   display: flex !important;
-   flex-direction: row;
-   width: 1300px;
-   min-height: 100vh;
-   gap: 20px;
- }
- 
- /* === Left side (Tabs + Order List) === */
- .order-left {
-   flex: 1;
-   display: flex;
-   flex-direction: column;
-   gap: 20px;
- }
- 
- /* === Right side (User Info + Card) === */
- .order-right {
-   width: 350px;
-   display: flex;
-   flex-direction: column;
-   gap: 20px;
- }
- 
- /* === Tabs Styling === */
- .order-nav-frame {
-   background-color: transparent;
- }
- 
- .tabel_list {
-   background-color: transparent;
-   padding-left: 10px;
- }
- 
- .MuiTab-root {
-   font-weight: 500;
-   font-size: 14px;
-   color: #c49e5b !important;
-   text-transform: uppercase;
- }
- 
- .Mui-selected {
-   color: #333 !important;
- }
- 
- .MuiTabs-indicator {
-   background-color: #333;
- }
- 
- /* === Main Tab Panel Area === */
- .order-main-content {
-   padding: 10px 0;
- }
- 
- /* === Each Order Card === */
- .order-main-box {
-   display: flex;
-   flex-direction: column;
-   gap: 20px;
-   background-color: #fff;
-   margin-bottom: 50px;
-   padding: 20px;
-   border-radius: 14px;
-   box-shadow: -15px 15px 10px rgba(0, 0, 0, 0.2),
-         inset 0 -15px 10px rgba(0, 0, 0, 0.1),
-         inset -15px 0 7px rgba(0, 0, 0, 0.1),
-         inset 0 15px 6px rgba(0, 0, 0, 0.1),
-         inset 10px 10px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #f7f7fb;
+  padding: 30px 0;
+}
 
- }
- 
- /* === Dish List Area (scrollable) === */
- .order-box-scroll {
-   display: flex;
-   flex-direction: column;
-   gap: 18px;
-   max-height: 280px;
-   overflow-y: auto;
-   width: 800px;
- }
- 
- /* === Each Dish Row === */
- .order-name-price {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
- }
- 
- /* Left part: image + title */
- .order-dish-img {
-   width: 60px;
-   height: 60px;
-   border-radius: 50%;
-   margin-left: 20px;
-   object-fit: cover;
-   margin-right: 25px;
-   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
- }
- 
- .title-dish {
-   font-weight: 600;
-   font-size: 16px;
-   color: #2a2a2a;
-   min-width: 100px;
- }
- 
- /* Right part: pricing */
- .price-box {
-   display: flex;
-   align-items: center;
-   gap: 10px;
-   font-size: 14px;
-   font-weight: 500;
-   color: #333;
- }
- 
- /* === Total Price + Action Buttons === */
- .total-price-box {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   justify-content:space-between;
-   gap: 16px;
-   flex-wrap: wrap;
-   border-top: 1px solid #eee;
-   padding-top: 15px;
- }
- 
- /* Pricing text row */
- .box-total {
-   display: flex;
-   align-items: center;
-   flex-wrap: wrap;
-   font-weight: 500;
-   font-size: 14px;
-   gap: 12px;
-   color: #444;
-   margin-left: 20px;
- }
+.order-container {
+  display: flex !important;
+  flex-direction: row;
+  width: 1300px;
+  min-height: 100vh;
+  gap: 20px;
+}
 
- .box-total p {
+/* === Left side (Tabs + Order List) === */
+.order-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* === Right side (User Info + Card) === */
+.order-right {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* === Tabs Styling === */
+.order-nav-frame {
+  background-color: transparent;
+}
+
+.tabel_list {
+  background-color: transparent;
+  padding-left: 10px;
+}
+
+.MuiTab-root {
+  font-weight: 500;
+  font-size: 14px;
+  color: #c49e5b !important;
+  text-transform: uppercase;
+}
+
+.Mui-selected {
+  color: #333 !important;
+}
+
+.MuiTabs-indicator {
+  background-color: #333;
+}
+
+/* === Main Tab Panel Area === */
+.order-main-content {
+  padding: 10px 0;
+}
+
+/* === Each Order Card === */
+.order-main-box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #fff;
+  margin-bottom: 50px;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: -15px 15px 10px rgba(0, 0, 0, 0.2),
+    inset 0 -15px 10px rgba(0, 0, 0, 0.1),
+    inset -15px 0 7px rgba(0, 0, 0, 0.1),
+    inset 0 15px 6px rgba(0, 0, 0, 0.1),
+    inset 10px 10px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+/* === Dish List Area (scrollable) === */
+.order-box-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: 280px;
+  overflow-y: auto;
+  width: 800px;
+}
+
+/* === Each Dish Row === */
+.order-name-price {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Left part: image + title */
+.order-dish-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-left: 20px;
+  object-fit: cover;
+  margin-right: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title-dish {
+  font-weight: 600;
+  font-size: 16px;
+  color: #2a2a2a;
+  min-width: 100px;
+}
+
+/* Right part: pricing */
+.price-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* === Total Price + Action Buttons === */
+.total-price-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+/* Pricing text row */
+.box-total {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-weight: 500;
+  font-size: 14px;
+  gap: 12px;
+  color: #444;
+  margin-left: 20px;
+}
+
+.box-total p {
   color: #000;
-  
-font-family: Commissioner;
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: 36px;
- }
+
+  font-family: Commissioner;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 36px;
+}
 
 .order-main-box .total-price-box .verify-button {
   background: #3a87cb;
@@ -167,42 +167,42 @@ line-height: 36px;
   padding-bottom: 8px;
   padding-top: 8px;
 }
- 
- /* Buttons */
- .cancel-button {
-   background-color: #c3a45c !important;
-   color: white !important;
-   padding: 6px 18px;
-   border-radius: 8px;
-   font-weight: 600;
-   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-   text-transform: none;
- }
- 
- .pay-button {
-   background-color: #68b171 !important;
-   color: white !important;
-   padding: 6px 18px;
-   border-radius: 8px;
-   font-weight: 600;
-   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-   text-transform: none;
- }
- 
- /* === Placeholder Image Section (Optional) === */
- .order-main-content > div:last-child {
-   display: flex;
-   justify-content: center;
-   margin-top: 40px;
- }
+
+/* Buttons */
+.cancel-button {
+  background-color: #c3a45c !important;
+  color: white !important;
+  padding: 6px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-transform: none;
+}
+
+.pay-button {
+  background-color: #68b171 !important;
+  color: white !important;
+  padding: 6px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-transform: none;
+}
+
+/* === Placeholder Image Section (Optional) === */
+.order-main-content>div:last-child {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
 
 
 
 
 
- 
 
- /* right frame */
+
+/* right frame */
 
 .order-page .order-right {
   width: 360px;
@@ -212,6 +212,7 @@ line-height: 36px;
   display: flex;
   flex-direction: column;
 }
+
 .order-page .order-right .order-info-box {
   width: 360px;
   height: auto;
@@ -406,4 +407,3 @@ line-height: 36px;
 
 
 /* FINISHED ORDERS*/
-
