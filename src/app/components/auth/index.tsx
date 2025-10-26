@@ -10,9 +10,11 @@ import { T } from "../../../lib/types/common";
 import { Messages } from "../../../lib/config";
 import MemberService from "../../services/MemberService";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 import { Link } from "react-router-dom";
+import Tab from "react-bootstrap/Tab";
+import Nav from "react-bootstrap/Nav";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -40,12 +42,14 @@ const ModalImg = styled.img`
 interface AuthenticationModalProps {
   signupOpen: boolean;
   loginOpen: boolean;
+  handleSignupOpen: () => void;  // 🔹 yangi props
+  handleLoginOpen: () => void;  // 🔹 yangi props
   handleSignupClose: () => void;
   handleLoginClose: () => void;
 }
 
 export default function AuthenticationModal(props: AuthenticationModalProps) {
-  const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
+  const { signupOpen, loginOpen, handleSignupOpen, handleLoginOpen, handleSignupClose, handleLoginClose } = props;
   const classes = useStyles();
 
   const [memberNick, setMemberNick] = useState<string>("");
@@ -89,8 +93,10 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       const member = new MemberService();
       const result = await member.signup(signupInput);
 
+
       //Saving authenticated user
       setAuthMember(result);
+      sweetTopSuccessAlert("Signed up successfully", 2000);
       handleSignupClose();
     } catch (err) {
       console.log(err);
@@ -115,16 +121,19 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
       //Saving authenticated user
       setAuthMember(result);
+      sweetTopSuccessAlert("Signed in successfully", 1000);
       handleLoginClose();
     } catch (err) {
       console.log(err);
       handleLoginClose();
-      sweetErrorHandling(err).then();
+      sweetErrorHandling(
+        err
+      ).then();
     }
   }
 
   return (
-    <div className="container">
+    <>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -139,51 +148,58 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
       >
         <Fade in={signupOpen}>
           <Stack
-            className={classes.paper}
             direction={"row"}
-            sx={{ width: "800px" }}
           >
-            <ModalImg src={"/img/auth.webp"} alt="camera" />
-            <Stack sx={{ marginLeft: "69px", alignItems: "center" }}>
-              <h2>Signup Form</h2>
-              <TextField
-                sx={{ marginTop: "7px" }}
-                id="outlined-basic"
-                label="username"
-                variant="outlined"
-                onChange={handleUsername}
-              />
-              <TextField
-                sx={{ my: "17px" }}
-                id="outlined-basic"
-                label="phone number"
-                variant="outlined"
-                onChange={handlePhone}
-              />
-              <TextField
-                id="outlined-basic"
-                label="password"
-                variant="outlined"
-                onChange={handlePassword}
-                onKeyDown={handlePasswordKeyDown}
-              />
-              <Fab
-                sx={{ marginTop: "30px", width: "120px" }}
-                variant="extended"
-                color="primary"
-                onClick={handleSignupRequest}
-              >
-                <LoginIcon sx={{ mr: 1 }}
 
-                />
-                Signup
-              </Fab>
-            </Stack>
+            <div className="oynaliWrapper">
+              <form>
+                <h2>Signup Form</h2>
+                <div className="input-field">
+                  <input type="text" required
+
+                    onChange={handleUsername}
+                  />
+                  <label>Enter your username</label>
+                </div>
+                <div className="input-field">
+                  <input type="password" required
+                    onChange={handlePassword}
+                    onKeyDown={handlePasswordKeyDown}
+                  />
+                  <label>Enter your password</label>
+                </div>
+                <div className="input-field">
+                  <input type="text" required
+
+                    onChange={handlePhone}
+                  />
+                  <label>Enter your phone number</label>
+                </div>
+                <button
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSignupRequest();
+                  }}>
+                  Signup
+                </button>
+                <div className="register">
+                  <p>
+                    Already have an account? <a href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSignupClose();   // avval login oynasini yopamiz
+                        handleLoginOpen();   // so‘ng signup modalni ochamiz
+                      }}>Login</a>
+                  </p>
+                </div>
+              </form>
+            </div>
           </Stack>
         </Fade>
       </Modal>
 
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -198,46 +214,130 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
         <Fade in={loginOpen}>
           <Stack
             className={classes.paper}
-            direction={"row"}
-            sx={{ width: "800px" }}
-          >
-            <div className="col-lg-7 col-md-12 ms-auto me-auto">
-              <div className="login-register-wrapper">
-                <div className="login-form-container">
-                  <div className="login-register-form">
-                    <form>
-                      <input
-                        id="outlined-basic"
-                        placeholder="Username"
-                        onChange={handleUsername}
-                      />
-                      <input
-                        type={"password"}
-                        placeholder="password"
-                        onChange={handlePassword}
-                        onKeyDown={handlePasswordKeyDown}
-                      />
-                      <div className="button-box">
-                        <div className="login-toggle-btn">
-                          <input type="checkbox" />
-                          <label className="ml-10">Remember me</label>
-                          <Link to={process.env.PUBLIC_URL + "/"}>
-                            Forgot Password?
-                          </Link>
-                        </div>
-                        <button
-                          onClick={handleLoginRequest} type="submit">
-                          <span>Login</span>
-                        </button>
-                      </div>
-                    </form>
+            direction={"row"}>
+            <div className="container">
+              <div className="row">
+                <div>
+                  <div className="login-register-wrapper">
+                    <Tab.Container defaultActiveKey="login">
+                      <Nav variant="pills" className="login-register-tab-list">
+                        <Nav.Item>
+                          <Nav.Link eventKey="login">
+                            <h4>Login</h4>
+                          </Nav.Link>
+                        </Nav.Item>
+                      </Nav>
+                      <Tab.Content>
+                        <Tab.Pane eventKey="login">
+                          <div className="login-form-container">
+                            <div className="login-register-form">
+                              <div>
+                                <input
+                                  placeholder="Username"
+                                  onChange={handleUsername}
+                                />
+                                <input
+                                  type={"password"}
+                                  placeholder="password"
+                                  onChange={handlePassword}
+                                  onKeyDown={handlePasswordKeyDown}
+                                />
+                                <div className="button-box">
+                                  <div className="login-toggle-btn">
+                                    <input type="checkbox" />
+                                    <label className="ml-10">Remember me</label>
+                                    <Link to={process.env.PUBLIC_URL + "/"}>
+                                      Forgot Password?
+                                    </Link>
+                                  </div>
+                                  <button
+                                    onClick={handleLoginRequest} type="submit">
+                                    <span>Login</span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Tab.Pane>
+                      </Tab.Content>
+                    </Tab.Container>
                   </div>
                 </div>
               </div>
             </div>
+            <div>
+            </div>
+
+          </Stack>
+        </Fade>
+      </Modal> */}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={loginOpen}
+        className={classes.modal}
+        onClose={handleLoginClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={loginOpen}>
+          <Stack
+            direction={"row"}>
+            <div className="oynaliWrapper">
+              <form>
+                <h2>Sign in here</h2>
+                <div className="input-field">
+                  <input type="text" required
+
+                    onChange={handleUsername}
+                  />
+                  <label>Enter your username</label>
+                </div>
+                <div className="input-field">
+                  <input type="password" required
+                    onChange={handlePassword}
+                    onKeyDown={handlePasswordKeyDown}
+                  />
+                  <label>Enter your password</label>
+                </div>
+                <div className="forget">
+                  <label htmlFor="remember">
+                    <input type="checkbox"
+
+                      id="remember" />
+                    <p>Remember</p>
+                  </label>
+                  <a href="#">Forgot password?</a>
+                </div>
+                <button
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLoginRequest();
+                  }}>
+                  Login
+                </button>
+                <div className="register">
+                  <p>
+                    Don't have an account? <a href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleLoginClose();   // avval login oynasini yopamiz
+                        handleSignupOpen();   // so‘ng signup modalni ochamiz
+                      }}>Register</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+
+
           </Stack>
         </Fade>
       </Modal>
-    </div>
+    </>
   );
 }

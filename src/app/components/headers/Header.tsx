@@ -18,6 +18,7 @@ interface HeaderProps {
   onDeleteAll: () => void;
   setSignupOpen: (isOpen: boolean) => void;
   setLoginOpen: (isOpen: boolean) => void;
+  handleLogoutRequest: () => void;
 }
 
 export default function Header(props: HeaderProps) {
@@ -25,6 +26,7 @@ export default function Header(props: HeaderProps) {
     onDeleteAll,
     setSignupOpen,
     setLoginOpen,
+    handleLogoutRequest
   } = props;
   const [scroll, setScroll] = useState(0);
   const [headerTop, setHeaderTop] = useState(0);
@@ -105,6 +107,7 @@ export default function Header(props: HeaderProps) {
                 onDeleteAll={onDeleteAll}
                 setSignupOpen={setSignupOpen}
                 setLoginOpen={setLoginOpen}
+                handleLogoutRequest={handleLogoutRequest}
               />
             </div>
           </div>

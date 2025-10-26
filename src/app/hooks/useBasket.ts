@@ -36,6 +36,7 @@ const useBasket = () => {
         (item: CartItem) => item._id !== input._id
       );
       setCartItems(cartUpdate);
+      cogoToast.error("Product removed", { position: "bottom-left" });
       localStorage.setItem("cartData", JSON.stringify(cartUpdate));
     } else {
       const cartUpdate = cartItems.map((item: CartItem) =>

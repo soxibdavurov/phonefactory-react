@@ -34,6 +34,8 @@ function App() {
   /* HANDLERS */
   const handleSignupClose = () => setSignupOpen(false);
   const handleLoginClose = () => setLoginOpen(false);
+  const handleSignupOpen = () => setSignupOpen(true);
+  const handleLoginOpen = () => setLoginOpen(true);
 
   const handleLogoutClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -44,7 +46,7 @@ function App() {
       const member = new MemberService();
       await member.logout();
 
-      await sweetTopSuccessAlert("success", 1000);
+      await sweetTopSuccessAlert("Logged out", 1000);
       setAuthMember(null);
     } catch (err) {
       console.log(err);
@@ -62,6 +64,7 @@ function App() {
         onDeleteAll={onDeleteAll}
         setSignupOpen={setSignupOpen}
         setLoginOpen={setLoginOpen}
+        handleLogoutRequest={handleLogoutRequest}
       />
       {/* {location.pathname === "/" ? (
         <HomeNavbar
@@ -124,6 +127,8 @@ function App() {
         loginOpen={loginOpen}
         handleLoginClose={handleLoginClose}
         handleSignupClose={handleSignupClose}
+        handleSignupOpen={handleSignupOpen}   // 🔹 qo‘shildi
+        handleLoginOpen={handleLoginOpen}   // 🔹 qo‘shildi
       />
     </>
   );

@@ -53,6 +53,8 @@ export default function ChosenProduct(props: ChosenProductsProps) {
     const { chosenProduct } = useSelector(chosenProductRetriever);
     const { restaurant } = useSelector(restaurantRetriever);
     useEffect(() => {
+        if (!productId) return;
+
         const product = new ProductService();
         product
             .getProduct(productId)
@@ -64,7 +66,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
             .getRestaurant()
             .then((data) => setRestaurant(data))
             .catch((err) => console.log(err));
-    }, []);
+    }, [productId, setChosenProduct, setRestaurant]);
 
     // ======= ProductImageDescription (gallery+thumbs) tanasi =======
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);

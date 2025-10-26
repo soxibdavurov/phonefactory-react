@@ -8,6 +8,8 @@ import Basket from "../Basket";
 import { CartItem } from "../../../../lib/types/search";
 import { useGlobals } from "../../../hooks/useGlobals";
 import { serverApi } from "../../../../lib/config";
+import { ListItemIcon } from "@mui/material";
+import { Logout } from "@mui/icons-material";
 
 interface IconGroupProps {
   cartItems: CartItem[];
@@ -17,6 +19,7 @@ interface IconGroupProps {
   onDeleteAll: () => void;
   setSignupOpen: (isOpen: boolean) => void;
   setLoginOpen: (isOpen: boolean) => void;
+  handleLogoutRequest: () => void;
 }
 
 export default function IconGroup({
@@ -27,6 +30,7 @@ export default function IconGroup({
   onDeleteAll,
   setSignupOpen,
   setLoginOpen,
+  handleLogoutRequest
 }: IconGroupProps) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -53,16 +57,24 @@ export default function IconGroup({
     }
   };
 
-  /** 🔹 Sahifaning boshqa joyini bosganda barcha active’larni yopish */
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       const root = rootRef.current;
       if (!root) return;
 
-      // IconGroup ichida bosilgan bo‘lsa — yopmaymiz
-      if (root.contains(e.target as Node)) return;
+      // 1️⃣ Agar IconGroup ichida bosilgan bo‘lsa — defaultda yopmaymiz
+      if (root.contains(e.target as Node)) {
+        // 2️⃣ Lekin agar account-dropdown ichida bosilgan bo‘lsa → yopamiz
+        const target = e.target as HTMLElement;
+        if (target.closest(".account-dropdown")) {
+          root
+            .querySelectorAll<HTMLElement>(".account-dropdown.active, .account-setting-active.active")
+            .forEach((el) => el.classList.remove("active"));
+        }
+        return;
+      }
 
-      // tashqarida bosilgan bo‘lsa — barcha ochiqlarni yopamiz
+      // 3️⃣ Agar tashqarida bosilgan bo‘lsa — barcha ochiqlarni yopamiz
       root
         .querySelectorAll<HTMLElement>(".active")
         .forEach((el) => el.classList.remove("active"));
@@ -109,9 +121,15 @@ export default function IconGroup({
         </button>
         <div className="account-dropdown">
           <ul>{!authMember ? (<>
-            <li><Link onClick={() => setLoginOpen(true)} to="/login-register">Login</Link></li>
-            <li><Link onClick={() => setSignupOpen(true)} to="/login-register">Register</Link></li>
-          </>) : (<li><Link to="/my-account">My Account</Link></li>)}
+            <li><Link onClick={() => setLoginOpen(true)} to="#">Login</Link></li>
+            <li><Link onClick={() => setSignupOpen(true)} to="#">Register</Link></li>
+          </>
+          ) : (
+            <>
+              <li><Link to="/my-account">My Account</Link></li>
+              <li><Link to="" onClick={handleLogoutRequest}><Logout fontSize="small" style={{ color: 'blue' }} />Logout</Link></li>
+            </>
+          )}
           </ul>
         </div>
       </div>
