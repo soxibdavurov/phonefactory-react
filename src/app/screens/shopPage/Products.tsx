@@ -31,7 +31,7 @@ interface ProductsProps {
 
 
 export default function Products(props: ProductsProps) {
-  const [layout, setLayout] = useState("grid three-column");
+  const [layout, setLayout] = useState("list");
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
@@ -338,20 +338,21 @@ export default function Products(props: ProductsProps) {
                   </button>
                   <button
                     onClick={e => {
-                      getLayout("grid three-column");
-                      setActiveLayout(e);
-                    }}
-                  >
-                    <i className="fa fa-th" />
-                  </button>
-                  <button
-                    onClick={e => {
                       getLayout("list");
                       setActiveLayout(e);
                     }}
                   >
                     <i className="fa fa-list-ul" />
                   </button>
+                  <button
+                    onClick={e => {
+                      getLayout("grid three-column");
+                      setActiveLayout(e);
+                    }}
+                  >
+                    <i className="fa fa-th" />
+                  </button>
+
                 </div>
               </div>
               {/* Productlar qatori */}

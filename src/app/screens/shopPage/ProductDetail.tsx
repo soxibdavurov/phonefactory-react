@@ -185,9 +185,8 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                         <div className="col-lg-6 col-md-6">
                             <div className="shop-list-content">
                                 <h3>
-                                    <Link to={"/product/" + chosenProduct._id}>
-                                        {chosenProduct.productName}
-                                    </Link>
+                                    {chosenProduct.productName}
+
                                 </h3>
                                 <div className="product-list-price">
                                     {chosenProduct.productDiscount !== 0 || null ? (
