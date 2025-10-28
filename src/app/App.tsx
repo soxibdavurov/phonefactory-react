@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
-import ProductsPage from "./screens/shopPage";
 import OrdersPage from "./screens/ordersPage";
 import UsersPage from "./screens/userPage";
-import HomeNavbar from "./components/headers/HomeNavbar";
-import OtherNavbar from "./components/headers/OtherNavbar";
 import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
 import useBasket from "./hooks/useBasket";
@@ -19,9 +16,11 @@ import AboutPage from "./screens/aboutPage";
 import ScrollToTop from "./components/scroll-to-top";
 import Header from "./components/headers/Header";
 import ContactUs from "./screens/contactUs";
-import Products from "./screens/productsPage";
 import ShopPage from "./screens/shopPage";
-// import ShopGridStandard from "./screens/shopPage";
+import ComparePage from "./screens/comparePage";
+import { CompareItem } from "../lib/types/compare";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 
 function App() {
   const location = useLocation();
@@ -29,6 +28,7 @@ function App() {
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
   const [signupOpen, setSignupOpen] = useState<boolean>(false);
   const [loginOpen, setLoginOpen] = useState<boolean>(false);
+
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   /* HANDLERS */
@@ -66,43 +66,18 @@ function App() {
         setLoginOpen={setLoginOpen}
         handleLogoutRequest={handleLogoutRequest}
       />
-      {/* {location.pathname === "/" ? (
-        <HomeNavbar
-          cartItems={cartItems}
-          onAdd={onAdd}
-          onRemove={onRemove}
-          onDelete={onDelete}
-          onDeleteAll={onDeleteAll}
-          setSignupOpen={setSignupOpen}
-          setLoginOpen={setLoginOpen}
-          anchorEl={anchorEl}
-          handleLogoutClick={handleLogoutClick}
-          handleCloseLogout={handleCloseLogout}
-          handleLogoutRequest={handleLogoutRequest}
-        />
-      ) : (
-        <OtherNavbar
-          cartItems={cartItems}
-          onAdd={onAdd}
-          onRemove={onRemove}
-          onDelete={onDelete}
-          onDeleteAll={onDeleteAll}
-          setSignupOpen={setSignupOpen}
-          setLoginOpen={setLoginOpen}
-          anchorEl={anchorEl}
-          handleLogoutClick={handleLogoutClick}
-          handleCloseLogout={handleCloseLogout}
-          handleLogoutRequest={handleLogoutRequest}
-        />
-      )} */}
-      {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+
       <Switch>
         <Route path="/shop">
           <ShopPage onAdd={onAdd} />
         </Route>
         <Route path="/orders">
           <OrdersPage />
+        </Route>
+        <Route path="/compare">
+          <ComparePage onAdd={onAdd}
+            cartItems={cartItems}
+          />
         </Route>
         <Route path="/contact">
           <ContactUs />

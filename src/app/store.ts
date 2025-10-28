@@ -23,7 +23,7 @@ import storage from "redux-persist/lib/storage";
 import productReducer from "./stores/slices/product-slice";
 import currencyReducer from "./stores/slices/currency-slice";
 import cartReducer from "./stores/slices/cart-slice";
-import compareReducer from "./stores/slices/compare-slice";
+import comparisonReducer from "./hooks/compare-slice";
 import wishlistReducer from "./stores/slices/wishlist-slice";
 
 const persistConfig = {
@@ -37,7 +37,7 @@ export const rootReducer = combineReducers({
   product: productReducer,
   currency: currencyReducer,
   cart: cartReducer,
-  compare: compareReducer,
+  comparison: comparisonReducer,
   wishlist: wishlistReducer,
 });
 
@@ -49,7 +49,7 @@ export const store = configureStore({
     homePage: HomePageReducer,
     productsPage: ProductPageReducer,
     ordersPage: OrdersPageReducer,
-    compare: compareReducer,
+    comparison: comparisonReducer,
     wishlist: wishlistReducer,
     cart: cartReducer,
   },

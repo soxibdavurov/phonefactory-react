@@ -93,7 +93,7 @@ export default function IconGroup({
   };
 
   const compareItems =
-    useSelector((state: RootState) => state.compare?.compareItems) ?? [];
+    useSelector((state: RootState) => state.comparison.compareItems) ?? [];
   const wishlistItems =
     useSelector((state: RootState) => state.wishlist?.wishlistItems) ?? [];
 
@@ -142,7 +142,7 @@ export default function IconGroup({
           </>
           ) : (
             <>
-              <li><Link to="/my-account">My Account</Link></li>
+              <li><Link to="/member-page">My Account</Link></li>
               <li><Link to="" onClick={handleLogoutRequest}><Logout fontSize="small" style={{ color: 'blue' }} />Logout</Link></li>
             </>
           )}

@@ -6,7 +6,7 @@ const bannerData = [
         "image": "/img/banner/banner6.jpg",
         "title": "Headphones",
         "subtitle": "Choose Your Products Here",
-        "link": "/shop-grid-standard",
+        "link": "/shop",
         "price": "1000000"
     },
     {
@@ -14,7 +14,7 @@ const bannerData = [
         "image": "/img/banner/banner7.jpg",
         "title": "Accessories",
         "subtitle": "Choose Your Products Here",
-        "link": "/shop-grid-standard",
+        "link": "/shop",
         "price": "1000000"
     },
     {
@@ -22,7 +22,7 @@ const bannerData = [
         "image": "/img/banner/banner6.jpg",
         "title": "Robotics",
         "subtitle": "Choose Your Products Here",
-        "link": "/shop-grid-standard",
+        "link": "/shop",
         "price": "1000000"
     }
 ];

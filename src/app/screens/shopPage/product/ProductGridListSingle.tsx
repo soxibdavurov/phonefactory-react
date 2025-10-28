@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import clsx from "clsx";
 // import ProductModal from "./ProductModal";
@@ -9,6 +9,8 @@ import { CartItem } from "../../../../lib/types/search";
 import { serverApi } from "../../../../lib/config";
 import { Badge } from "@mui/material";
 import ProductRating from "../../homePage/ProductRating";
+import { addToCompare } from "../../../hooks/compare-slice";
+import { RootState } from "../../../store"; // loyihangizdagi to'g'ri yo'l
 
 type Props = {
     product: Product;
@@ -17,10 +19,13 @@ type Props = {
 };
 
 const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
+    const compareItems = useSelector((state: RootState) => state.comparison.compareItems) ?? [];
+    const compareItem = compareItems.find((item) => item._id === product._id);
+    const dispatch = useDispatch();
+
     const [modalShow, setModalShow] = useState(false);
     const imagePath = `${serverApi}/${product.productImages[0]}`;
     const imagePath2 = `${serverApi}/${product.productImages[1]}`;
-    const dispatch = useDispatch();
     const history = useHistory();
     const chooSeSMARTPHONEHandler = (id: string) => {
         history.push(`/shop/${id}`);
@@ -60,8 +65,27 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
 
                     <div className="product-action">
                         <div className="pro-same-action pro-wishlist">
-                            <button title="Add to wishlist">
-                                <i className="pe-7s-like" />
+                            <button
+                                className={compareItem !== undefined ? "active" : ""}
+                                disabled={compareItem !== undefined}
+                                title={
+                                    compareItem !== undefined
+                                        ? "Added to compare"
+                                        : "Add to compare"
+                                }
+                                onClick={() => dispatch(addToCompare(
+                                    {
+                                        _id: product._id,
+                                        discount: product.productDiscount,
+                                        name: product.productName,
+                                        rating: product.productRate,
+                                        description: product.productDesc,
+                                        price: product.productPrice,
+                                        image: product.productImages[0],
+                                    }
+                                ))}
+                            >
+                                <i className="pe-7s-shuffle" />
                             </button>
                         </div>
                         <div className="pro-same-action pro-cart">
@@ -211,6 +235,30 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                         }}
                                     >
                                         Add to cart
+                                    </button>
+                                </div>
+                                <div className="shop-list-compare ml-10">
+                                    <button
+                                        className={compareItem !== undefined ? "active" : ""}
+                                        disabled={compareItem !== undefined}
+                                        title={
+                                            compareItem !== undefined
+                                                ? "Added to compare"
+                                                : "Add to compare"
+                                        }
+                                        onClick={() => dispatch(addToCompare(
+                                            {
+                                                _id: product._id,
+                                                discount: product.productDiscount,
+                                                name: product.productName,
+                                                rating: product.productRate,
+                                                description: product.productDesc,
+                                                price: product.productPrice,
+                                                image: product.productImages[0],
+                                            }
+                                        ))}
+                                    >
+                                        <i className="pe-7s-shuffle" />
                                     </button>
                                 </div>
 

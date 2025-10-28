@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
 const useScrollTop = () => {
-    const [stick, setStick] = useState(false);
+    const [stick, setStick] = useState < boolean > (false);
+
     const onClickHandler = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -9,18 +10,12 @@ const useScrollTop = () => {
     useEffect(() => {
         const scrollHandler = () => {
             const scrollPos = window.pageYOffset;
-            if (scrollPos > 300) {
-                setStick(true);
-            } else {
-                setStick(false);
-            }
+            setStick(scrollPos > 300);
         };
 
         window.addEventListener("scroll", scrollHandler);
-        return () => {
-            window.removeEventListener("scroll", scrollHandler);
-        };
-    }, [stick]);
+        return () => window.removeEventListener("scroll", scrollHandler);
+    }, []); // ✅ dependencyni olib tashladik — infinite loop bo‘lmaydi
 
     return { stick, onClickHandler };
 };
