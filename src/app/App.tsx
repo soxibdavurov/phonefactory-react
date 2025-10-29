@@ -21,6 +21,7 @@ import ComparePage from "./screens/comparePage";
 import { CompareItem } from "../lib/types/compare";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import NotFoundPage from "./screens/notFound";
 
 function App() {
   const location = useLocation();
@@ -71,28 +72,38 @@ function App() {
         <Route path="/shop">
           <ShopPage onAdd={onAdd} />
         </Route>
+
         <Route path="/orders">
           <OrdersPage />
         </Route>
+
         <Route path="/compare">
-          <ComparePage onAdd={onAdd}
-            cartItems={cartItems}
-          />
+          <ComparePage onAdd={onAdd} cartItems={cartItems} />
         </Route>
+
         <Route path="/contact">
           <ContactUs />
         </Route>
+
         <Route path="/member-page">
           <UsersPage />
         </Route>
+
         <Route path="/help">
           <HelpPage />
         </Route>
+
         <Route path="/about">
           <AboutPage />
         </Route>
-        <Route path="/">
+
+        <Route exact path="/">
           <HomePage onAdd={onAdd} />
+        </Route>
+
+        {/* ✅ fallback 404 route */}
+        <Route>
+          <NotFoundPage />
         </Route>
       </Switch>
       <Footer />

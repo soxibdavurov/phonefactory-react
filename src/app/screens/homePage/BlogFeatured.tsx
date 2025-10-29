@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 const blogFeaturedFiveData = [
     {
         "id": 1,
-        "image": "/img/blog/blog-13.jpg",
+        "image": "/img/blog/sim.png",
         "category": ["lifestyle", "men"],
         "title": "A guide to latest trends",
         "url": "/blog-details-standard",
@@ -11,7 +11,7 @@ const blogFeaturedFiveData = [
     },
     {
         "id": 2,
-        "image": "/img/banner/banner6.jpg",
+        "image": "/img/blog/smartphones.jpg",
         "category": ["lifestyle"],
         "title": "Five ways to lead a happy life",
         "url": "/blog-details-standard",
@@ -20,7 +20,7 @@ const blogFeaturedFiveData = [
     },
     {
         "id": 3,
-        "image": "/img/blog/blog-15.jpg",
+        "image": "/img/blog/companies.jpg",
         "category": ["lifestyle"],
         "title": "Tips on having a happy life",
         "url": "/blog-details-standard",

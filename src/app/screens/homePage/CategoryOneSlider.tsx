@@ -6,7 +6,7 @@ import { categoryData } from "../../../lib/data/category"
 // swiper slider settings
 const settings = {
   autoplay: {
-    delay: 4000,
+    delay: 6000,
     disableOnInteraction: false,
   },
   loop: true,

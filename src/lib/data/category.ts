@@ -1,16 +1,16 @@
 export const categoryData = [
   {
     "id": "1",
-    "image": "/category/5g.jpg",
-    "subtitle": "4 Products",
-    "title": "SKT SimCards",
+    "image": "/category/earphone.png",
+    "subtitle": "8 Products",
+    "title": "Earphones",
     "link": "/shop"
   },
   {
     "id": "2",
-    "image": "/category/5g.jpg",
+    "image": "/category/phones.jpg",
     "subtitle": "8 Products",
-    "title": "Bluetooth Headphone",
+    "title": "Linephones",
     "link": "/shop"
   },
   {
@@ -22,9 +22,16 @@ export const categoryData = [
   },
   {
     "id": "4",
-    "image": "/category/5g.jpg",
+    "image": "/category/charger2.webp",
     "subtitle": "4 Products",
-    "title": "Bluetooth Speaker",
+    "title": "Chargers",
     "link": "/shop"
-  }
+  },
+  {
+    "id": "5",
+    "image": "/category/phones2.jpg",
+    "subtitle": "8 Products",
+    "title": "Smartphones",
+    "link": "/shop"
+  },
 ]
