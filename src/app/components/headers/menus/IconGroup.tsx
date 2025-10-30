@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "../sub-components/MenuCart";
@@ -33,8 +33,15 @@ export default function IconGroup({
   handleLogoutRequest
 }: IconGroupProps) {
   const rootRef = useRef<HTMLDivElement>(null);
-
+  const { pathname } = useLocation(); // ⬅️ joriy yo‘l
   const { authMember } = useGlobals();
+
+  // ✅ Route o‘zgarganda hamma .active larni tozalash
+  useEffect(() => {
+    rootRef.current
+      ?.querySelectorAll<HTMLElement>(".active")
+      .forEach((el) => el.classList.remove("active"));
+  }, [pathname]);
 
   /** 🔹 Tugmani bosilganda — agar yopiq bo‘lsa ochiladi, agar ochiq bo‘lsa yopiladi */
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

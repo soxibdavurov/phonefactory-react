@@ -14,6 +14,8 @@ import { OrderStatus } from "../../../lib/enums/order.enum";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrdersService";
 import { Link } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
+import useBasket from "../../hooks/useBasket";
 
 
 /* REDUX SLIC & SELECTOR */
@@ -27,12 +29,64 @@ interface PausedOrdersProps {
    setValue: (input: string) => void;
 }
 
+
 export default function PausedOrders(props: PausedOrdersProps) {
    const { setValue } = props;
+   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
    const { authMember, setOrderBuilder } = useGlobals();
    const { pausedOrders } = useSelector(pausedOrdersRetriever);
 
    /** HANDLERS */
+
+   // 🔁 faqat shu komponentda ishlatiladigan reload helper
+   const reloadAfterToast = (delay = 700) => {
+      if (typeof window !== "undefined") {
+         setTimeout(() => window.location.reload(), delay);
+      }
+   };
+
+   // 🧰 Wrapper handlerlar: hook funksiyasini chaqiramiz → keyin reload
+   const onAddFromPaused = (item: CartItem) => {
+      onAdd(item);
+      reloadAfterToast();
+   };
+   const onRemoveFromPaused = (item: CartItem) => {
+      onRemove(item);
+      reloadAfterToast();
+   };
+   const onDeleteFromPaused = (item: CartItem) => {
+      onDelete(item);
+      reloadAfterToast();
+   };
+   const onDeleteAllFromPaused = () => {
+      onDeleteAll();
+      reloadAfterToast();
+   };
+
+
+   // 🧮 1️⃣ Umumiy narx (chegirmasiz)
+   const originalTotal = cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+   );
+   // 🧮 2️⃣ Chegirmali narx
+   const discountedTotal = cartItems.reduce((total, item) => {
+      const discountedPrice =
+         item.discount && item.discount > 0
+            ? item.price - item.discount
+            : item.price;
+      return total + item.quantity * discountedPrice;
+   }, 0);
+
+   // 🧮 3️⃣ Faqat chegirma miqdori (necha so‘m tejalgan)
+   const totalDiscount = originalTotal - discountedTotal;
+
+   // 🧮 4️⃣ Yetkazib berish (oddiy shart)
+   const shippingCost = discountedTotal < 50000 ? 5000 : 0;
+
+   // 🧮 5️⃣ Yakuniy umumiy summa
+   const grandTotal = discountedTotal + shippingCost;
+
 
    const deleteOrderHandler = async (e: T) => {
       try {
@@ -184,7 +238,7 @@ export default function PausedOrders(props: PausedOrdersProps) {
          </Stack>
 
 
-         {/* <div className="cart-main-area pt-90 pb-100">
+         <div className="cart-main-area pt-90 pb-100">
             <div className="container">
                {cartItems && cartItems.length >= 1 ? (
                   <Fragment>
@@ -205,39 +259,28 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                  </thead>
                                  <tbody>
                                     {cartItems.map((cartItem, key) => {
-                                       const discountedPrice = getDiscountPrice(
-                                          cartItem.price,
-                                          cartItem.discount
-                                       );
-                                       const finalProductPrice = (
-                                          cartItem.price * currency.currencyRate
-                                       ).toFixed(2);
-                                       const finalDiscountedPrice = (
-                                          discountedPrice * currency.currencyRate
-                                       ).toFixed(2);
-
-                                       discountedPrice != null
-                                          ? (cartTotalPrice +=
-                                             finalDiscountedPrice * cartItem.quantity)
-                                          : (cartTotalPrice +=
-                                             finalProductPrice * cartItem.quantity);
+                                       const imagePath = `${serverApi}/${cartItem.image}`;
+                                       const discountedPrice =
+                                          cartItem.discount && cartItem.discount > 0
+                                             ? cartItem.price - cartItem.discount
+                                             : cartItem.price;
                                        return (
                                           <tr key={key}>
                                              <td className="product-thumbnail">
                                                 <Link
                                                    to={
                                                       process.env.PUBLIC_URL +
-                                                      "/product/" +
-                                                      cartItem.id
+                                                      "/shop/" +
+                                                      cartItem._id
                                                    }
                                                 >
                                                    <img
                                                       className="img-fluid"
                                                       src={
                                                          process.env.PUBLIC_URL +
-                                                         cartItem.image[0]
+                                                         imagePath
                                                       }
-                                                      alt=""
+                                                      alt={cartItem.name}
                                                    />
                                                 </Link>
                                              </td>
@@ -246,13 +289,14 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                                 <Link
                                                    to={
                                                       process.env.PUBLIC_URL +
-                                                      "/product/" +
-                                                      cartItem.id
+                                                      "/shop/" +
+                                                      cartItem._id
                                                    }
                                                 >
                                                    {cartItem.name}
                                                 </Link>
-                                                {cartItem.selectedProductColor &&
+                                                {/* keyinchalik rang va o'lcham kiritilsa ishlataman */}
+                                                {/* {cartItem. &&
                                                    cartItem.selectedProductSize ? (
                                                    <div className="cart-item-variation">
                                                       <span>
@@ -264,37 +308,29 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                                    </div>
                                                 ) : (
                                                    ""
-                                                )}
+                                                )} */}
                                              </td>
 
                                              <td className="product-price-cart">
                                                 {discountedPrice !== null ? (
                                                    <Fragment>
                                                       <span className="amount old">
-                                                         {currency.currencySymbol +
-                                                            finalProductPrice}
+                                                         {discountedPrice.toLocaleString()} ₩{" "}
                                                       </span>
                                                       <span className="amount">
-                                                         {currency.currencySymbol +
-                                                            finalDiscountedPrice}
+                                                         {cartItem.price.toLocaleString()} ₩
                                                       </span>
                                                    </Fragment>
                                                 ) : (
                                                    <span className="amount">
-                                                      {currency.currencySymbol +
-                                                         finalProductPrice}
+                                                      {cartItem.price.toLocaleString()} ₩
                                                    </span>
                                                 )}
                                              </td>
 
                                              <td className="product-quantity">
                                                 <div className="cart-plus-minus">
-                                                   <button
-                                                      className="dec qtybutton"
-                                                      onClick={() =>
-                                                         dispatch(decreaseQuantity(cartItem))
-                                                      }
-                                                   >
+                                                   <button className="dec qtybutton" onClick={() => onRemoveFromPaused(cartItem)}>
                                                       -
                                                    </button>
                                                    <input
@@ -305,22 +341,7 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                                    />
                                                    <button
                                                       className="inc qtybutton"
-                                                      onClick={() =>
-                                                         dispatch(addToCart({
-                                                            ...cartItem,
-                                                            quantity: quantityCount
-                                                         }))
-                                                      }
-                                                      disabled={
-                                                         cartItem !== undefined &&
-                                                         cartItem.quantity &&
-                                                         cartItem.quantity >=
-                                                         cartItemStock(
-                                                            cartItem,
-                                                            cartItem.selectedProductColor,
-                                                            cartItem.selectedProductSize
-                                                         )
-                                                      }
+                                                      onClick={() => onAddFromPaused(cartItem)}
                                                    >
                                                       +
                                                    </button>
@@ -328,21 +349,19 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                              </td>
                                              <td className="product-subtotal">
                                                 {discountedPrice !== null
-                                                   ? currency.currencySymbol +
+                                                   ?
                                                    (
-                                                      finalDiscountedPrice * cartItem.quantity
-                                                   ).toFixed(2)
-                                                   : currency.currencySymbol +
+                                                      discountedPrice * cartItem.quantity
+                                                   ).toFixed() + `₩`
+                                                   :
                                                    (
-                                                      finalProductPrice * cartItem.quantity
-                                                   ).toFixed(2)}
+                                                      cartItem.price * cartItem.quantity
+                                                   ).toFixed() + `₩`}
                                              </td>
 
                                              <td className="product-remove">
                                                 <button
-                                                   onClick={() =>
-                                                      dispatch(deleteFromCart(cartItem.cartItemId))
-                                                   }
+                                                   onClick={() => onDeleteFromPaused(cartItem)}
                                                 >
                                                    <i className="fa fa-times"></i>
                                                 </button>
@@ -366,7 +385,7 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                  </Link>
                               </div>
                               <div className="cart-clear">
-                                 <button onClick={() => dispatch(deleteAllFromCart())}>
+                                 <button onClick={() => onDeleteAllFromPaused()}>
                                     Clear Shopping Cart
                                  </button>
                               </div>
@@ -446,16 +465,16 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                  </h4>
                               </div>
                               <h5>
-                                 Total products{" "}
-                                 <span>
-                                    {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                                 Subtotal:{" "}
+                                 <span className="shop-total">
+                                    {originalTotal.toLocaleString()} ₩
                                  </span>
                               </h5>
 
                               <h4 className="grand-totall-title">
                                  Grand Total{" "}
                                  <span>
-                                    {currency.currencySymbol + cartTotalPrice.toFixed(2)}
+                                    {originalTotal.toFixed(2)}
                                  </span>
                               </h4>
                               <Link to={process.env.PUBLIC_URL + "/checkout"}>
@@ -483,7 +502,7 @@ export default function PausedOrders(props: PausedOrdersProps) {
                   </div>
                )}
             </div>
-         </div> */}
+         </div>
 
       </TabPanel>
    )
