@@ -20,9 +20,6 @@ import "../../../css/order.css";
 import { serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
 
-import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
-import { useLocation, Link } from "react-router-dom";
-
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
   setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
@@ -32,7 +29,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 });
 
 export default function OrdersPage() {
-  const { pathname } = useLocation();
+
   const { setPausedOrders, setProcessOrders, setFinishedOrders }
     = actionDispatch(useDispatch());
   const { authMember, orderBuilder } = useGlobals();
@@ -45,7 +42,7 @@ export default function OrdersPage() {
   });
 
 
-  // if (!authMember) history.push("/");
+  if (!authMember) history.push("/");
 
   useEffect(() => {
     const order = new OrderService();
@@ -73,136 +70,104 @@ export default function OrdersPage() {
     setValue(newValue);
   };
   return (
-    <>
-      <div>
-        <BreadcrumbWrap
-          pages={[
-            { label: "Home", path: process.env.PUBLIC_URL + "/" },
-            { label: "Orders", path: process.env.PUBLIC_URL + pathname },
-          ]}
-        />
-      </div>
+    <div className="order-page">
+      <Container className="order-container">
+        <Stack className="order-left">
+          <TabContext value={value}>
+            <Box className={"order-nav-frame"}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider", paddingBottom: 3, paddingLeft: 3 }}>
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="basic tabs example"
+                  className={"table_list"}
+                >
+                  <Tab label="PAUSED ORDERS" value={"1"} />
+                  <Tab label="PROCESS ORDERS" value={"2"} />
+                  <Tab label="FINISHED ORDERS" value={"3"} />
+                </Tabs>
+              </Box>
+            </Box>
+            <Stack className={"order-main-content"}>
+              <PausedOrders setValue={setValue} />
+              <ProcessOrders setValue={setValue} />
+              <FinishedOrders />
+            </Stack>
+          </TabContext>
+        </Stack>
 
-      <div className="cart-main-area pt-90 pb-100">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="item-empty-area text-center">
-                <div className="item-empty-area__icon mb-30">
-                  <i className="pe-7s-cart"></i>
-                </div>
-                <div className="item-empty-area__text">
-                  No items found in cart <br />{" "}
-                  <Link to={process.env.PUBLIC_URL + "/shop"}>
-                    Shop Now
-                  </Link>
-                </div>
+        <Stack className="order-right">
+          <Box className="order-info-box">
+            <Box className="member-box">
+              <div className="order-user-img">
+                <img
+                  src={
+                    authMember?.memberImage
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : "/icons/default-user.svg"
+                  }
+                  className="order-user-avatar"
+                />
               </div>
-              <div >
-                <Container className="order-container">
-                  <Stack className="order-left">
-                    <TabContext value={value}>
-                      <Box className={"order-nav-frame"}>
-                        <Box sx={{ borderBottom: 1, borderColor: "divider", paddingBottom: 3, paddingLeft: 3 }}>
-                          <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            aria-label="basic tabs example"
-                            className={"table_list"}
-                          >
-                            <Tab label="PAUSED ORDERS" value={"1"} />
-                            <Tab label="PROCESS ORDERS" value={"2"} />
-                            <Tab label="FINISHED ORDERS" value={"3"} />
-                          </Tabs>
-                        </Box>
-                      </Box>
-                      <Stack className={"order-main-content"}>
-                        <PausedOrders setValue={setValue} />
-                        <ProcessOrders setValue={setValue} />
-                        <FinishedOrders />
-                      </Stack>
-                    </TabContext>
-                  </Stack>
-
-                  <Stack className="order-right">
-                    <Box className="order-info-box">
-                      <Box className="member-box">
-                        <div className="order-user-img">
-                          <img
-                            src={
-                              authMember?.memberImage
-                                ? `${serverApi}/${authMember.memberImage}`
-                                : "/icons/default-user.svg"
-                            }
-                            className="order-user-avatar"
-                          />
-                        </div>
-                        <div className="order-user-icon-box">
-                          <img
-                            src={
-                              authMember?.memberType === MemberType.RESTAURANT
-                                ? "/icons/restaurant.svg"
-                                : "/icons/user-badge.svg"
-                            }
-                            className="order-user-prof-img"
-                          />
-                        </div>
-                        <span className="order-user-name">  {authMember?.memberNick} </span>
-                        <span className="order-user-prof">  {authMember?.memberType}</span>
-                      </Box>
-                      <div className="liner"></div>
-                      <Stack className="location-box">
-                        <img src="/icons/location.svg" className="location-icon" />
-                        <Box className="location-name"> {authMember?.memberAddress
-                          ? authMember.memberAddress
-                          : "Do not exist"}</Box>
-                      </Stack>
-                    </Box>
-                    <Stack className="order-right-bottom">
-                      <input
-                        type={"text"}
-                        name={"cardPeriod"}
-                        placeholder={"Card number : 5243 4090 2002 7495"}
-                        className={"order-input1"}
-                      />
-
-                      <Stack className="order-input-stack">
-                        <input
-                          type={"text"}
-                          name={"cardPeriod"}
-                          placeholder={"07 / 24"}
-                          className={"order-input2"}
-                        />
-                        <input
-                          type={"text"}
-                          name={"cardPeriod"}
-                          placeholder={"CVV : 010"}
-                          className={"order-input2"}
-                        />
-                      </Stack>
-
-                      <input
-                        type={"text"}
-                        name={"cardPeriod"}
-                        placeholder={"Justin Robertson"}
-                        className={"order-input3"}
-                      />
-                      <Stack className="order-cards">
-                        <img src="/icons/western-card.svg" className="img-cards" />
-                        <img src="/icons/master-card.svg" className="img-cards" />
-                        <img src="/icons/paypal-card.svg" className="img-cards" />
-                        <img src="/icons/visa-card.svg" className="img-cards" />
-                      </Stack>
-                    </Stack>
-                  </Stack>
-                </Container>
+              <div className="order-user-icon-box">
+                <img
+                  src={
+                    authMember?.memberType === MemberType.RESTAURANT
+                      ? "/icons/restaurant.svg"
+                      : "/icons/user-badge.svg"
+                  }
+                  className="order-user-prof-img"
+                />
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <span className="order-user-name">  {authMember?.memberNick} </span>
+              <span className="order-user-prof">  {authMember?.memberType}</span>
+            </Box>
+            <div className="liner"></div>
+            <Stack className="location-box">
+              <img src="/icons/location.svg" className="location-icon" />
+              <Box className="location-name"> {authMember?.memberAddress
+                ? authMember.memberAddress
+                : "Do not exist"}</Box>
+            </Stack>
+          </Box>
+          <Stack className="order-right-bottom">
+            <input
+              type={"text"}
+              name={"cardPeriod"}
+              placeholder={"Card number : 5243 4090 2002 7495"}
+              className={"order-input1"}
+            />
 
+            <Stack className="order-input-stack">
+              <input
+                type={"text"}
+                name={"cardPeriod"}
+                placeholder={"07 / 24"}
+                className={"order-input2"}
+              />
+              <input
+                type={"text"}
+                name={"cardPeriod"}
+                placeholder={"CVV : 010"}
+                className={"order-input2"}
+              />
+            </Stack>
 
-    </>
+            <input
+              type={"text"}
+              name={"cardPeriod"}
+              placeholder={"Justin Robertson"}
+              className={"order-input3"}
+            />
+            <Stack className="order-cards">
+              <img src="/icons/western-card.svg" className="img-cards" />
+              <img src="/icons/master-card.svg" className="img-cards" />
+              <img src="/icons/paypal-card.svg" className="img-cards" />
+              <img src="/icons/visa-card.svg" className="img-cards" />
+            </Stack>
+          </Stack>
+        </Stack>
+      </Container>
+    </div>
   )
 }

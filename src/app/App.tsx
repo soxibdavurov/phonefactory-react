@@ -22,6 +22,7 @@ import { CompareItem } from "../lib/types/compare";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import NotFoundPage from "./screens/notFound";
+import CartPage from "./screens/cartPage";
 
 function App() {
   const location = useLocation();
@@ -75,6 +76,10 @@ function App() {
 
         <Route path="/orders">
           <OrdersPage />
+        </Route>
+
+        <Route path="/cart">
+          <CartPage />
         </Route>
 
         <Route path="/compare">
