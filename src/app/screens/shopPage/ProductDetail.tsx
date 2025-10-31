@@ -12,10 +12,10 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 
 import { Dispatch } from "@reduxjs/toolkit";
-import { setRestaurant, setChosenProduct } from "./slice";
+import { setMobileshop, setChosenProduct } from "./slice";
 import { Product } from "../../../lib/types/product";
 import { createSelector } from "reselect";
-import { retrieveChosenProduct, retrieveRestaurant } from "./selector";
+import { retrieveChosenProduct, retrieveMobileshop } from "./selector";
 import { Link, useHistory, useParams } from "react-router-dom";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
@@ -24,11 +24,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { CartItem } from "../../../lib/types/search";
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { serverApi } from "../../../lib/config";
-import Rating from "../../screens/homePage/ProductRating";
+import Rating from "../homePage/productRating1";
 
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
-    setRestaurant: (data: Member) => dispatch(setRestaurant(data)),
+    setMobileshop: (data: Member) => dispatch(setMobileshop(data)),
     setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
 
 });
@@ -37,9 +37,7 @@ const chosenProductRetriever = createSelector(retrieveChosenProduct, (chosenProd
     chosenProduct,
 }));
 
-const restaurantRetriever = createSelector(retrieveRestaurant, (restaurant) => ({
-    restaurant,
-}));
+
 
 interface ChosenProductsProps {
     onAdd: (item: CartItem) => void;
@@ -48,25 +46,23 @@ interface ChosenProductsProps {
 export default function ChosenProduct(props: ChosenProductsProps) {
     const { onAdd } = props;
     const history = useHistory();
+    const dispatch = useDispatch();
     const { productId } = useParams<{ productId: string }>();
-    const { setRestaurant, setChosenProduct } = actionDispatch(useDispatch());
+    const { setMobileshop, setChosenProduct } = actionDispatch(useDispatch());
     const { chosenProduct } = useSelector(chosenProductRetriever);
-    const { restaurant } = useSelector(restaurantRetriever);
     useEffect(() => {
         if (!productId) return;
 
         const product = new ProductService();
-        product
-            .getProduct(productId)
-            .then((data) => setChosenProduct(data))
-            .catch((err) => console.log(err));
+        product.getProduct(productId)
+            .then((data) => dispatch(setChosenProduct(data)))
+            .catch(console.log);
 
         const member = new MemberService();
-        member
-            .getRestaurant()
-            .then((data) => setRestaurant(data))
-            .catch((err) => console.log(err));
-    }, [productId, setChosenProduct, setRestaurant]);
+        member.getMobileshop()
+            .then((data) => dispatch(setMobileshop(data)))
+            .catch(console.log);
+    }, [productId, dispatch]); // ✅ faqat productId va dispatch
 
     // ======= ProductImageDescription (gallery+thumbs) tanasi =======
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);

@@ -12,7 +12,7 @@ import { Product } from "../../../lib/types/product";
 import { Link } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import { retrieveProducts } from "../shopPage/selector";
-import SingleProductGrid from "../../components/product/SingleProductGrid";
+import SingleProductGrid from "./SingleProductGrid";
 import { Box } from "@mui/material";
 /* REDUX SLIC & SELECTOR */
 const productsRetriever = createSelector(retrieveProducts, (products) => ({ products, }));

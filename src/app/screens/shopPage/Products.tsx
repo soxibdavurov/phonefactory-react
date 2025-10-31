@@ -11,9 +11,6 @@ import { ProductBrand, ProductCollection } from "../../../lib/enums/products.enu
 import { serverApi } from "../../../lib/config";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
-import SingleProductList from "../../components/product/SingleProducList";
-import SingleProductColumns from "../../components/product/SingleProductColumns";
-import SingleProductGrid from "../../components/product/SingleProductGrid";
 import ProductsFragment from "./product/ProductsFragment";
 
 /* REDUX SLIC & SELECTOR */
@@ -222,7 +219,7 @@ export default function Products(props: ProductsProps) {
                   </div>
                 </div>
                 <div className="sidebar-widget mt-40">
-                  <h4 className="pro-sidebar-title">Brand</h4>
+                  <h4 className="pro-sidebar-title">Brand/Companies</h4>
                   <div className="sidebar-widget-list mt-20">
                     <ul>
                       <li>
@@ -232,7 +229,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchBrandHandler("ALL")}
                           >
                             <span className="checkmark" />
-                            All Brands
+                            All
                           </button>
                         </div>
                       </li>

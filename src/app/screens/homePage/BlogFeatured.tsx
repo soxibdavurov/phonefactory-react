@@ -3,8 +3,8 @@ const blogFeaturedFiveData = [
     {
         "id": 1,
         "image": "/img/blog/sim.png",
-        "category": ["lifestyle", "men"],
-        "title": "A guide to latest trends",
+        "category": ["sim", "connection"],
+        "title": "A guide to purchase SIM cards",
         "url": "/blog-details-standard",
         "author": "Admin",
         "authorUrl": "/blog-standard"
@@ -12,7 +12,7 @@ const blogFeaturedFiveData = [
     {
         "id": 2,
         "image": "/img/blog/smartphones.jpg",
-        "category": ["lifestyle"],
+        "category": ["smartphones", "connection"],
         "title": "Five ways to lead a happy life",
         "url": "/blog-details-standard",
         "author": "Admin",
@@ -21,7 +21,7 @@ const blogFeaturedFiveData = [
     {
         "id": 3,
         "image": "/img/blog/companies.jpg",
-        "category": ["lifestyle"],
+        "category": ["connection"],
         "title": "Tips on having a happy life",
         "url": "/blog-details-standard",
         "author": "Admin",

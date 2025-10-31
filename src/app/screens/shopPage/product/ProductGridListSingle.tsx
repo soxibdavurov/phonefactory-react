@@ -2,13 +2,12 @@ import PropTypes from "prop-types";
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import clsx from "clsx";
 // import ProductModal from "./ProductModal";
 import { Product } from "../../../../lib/types/product";
 import { CartItem } from "../../../../lib/types/search";
 import { serverApi } from "../../../../lib/config";
 import { Badge } from "@mui/material";
-import ProductRating from "../../homePage/ProductRating";
+import ProductRating from "../../homePage/productRating1";
 import { addToCompare } from "../../../hooks/compare-slice";
 import { RootState } from "../../../store"; // loyihangizdagi to'g'ri yo'l
 

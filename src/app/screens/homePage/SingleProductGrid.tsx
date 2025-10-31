@@ -2,20 +2,21 @@ import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import { Product } from "../../../lib/types/product";
 import { serverApi } from "../../../lib/config";
-import Rating from "../../screens/homePage/ProductRating";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../stores/slices/cart-slice";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@mui/material";
-
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
+import ProductRating from "./productRating1";
+import { RootState } from "../../store";
+import { addToCompare } from "../../hooks/compare-slice";
 type Props = {
     ele: Product;
     onAdd: (item: CartItem) => void;
 };
 
 const SingleProductGrid = ({ ele, onAdd }: Props) => {
+    const compareItems = useSelector((state: RootState) => state.comparison.compareItems) ?? [];
+    const compareItem = compareItems.find((item) => item._id === ele._id);
 
     const [modalShow, setModalShow] = useState(false);
     const imagePath = `${serverApi}/${ele.productImages[0]}`;
@@ -59,8 +60,27 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
 
                 <div className="product-action">
                     <div className="pro-same-action pro-wishlist">
-                        <button title="Add to wishlist">
-                            <i className="pe-7s-like" />
+                        <button
+                            className={compareItem !== undefined ? "active" : ""}
+                            disabled={compareItem !== undefined}
+                            title={
+                                compareItem !== undefined
+                                    ? "Added to compare"
+                                    : "Add to compare"
+                            }
+                            onClick={() => dispatch(addToCompare(
+                                {
+                                    _id: ele._id,
+                                    discount: ele.productDiscount,
+                                    name: ele.productName,
+                                    rating: ele.productRate,
+                                    description: ele.productDesc,
+                                    price: ele.productPrice,
+                                    image: ele.productImages[0],
+                                }
+                            ))}
+                        >
+                            <i className="pe-7s-shuffle" />
                         </button>
                     </div>
                     <div className="pro-same-action pro-cart">
@@ -112,7 +132,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                     </Link>
                 </h3>
                 <div className="product-rating">
-                    <Rating ratingValue={ele.productRate ?? 0} />
+                    <ProductRating ratingValue={ele.productRate ?? 0} />
                 </div>
                 <div className="product-price">
                     {ele.productDiscount !== 0 || null ? (

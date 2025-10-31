@@ -1,8 +1,4 @@
 import React, { useEffect } from "react";
-import { Container } from "@mui/material";
-import Statistics from "./Statistics";
-import PopularDishes from "./PopularDishes";
-import NewDishes from "./NewDishes";
 import Advertisement from "./Advertisement";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
@@ -13,7 +9,6 @@ import { ProductCollection } from "../../../lib/enums/products.enum";
 import "../../../css/home.css";
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
-import HomePageSlider from "./HomePageSlider";
 import CategoryOneSlider from "./CategoryOneSlider";
 import ProductCollectionSection from "./ProductCollectionSection";
 import { CartItem } from "../../../lib/types/search";
@@ -21,6 +16,7 @@ import FeatureIcon from "./FeatureIcon";
 import Banner from "./Banner";
 import BlogFeatured from "./BlogFeatured";
 import BrandLogoSlider from "./BrandLogoSlider";
+import HomePageSlider from "./homePageSlider1";
 
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({

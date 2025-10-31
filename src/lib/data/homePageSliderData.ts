@@ -1,0 +1,34 @@
+export const homePageSliderData = [
+  {
+    id: 1,
+    title: "Shopping starts from",
+    subtitle: "PhoneFactory",
+    text: "Mobile phone, USIM/ESIM cards, LG, KT, SKT",
+    image: "/slider/welcome.jpg",
+    url: "/shop"
+  },
+  {
+    id: 2,
+    title: "Hurry Up",
+    subtitle: "Get 50% Offer",
+    text: "All Electronic Products & Instrument For This Summer.",
+    image: "/slider/airpodsslide.jpg",
+    url: "/shop"
+  },
+  {
+    id: 3,
+    title: "Our new",
+    subtitle: "Shop in",
+    text: "화성시 조암로 14",
+    image: "/slider/joam1.jpg",
+    url: "/gallery"
+  },
+  {
+    id: 4,
+    title: "Hurry Up",
+    subtitle: "Get 30% Offer",
+    text: "for all SimCards and some tariffs",
+    image: "/slider/simcards.jpg",
+    url: "/shop"
+  }
+];

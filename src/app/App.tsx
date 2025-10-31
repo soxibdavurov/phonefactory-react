@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import OrdersPage from "./screens/ordersPage";
@@ -15,6 +15,7 @@ import { useGlobals } from "./hooks/useGlobals";
 import AboutPage from "./screens/aboutPage";
 import ScrollToTop from "./components/scroll-to-top";
 import Header from "./components/headers/Header";
+
 import ContactUs from "./screens/contactUs";
 import ShopPage from "./screens/shopPage";
 import ComparePage from "./screens/comparePage";
@@ -23,6 +24,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import NotFoundPage from "./screens/notFound";
 import CartPage from "./screens/cartPage";
+
+const Headerr = lazy(() =>
+  import("./components/headers/Header"));
 
 function App() {
   const location = useLocation();
@@ -59,68 +63,79 @@ function App() {
   return (
     <>
       {" "}
-      <Header cartItems={cartItems}
-        onAdd={onAdd}
-        onRemove={onRemove}
-        onDelete={onDelete}
-        onDeleteAll={onDeleteAll}
-        setSignupOpen={setSignupOpen}
-        setLoginOpen={setLoginOpen}
-        handleLogoutRequest={handleLogoutRequest}
-      />
+      <Suspense
+        fallback={
+          <div className="flone-preloader-wrapper">
+            <div className="flone-preloader">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        }
+      >
+        <Headerr cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+          setSignupOpen={setSignupOpen}
+          setLoginOpen={setLoginOpen}
+          handleLogoutRequest={handleLogoutRequest}
+        />
 
-      <Switch>
-        <Route path="/shop">
-          <ShopPage onAdd={onAdd} />
-        </Route>
+        <Switch>
+          <Route path="/shop">
+            <ShopPage onAdd={onAdd} />
+          </Route>
 
-        <Route path="/orders">
-          <OrdersPage />
-        </Route>
+          <Route path="/orders">
+            <OrdersPage />
+          </Route>
 
-        <Route path="/cart">
-          <CartPage />
-        </Route>
+          <Route path="/cart">
+            <CartPage />
+          </Route>
 
-        <Route path="/compare">
-          <ComparePage onAdd={onAdd} cartItems={cartItems} />
-        </Route>
+          <Route path="/compare">
+            <ComparePage onAdd={onAdd} cartItems={cartItems} />
+          </Route>
 
-        <Route path="/contact">
-          <ContactUs />
-        </Route>
+          <Route path="/contact">
+            <ContactUs />
+          </Route>
 
-        <Route path="/member-page">
-          <UsersPage />
-        </Route>
+          <Route path="/member-page">
+            <UsersPage />
+          </Route>
 
-        <Route path="/help">
-          <HelpPage />
-        </Route>
+          <Route path="/help">
+            <HelpPage />
+          </Route>
 
-        <Route path="/about">
-          <AboutPage />
-        </Route>
+          <Route path="/about">
+            <AboutPage />
+          </Route>
 
-        <Route exact path="/">
-          <HomePage onAdd={onAdd} />
-        </Route>
+          <Route exact path="/">
+            <HomePage onAdd={onAdd} />
+          </Route>
 
-        {/* ✅ fallback 404 route */}
-        <Route>
-          <NotFoundPage />
-        </Route>
-      </Switch>
-      <Footer />
-      <ScrollToTop />
-      <AuthenticationModal
-        signupOpen={signupOpen}
-        loginOpen={loginOpen}
-        handleLoginClose={handleLoginClose}
-        handleSignupClose={handleSignupClose}
-        handleSignupOpen={handleSignupOpen}   // 🔹 qo‘shildi
-        handleLoginOpen={handleLoginOpen}   // 🔹 qo‘shildi
-      />
+          {/* ✅ fallback 404 route */}
+          <Route>
+            <NotFoundPage />
+          </Route>
+        </Switch>
+        <Footer />
+        <ScrollToTop />
+        <AuthenticationModal
+          signupOpen={signupOpen}
+          loginOpen={loginOpen}
+          handleLoginClose={handleLoginClose}
+          handleSignupClose={handleSignupClose}
+          handleSignupOpen={handleSignupOpen}   // 🔹 qo‘shildi
+          handleLoginOpen={handleLoginOpen}   // 🔹 qo‘shildi
+        />
+      </Suspense>
     </>
   );
 }

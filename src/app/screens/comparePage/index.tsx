@@ -3,7 +3,7 @@ import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { useLocation, Link } from "react-router-dom";
 import { deleteFromCompare } from "../../hooks/compare-slice";
 import { RootState } from "../../store";
-import ProductRating from "../homePage/ProductRating";
+import ProductRating from "../homePage/productRating1";
 import { Fragment } from "react";
 import { CartItem } from "../../../lib/types/search";
 import { CompareItem } from "../../../lib/types/compare";

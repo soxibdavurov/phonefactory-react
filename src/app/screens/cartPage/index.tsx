@@ -18,6 +18,7 @@ import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { useLocation, Link } from "react-router-dom";
 import useBasket from "../../hooks/useBasket";
 import { CartItem } from "../../../lib/types/search";
+import cogoToast from "cogo-toast";
 
 export default function CartPage() {
     const { pathname } = useLocation();
@@ -31,10 +32,21 @@ export default function CartPage() {
         orderStatus: OrderStatus.PAUSE,
     });
 
+    // 
 
-    // if (!authMember) history.push("/");
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        if (authMember) {
+            history.push("/orders");
+            window.scrollTo(0, 0);
+        }
 
-
+        else {
+            cogoToast.warn("Please, login first!", {
+                position: "bottom-left",
+            });
+        }
+    };
 
     /* Handlers */
     const handleChange = (e: SyntheticEvent, newValue: string) => {
@@ -149,8 +161,8 @@ export default function CartPage() {
                                                                 </Link>
                                                             </td>
 
-                                                            <td className="product-name">
-                                                                <Link
+                                                            <td className="product-name" style={{ textAlign: "center" }}>
+                                                                <Link style={{ display: "block" }}
                                                                     to={
                                                                         process.env.PUBLIC_URL +
                                                                         "/shop/" +
@@ -176,7 +188,7 @@ export default function CartPage() {
                                                             </td>
 
                                                             <td className="product-price-cart">
-                                                                {discountedPrice !== null ? (
+                                                                {cartItem.discount > 0 ? (
                                                                     <Fragment>
                                                                         <span className="amount old">
                                                                             {discountedPrice.toLocaleString()} ₩{" "}
@@ -212,15 +224,15 @@ export default function CartPage() {
                                                                 </div>
                                                             </td>
                                                             <td className="product-subtotal">
-                                                                {discountedPrice !== null
+                                                                {discountedPrice > 0
                                                                     ?
                                                                     (
                                                                         discountedPrice * cartItem.quantity
-                                                                    ).toFixed() + `₩`
+                                                                    ).toLocaleString() + `₩`
                                                                     :
                                                                     (
                                                                         cartItem.price * cartItem.quantity
-                                                                    ).toFixed() + `₩`}
+                                                                    ).toLocaleString() + `₩`}
                                                             </td>
 
                                                             <td className="product-remove">
@@ -258,69 +270,6 @@ export default function CartPage() {
                             </div>
 
                             <div className="row">
-                                <div className="col-lg-4 col-md-6">
-                                    <div className="cart-tax">
-                                        <div className="title-wrap">
-                                            <h4 className="cart-bottom-title section-bg-gray">
-                                                Estimate Shipping And Tax
-                                            </h4>
-                                        </div>
-                                        <div className="tax-wrapper">
-                                            <p>
-                                                Enter your destination to get a shipping estimate.
-                                            </p>
-                                            <div className="tax-select-wrapper">
-                                                <div className="tax-select">
-                                                    <label>* Country</label>
-                                                    <select className="email s-email s-wid">
-                                                        <option>Bangladesh</option>
-                                                        <option>Albania</option>
-                                                        <option>Åland Islands</option>
-                                                        <option>Afghanistan</option>
-                                                        <option>Belgium</option>
-                                                    </select>
-                                                </div>
-                                                <div className="tax-select">
-                                                    <label>* Region / State</label>
-                                                    <select className="email s-email s-wid">
-                                                        <option>Bangladesh</option>
-                                                        <option>Albania</option>
-                                                        <option>Åland Islands</option>
-                                                        <option>Afghanistan</option>
-                                                        <option>Belgium</option>
-                                                    </select>
-                                                </div>
-                                                <div className="tax-select">
-                                                    <label>* Zip/Postal Code</label>
-                                                    <input type="text" />
-                                                </div>
-                                                <button className="cart-btn-2" type="submit">
-                                                    Get A Quote
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-4 col-md-6">
-                                    <div className="discount-code-wrapper">
-                                        <div className="title-wrap">
-                                            <h4 className="cart-bottom-title section-bg-gray">
-                                                Use Coupon Code
-                                            </h4>
-                                        </div>
-                                        <div className="discount-code">
-                                            <p>Enter your coupon code if you have one.</p>
-                                            <form>
-                                                <input type="text" required name="name" />
-                                                <button className="cart-btn-2" type="submit">
-                                                    Apply Coupon
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="col-lg-4 col-md-12">
                                     <div className="grand-totall">
                                         <div className="title-wrap">
@@ -334,14 +283,24 @@ export default function CartPage() {
                                                 {originalTotal.toLocaleString()} ₩
                                             </span>
                                         </h5>
+                                        {totalDiscount > 0 && (
+                                            <h5 style={{ color: "#ff3d3d" }}>
+                                                Discount:{" "}
+                                                <span className="shop-total">
+                                                    -{totalDiscount.toLocaleString()} ₩
+                                                </span>
+                                            </h5>
+                                        )}
+
+
 
                                         <h4 className="grand-totall-title">
                                             Grand Total{" "}
                                             <span>
-                                                {originalTotal.toFixed(2)}
+                                                {grandTotal.toLocaleString()} ₩
                                             </span>
                                         </h4>
-                                        <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                                        <Link onClick={handleClick} to={process.env.PUBLIC_URL + "/checkout"}>
                                             Proceed to Checkout
                                         </Link>
                                     </div>
