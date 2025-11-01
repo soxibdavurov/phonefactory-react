@@ -118,9 +118,7 @@ const ProductTabRight = () => {
                             <Fragment>
                                 <div className="row row-5 test">
                                     <div
-                                        className={clsx(thumbPosition && thumbPosition === "left"
-                                            ? "col-xl-10 order-1 order-xl-2"
-                                            : "col-xl-10")}
+                                        className={"col-xl-10"}
                                     >
                                         <div className="product-large-image-wrapper">
                                             {product.discount || product.new ? (
@@ -634,10 +632,10 @@ const ProductTabRight = () => {
             </div>
 
             {/* related product slider */}
-            <RelatedProductSlider
+            {/* <RelatedProductSlider
                 spaceBottomClass="pb-95"
                 category={product.category[0]}
-            />
+            /> */}
         </Fragment>
     );
 };
