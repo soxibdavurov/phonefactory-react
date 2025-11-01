@@ -1,60 +1,149 @@
+// src/stores/slices/cart-slice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CartItem } from "../../lib/types/search";
 import cogoToast from "cogo-toast";
+import { v4 } from 'uuid'
 
-interface CartState {
+/** Mahsulot uchun umumiy tip (UIdan dispatch qilinadigan payload) */
+export interface ProductPayload {
+    id: string | number;
+    // ixtiyoriy maydonlar – kerak bo‘lsa kengaytirasiz
+    name?: string;
+    price?: number;
+    quantity?: number;
+    /** variation = true bo‘lsa rang/razmer farqlanadi */
+    variation?: boolean;
+    selectedProductColor?: string;
+    selectedProductSize?: string;
+    /** Ayrim joylarda mavjud bo‘lishi mumkin, lekin cartga qo‘shilganda yangidan beriladi */
+    cartItemId?: string;
+}
+
+/** Savatchadagi aniq item tipi */
+export interface CartItem extends Omit<ProductPayload, "cartItemId" | "quantity"> {
+    cartItemId: string;
+    quantity: number;
+}
+
+/** Slice state tipi */
+export interface CartState {
     cartItems: CartItem[];
 }
 
-const initialState: CartState = { cartItems: [] };
+const initialState: CartState = {
+    cartItems: [],
+};
+
+const sameVariant = (a: ProductPayload, b: CartItem): boolean => {
+    return (
+        a.id === b.id &&
+        (!!a.selectedProductColor ? a.selectedProductColor === b.selectedProductColor : true) &&
+        (!!a.selectedProductSize ? a.selectedProductSize === b.selectedProductSize : true) &&
+        // agar payloadda cartItemId kelsa, aynan o‘sha elementga tegishli bo‘lishi ham mumkin
+        (a.cartItemId ? a.cartItemId === b.cartItemId : true)
+    );
+};
 
 const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        /** ➕ Mahsulot qo‘shish yoki miqdorini oshirish */
-        addToCart: (state, action: PayloadAction<CartItem>) => {
-            const item = action.payload;
-            const exist = state.cartItems.find(i => i._id === item._id);
+        addToCart(state, action: PayloadAction<ProductPayload>) {
+            const product = action.payload;
 
-            if (exist) {
-                exist.quantity += 1;
-                cogoToast.success("Product quantity increased", { position: "bottom-left" });
+            if (!product.variation) {
+                // oddiy mahsulot (variant yo‘q)
+                const cartItem = state.cartItems.find((item) => item.id === product.id);
+
+                if (!cartItem) {
+                    state.cartItems.push({
+                        ...product,
+                        quantity: product.quantity ? product.quantity : 1,
+                        cartItemId: v4(),
+                    });
+                } else {
+                    state.cartItems = state.cartItems.map((item) => {
+                        if (item.cartItemId === cartItem.cartItemId) {
+                            return {
+                                ...item,
+                                quantity: product.quantity ? item.quantity + product.quantity : item.quantity + 1,
+                            };
+                        }
+                        return item;
+                    });
+                }
             } else {
-                state.cartItems.push({ ...item, quantity: 1 });
-                cogoToast.success("Product added to cart", { position: "bottom-left" });
+                // variantli mahsulot (rang/razmer)
+                const cartItem = state.cartItems.find((item) => sameVariant(product, item));
+
+                if (!cartItem) {
+                    // bunday kombinatsiya yo‘q — yangi item qo‘shamiz
+                    state.cartItems.push({
+                        ...product,
+                        quantity: product.quantity ? product.quantity : 1,
+                        cartItemId: v4(),
+                    });
+                } else if (
+                    cartItem !== undefined &&
+                    (cartItem.selectedProductColor !== product.selectedProductColor ||
+                        cartItem.selectedProductSize !== product.selectedProductSize)
+                ) {
+                    // ID bir xil, lekin variant boshqacha bo‘lsa — alohida item sifatida qo‘shamiz
+                    state.cartItems = [
+                        ...state.cartItems,
+                        {
+                            ...product,
+                            quantity: product.quantity ? product.quantity : 1,
+                            cartItemId: v4(),
+                        },
+                    ];
+                } else {
+                    // mavjud variantga miqdor qo‘shamiz (yoki quantity ni oshiramiz)
+                    state.cartItems = state.cartItems.map((item) => {
+                        if (item.cartItemId === cartItem.cartItemId) {
+                            return {
+                                ...item,
+                                quantity: product.quantity ? item.quantity + product.quantity : item.quantity + 1,
+                                selectedProductColor: product.selectedProductColor,
+                                selectedProductSize: product.selectedProductSize,
+                            };
+                        }
+                        return item;
+                    });
+                }
+            }
+
+            cogoToast.success("Added To Cart", { position: "bottom-left" });
+        },
+
+        /** cartItemId bo‘yicha o‘chirish */
+        deleteFromCart(state, action: PayloadAction<string>) {
+            state.cartItems = state.cartItems.filter((item) => item.cartItemId !== action.payload);
+            cogoToast.error("Removed From Cart", { position: "bottom-left" });
+        },
+
+        /** Bitta item miqdorini kamaytirish yoki 1 bo‘lsa o‘chirish */
+        decreaseQuantity(state, action: PayloadAction<CartItem>) {
+            const product = action.payload;
+
+            if (product.quantity === 1) {
+                state.cartItems = state.cartItems.filter((item) => item.cartItemId !== product.cartItemId);
+                cogoToast.error("Removed From Cart", { position: "bottom-left" });
+            } else {
+                state.cartItems = state.cartItems.map((item) =>
+                    item.cartItemId === product.cartItemId ? { ...item, quantity: item.quantity - 1 } : item
+                );
+                cogoToast.warn("Item Decremented From Cart", { position: "bottom-left" });
             }
         },
 
-        /** ➖ Mahsulot miqdorini kamaytirish yoki o‘chirish */
-        removeFromCart: (state, action: PayloadAction<CartItem>) => {
-            const item = action.payload;
-            const exist = state.cartItems.find(i => i._id === item._id);
-
-            if (!exist) return;
-
-            if (exist.quantity > 1) {
-                exist.quantity -= 1;
-                cogoToast.warn("Product quantity decreased", { position: "bottom-left" });
-            } else {
-                state.cartItems = state.cartItems.filter(i => i._id !== item._id);
-                cogoToast.error("Product removed from cart", { position: "bottom-left" });
-            }
-        },
-
-        /** ❌ Mahsulotni butunlay o‘chirish */
-        deleteFromCart: (state, action: PayloadAction<CartItem>) => {
-            state.cartItems = state.cartItems.filter(i => i._id !== action.payload._id);
-            cogoToast.error("Product removed from cart", { position: "bottom-left" });
-        },
-
-        /** 🗑️ Barcha mahsulotlarni tozalash */
-        clearCart: (state) => {
+        /** Hammasini tozalash */
+        deleteAllFromCart(state) {
             state.cartItems = [];
-            cogoToast.info("All items cleared from cart", { position: "bottom-left" });
-        }
-    }
+        },
+    },
 });
 
-export const { addToCart, removeFromCart, deleteFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, deleteFromCart, decreaseQuantity, deleteAllFromCart } =
+    cartSlice.actions;
+
 export default cartSlice.reducer;

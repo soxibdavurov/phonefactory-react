@@ -4,6 +4,7 @@ import Products from "./Products";
 // import "../../../css/products.css";
 import { CartItem } from "../../../lib/types/search";
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
+import ProductTabRight from "./PrDetail2";
 
 interface ProductsPageProps {
     onAdd: (item: CartItem) => void;
@@ -30,6 +31,9 @@ export default function ShopPage(props: ProductsPageProps) {
                 <Route path={`${shop.path}`}>
                     <Products onAdd={onAdd} />
                 </Route>
+                {/* <Route path={`${shop.path}/:productId`}>
+                    <ProductTabRight />
+                </Route> */}
             </Switch>
 
             {/* </div> */}

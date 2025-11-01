@@ -60,6 +60,7 @@ const useBasket = () => {
   const onDeleteAll = () => {
     setCartItems([]);
     localStorage.removeItem("cartData");
+    cogoToast.info("All items cleared from cart", { position: "bottom-left" });
   };
   return {
     cartItems,

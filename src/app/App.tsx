@@ -1,32 +1,29 @@
 import React, { lazy, Suspense, useState } from "react";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
-import HomePage from "./screens/homePage";
-import OrdersPage from "./screens/ordersPage";
-import UsersPage from "./screens/userPage";
-import Footer from "./components/footer";
-import HelpPage from "./screens/helpPage";
-import useBasket from "./hooks/useBasket";
-import AuthenticationModal from "./components/auth";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
 import MemberService from "./services/MemberService";
+import AuthenticationModal from "./components/auth";
 import { useGlobals } from "./hooks/useGlobals";
-
-import AboutPage from "./screens/aboutPage";
+import useBasket from "./hooks/useBasket";
+import Footer from "./components/footer";
 import ScrollToTop from "./components/scroll-to-top";
-import Header from "./components/headers/Header";
 
-import ContactUs from "./screens/contactUs";
-import ShopPage from "./screens/shopPage";
-import ComparePage from "./screens/comparePage";
-import { CompareItem } from "../lib/types/compare";
-import { useSelector } from "react-redux";
-import { RootState } from "./store";
-import NotFoundPage from "./screens/notFound";
-import CartPage from "./screens/cartPage";
-
-const Headerr = lazy(() =>
-  import("./components/headers/Header"));
+const HomePage = lazy(() => import("./screens/homePage"));
+const OrdersPage = lazy(() => import("./screens/ordersPage"));
+const UsersPage = lazy(() => import("./screens/userPage"));
+const HelpPage = lazy(() => import("./screens/helpPage"));
+const AboutPage = lazy(() => import("./screens/aboutPage"));
+const ContactUs = lazy(() => import("./screens/contactUs"));
+const ShopPage = lazy(() => import("./screens/shopPage"));
+const ComparePage = lazy(() => import("./screens/comparePage"));
+const NotFoundPage = lazy(() => import("./screens/notFound"));
+const CartPage = lazy(() => import("./screens/cartPage"));
+const Header = lazy(() => import("./components/headers/Header"));
+// import Header from "./components/headers/Header";
+// import { CompareItem } from "../lib/types/compare";
+// import { useSelector } from "react-redux";
+// import { RootState } from "./store";
 
 function App() {
   const location = useLocation();
@@ -73,7 +70,7 @@ function App() {
           </div>
         }
       >
-        <Headerr cartItems={cartItems}
+        <Header cartItems={cartItems}
           onAdd={onAdd}
           onRemove={onRemove}
           onDelete={onDelete}
