@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 
-import { addToCart } from "../../stores/slices/cart-slice";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { retrieveNewProducts, retrievePopularProducts, retrieveSaleItems } from "./selector";

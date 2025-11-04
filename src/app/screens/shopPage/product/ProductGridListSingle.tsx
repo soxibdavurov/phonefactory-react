@@ -27,7 +27,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
     const imagePath = `${serverApi}/${product.productImages[0]}`;
     const imagePath2 = `${serverApi}/${product.productImages[1]}`;
     const history = useHistory();
-    const chooSeSMARTPHONEHandler = (id: string) => {
+    const chooseMobileshopHandler = (id: string) => {
         history.push(`/shop/${id}`);
     };
 
@@ -130,7 +130,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                 </div>
                 <div className="product-content text-center">
                     <h3>
-                        <Link to={`/shop/${product._id}`} onClick={() => chooSeSMARTPHONEHandler(product._id)}>
+                        <Link to={`/shop/${product._id}`} onClick={() => chooseMobileshopHandler(product._id)}>
                             {product.productName}
                         </Link>
                     </h3>
@@ -190,7 +190,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                     <div className="col-xl-8 col-md-7 col-sm-6">
                         <div className="shop-list-content">
                             <h3>
-                                <Link to={`/shop/${product._id}`} onClick={() => chooSeSMARTPHONEHandler(product._id)}>
+                                <Link to={`/shop/${product._id}`} onClick={() => chooseMobileshopHandler(product._id)}>
                                     {product.productName}
                                 </Link>
                             </h3>

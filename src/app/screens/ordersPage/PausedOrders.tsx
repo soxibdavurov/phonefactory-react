@@ -13,6 +13,7 @@ import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import { useGlobals } from "../../stores/slices/useGlobals";
 import OrderService from "../../services/OrdersService";
+import { Link } from "react-router-dom";
 
 
 /* REDUX SLIC & SELECTOR */
@@ -108,9 +109,10 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                     justifyContent: "space-between",
                                  }}>
 
-                                    <p className={"title-dish"}>{product.productName}</p>
+                                    <Link className="product-name" to={`shop/${product._id}`}>
+                                       <p className={"title-dish"}>{product.productName}</p></Link>
                                     <Box className={"price-box"}>
-                                       <p>${item.itemPrice}</p>
+                                       <p>{item.itemPrice}</p>
                                        < img src={"/icons/close.svg"} />
                                        <p>{item.itemQuantity}</p>
                                        < img src={"/icons/pause.svg"} />

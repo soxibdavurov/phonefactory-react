@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { deleteFromCart } from "../../../stores/slices/cart-slice";
 import { CartItem } from "../../../../lib/types/search";
 import { Messages, serverApi } from "../../../../lib/config";
 import { useGlobals } from "../../../stores/slices/useGlobals";

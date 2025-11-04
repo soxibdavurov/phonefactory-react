@@ -12,11 +12,9 @@ import { useGlobals } from "../../stores/slices/useGlobals";
 import { useHistory } from "react-router-dom";
 import "../../../css/order.css";
 import { Messages, serverApi } from "../../../lib/config";
-import { MemberType } from "../../../lib/enums/member.enum";
 
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { useLocation, Link } from "react-router-dom";
-import useBasket from "../../stores/slices/useBasket";
 import { CartItem } from "../../../lib/types/search";
 import cogoToast from "cogo-toast";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";

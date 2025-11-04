@@ -1,0 +1,28 @@
+const funFact = [
+    {
+        "id": "1",
+        "iconClass": "pe-7s-portfolio",
+        "countNum": 360,
+        "title": "project done"
+    },
+    {
+        "id": "2",
+        "iconClass": "pe-7s-cup",
+        "countNum": 690,
+        "title": "cups of coffee"
+    },
+    {
+        "id": "3",
+        "iconClass": "pe-7s-light",
+        "countNum": 100,
+        "title": "branding"
+    },
+    {
+        "id": "4",
+        "iconClass": "pe-7s-smile",
+        "countNum": 420,
+        "title": "happy clients"
+    }
+]
+
+export default funFact;

@@ -85,7 +85,6 @@ export default function HomePage(props: ProductsPageProps) {
       <CategoryOneSlider />
       <ProductCollectionSection onAdd={onAdd} />
       <Advertisement />
-      {/* featured icon */}
       <FeatureIcon />
       <Banner />
       <BlogFeatured />

@@ -23,7 +23,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
     const imagePath2 = `${serverApi}/${ele.productImages[1]}`;
     const dispatch = useDispatch();
     const history = useHistory();
-    const chooSeSMARTPHONEHandler = (id: string) => {
+    const chooseMobileshopHandler = (id: string) => {
         history.push(`/shop/${id}`);
     };
     return (
@@ -127,7 +127,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
             <div className="product-content text-center">
                 {/* <div className="title-price-wrap-2"> */}
                 <h3>
-                    <Link to={`/shop/${ele._id}`} onClick={() => chooSeSMARTPHONEHandler(ele._id)}>
+                    <Link to={`/shop/${ele._id}`} onClick={() => chooseMobileshopHandler(ele._id)}>
                         {ele.productName}
                     </Link>
                 </h3>
