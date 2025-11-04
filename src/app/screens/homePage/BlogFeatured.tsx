@@ -5,7 +5,7 @@ const blogFeaturedFiveData = [
         "image": "/img/blog/sim.png",
         "category": ["sim", "connection"],
         "title": "A guide to purchase SIM cards",
-        "url": "/blog-details-standard",
+        "url": "/blog-details",
         "author": "Admin",
         "authorUrl": "/blog-standard"
     },
@@ -14,7 +14,7 @@ const blogFeaturedFiveData = [
         "image": "/img/blog/smartphones.jpg",
         "category": ["smartphones", "connection"],
         "title": "Five ways to lead a happy life",
-        "url": "/blog-details-standard",
+        "url": "/blog-details",
         "author": "Admin",
         "authorUrl": "/blog-standard"
     },
@@ -23,7 +23,7 @@ const blogFeaturedFiveData = [
         "image": "/img/blog/companies.jpg",
         "category": ["connection"],
         "title": "Tips on having a happy life",
-        "url": "/blog-details-standard",
+        "url": "/blog-details",
         "author": "Admin",
         "authorUrl": "/blog-standard"
     }

@@ -7,7 +7,7 @@
       "men"
     ],
     "title": "A guide to latest trends",
-    "url": "/blog-details-standard",
+    "url": "/blog-details",
     "author": "Admin",
     "authorUrl": "/blog-standard"
   },
@@ -18,7 +18,7 @@
       "lifestyle"
     ],
     "title": "Five ways to lead a happy life",
-    "url": "/blog-details-standard",
+    "url": "/blog-details",
     "author": "Admin",
     "authorUrl": "/blog-standard"
   },
@@ -29,7 +29,7 @@
       "lifestyle"
     ],
     "title": "Tips on having a happy life",
-    "url": "/blog-details-standard",
+    "url": "/blog-details",
     "author": "Admin",
     "authorUrl": "/blog-standard"
   }

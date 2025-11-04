@@ -23,16 +23,16 @@ const teamMemberData = [
         "fbLink": "//www.facebook.com",
         "twitterLink": "//www.twitter.com",
         "instagramLink": "//www.instagram.com",
-        "name": "Sokhibjon (Сохибжон)",
+        "name": "Sokhibjon (Сохибджон)",
         "position": "Main sales assistant"
     },
     {
         "id": "4",
-        "image": "../img/team/team-4.jpg",
+        "image": "../img/team/Islom.jpg",
         "fbLink": "//www.facebook.com",
         "twitterLink": "//www.twitter.com",
         "instagramLink": "//www.instagram.com",
-        "name": "Islom",
+        "name": "Islomjon (Исломджон)",
         "position": "Sales assistant"
     }
 ]

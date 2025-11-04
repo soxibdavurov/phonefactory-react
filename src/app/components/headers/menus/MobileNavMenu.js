@@ -23,7 +23,7 @@ const MobileNavMenu = () => {
               <Link to={"/blog-standard"}> Blog Standard</Link>
             </li>
             <li>
-              <Link to={"/blog-details-standard"}>Blog Details Standard</Link>
+              <Link to={"/blog-details"}>Blog Details Standard</Link>
             </li>
           </ul>
         </li>

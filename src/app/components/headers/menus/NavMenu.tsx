@@ -20,16 +20,16 @@ const NavMenu: React.FC = () => {
             <Link to="/orders">Orders</Link>
           </li>) : null}
           <li>
-            <Link to="/blog-standard">
+            <Link to="/blog">
               Blog
               <i className="fa fa-angle-down" />
             </Link>
             <ul className="submenu">
               <li>
-                <Link to="/blog-standard">Blog Standard</Link>
+                <Link to="/blog">Blog Standard</Link>
               </li>
               <li>
-                <Link to="/blog-details-standard">Blog Details Standard</Link>
+                <Link to="/blog-details">Blog Details Standard</Link>
               </li>
             </ul>
           </li>

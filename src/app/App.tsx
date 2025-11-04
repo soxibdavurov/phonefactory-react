@@ -8,13 +8,19 @@ import { useGlobals } from "./stores/slices/useGlobals";
 import useBasket from "./stores/slices/useBasket";
 import Footer from "./components/footer";
 import ScrollToTop from "./components/scroll-to-top";
+import ScrollToTop2 from "./components/helpers/scroll-top";
 
 const HomePage = lazy(() => import("./screens/homePage"));
 const OrdersPage = lazy(() => import("./screens/ordersPage"));
+// const BlogPage = lazy(() => import("./screens/blog"));
 const UsersPage = lazy(() => import("./screens/userPage"));
 const HelpPage = lazy(() => import("./screens/helpPage"));
 const AboutPage = lazy(() => import("./screens/aboutPage"));
 const ContactUs = lazy(() => import("./screens/contactUs"));
+const BlogStandard = lazy(() => import("./screens/blog"));
+const BlogDetails = lazy(() =>
+  import("./screens/blog/blogDetails")
+);
 const ShopPage = lazy(() => import("./screens/shopPage"));
 const ComparePage = lazy(() => import("./screens/comparePage"));
 const NotFoundPage = lazy(() => import("./screens/notFound"));
@@ -70,6 +76,7 @@ function App() {
           </div>
         }
       >
+        <ScrollToTop2 />
         <Header cartItems={cartItems}
           onAdd={onAdd}
           onRemove={onRemove}
@@ -115,6 +122,14 @@ function App() {
 
           <Route path="/about">
             <AboutPage />
+          </Route>
+
+          <Route path="/blog">
+            <BlogStandard />
+          </Route>
+
+          <Route path="/blog-details">
+            <BlogDetails />
           </Route>
 
           <Route exact path="/">
