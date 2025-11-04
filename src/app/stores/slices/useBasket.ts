@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CartItem } from "../../lib/types/search";
+import { CartItem } from "../../../lib/types/search";
 import cogoToast from "cogo-toast";
 
 const useBasket = () => {

@@ -8,22 +8,31 @@ import { Dispatch } from "@reduxjs/toolkit";
 import { Order, OrderInquiry } from "../../../lib/types/order";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrdersService";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../stores/slices/useGlobals";
 import { useHistory } from "react-router-dom";
 import "../../../css/order.css";
-import { serverApi } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
 
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { useLocation, Link } from "react-router-dom";
-import useBasket from "../../hooks/useBasket";
+import useBasket from "../../stores/slices/useBasket";
 import { CartItem } from "../../../lib/types/search";
 import cogoToast from "cogo-toast";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
 
-export default function CartPage() {
+interface CartPageProps {
+    cartItems: CartItem[];
+    onAdd: (item: CartItem) => void;
+    onRemove: (item: CartItem) => void;
+    onDelete: (item: CartItem) => void;
+    onDeleteAll: () => void;
+}
+
+export default function CartPage(props: CartPageProps) {
     const { pathname } = useLocation();
-    const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
-    const { authMember, orderBuilder } = useGlobals();
+    const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+    const { authMember, setOrderBuilder } = useGlobals();
     const history = useHistory();
     const [value, setValue] = useState("1");
     const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
@@ -33,51 +42,32 @@ export default function CartPage() {
     });
 
     // 
-
-    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        if (authMember) {
-            history.push("/orders");
-            window.scrollTo(0, 0);
-        }
-
-        else {
-            cogoToast.warn("Please, login first!", {
+    const proceedOrderHandler = async () => {
+        try {
+            if (!authMember) cogoToast.warn("Please, login first!", {
                 position: "bottom-left",
             });
+
+            const order = new OrderService();
+            await order.createOrder(cartItems);
+
+            onDeleteAll();
+            setOrderBuilder(new Date());
+            //Refresh via context
+            history.push("/orders");
+
+
+        } catch (err) {
+            console.log(err);
+            sweetErrorHandling(err).then();
         }
-    };
+    }
+
 
     /* Handlers */
     const handleChange = (e: SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
-
-    // 🔁 faqat shu komponentda ishlatiladigan reload helper
-    const reloadAfterToast = (delay = 700) => {
-        if (typeof window !== "undefined") {
-            setTimeout(() => window.location.reload(), delay);
-        }
-    };
-
-    // 🧰 Wrapper handlerlar: hook funksiyasini chaqiramiz → keyin reload
-    const onAddFromPaused = (item: CartItem) => {
-        onAdd(item);
-        reloadAfterToast();
-    };
-    const onRemoveFromPaused = (item: CartItem) => {
-        onRemove(item);
-        reloadAfterToast();
-    };
-    const onDeleteFromPaused = (item: CartItem) => {
-        onDelete(item);
-        reloadAfterToast();
-    };
-    const onDeleteAllFromPaused = () => {
-        onDeleteAll();
-        reloadAfterToast();
-    };
-
 
     // 🧮 1️⃣ Umumiy narx (chegirmasiz)
     const originalTotal = cartItems.reduce(
@@ -206,7 +196,7 @@ export default function CartPage() {
 
                                                             <td className="product-quantity">
                                                                 <div className="cart-plus-minus">
-                                                                    <button className="dec qtybutton" onClick={() => onRemoveFromPaused(cartItem)}>
+                                                                    <button className="dec qtybutton" onClick={() => onRemove(cartItem)}>
                                                                         -
                                                                     </button>
                                                                     <input
@@ -217,7 +207,7 @@ export default function CartPage() {
                                                                     />
                                                                     <button
                                                                         className="inc qtybutton"
-                                                                        onClick={() => onAddFromPaused(cartItem)}
+                                                                        onClick={() => onAdd(cartItem)}
                                                                     >
                                                                         +
                                                                     </button>
@@ -237,7 +227,7 @@ export default function CartPage() {
 
                                                             <td className="product-remove">
                                                                 <button
-                                                                    onClick={() => onDeleteFromPaused(cartItem)}
+                                                                    onClick={() => onDelete(cartItem)}
                                                                 >
                                                                     <i className="fa fa-times"></i>
                                                                 </button>
@@ -261,7 +251,7 @@ export default function CartPage() {
                                             </Link>
                                         </div>
                                         <div className="cart-clear">
-                                            <button onClick={() => onDeleteAllFromPaused()}>
+                                            <button onClick={() => onDeleteAll()}>
                                                 Clear Shopping Cart
                                             </button>
                                         </div>
@@ -300,7 +290,12 @@ export default function CartPage() {
                                                 {grandTotal.toLocaleString()} ₩
                                             </span>
                                         </h4>
-                                        <Link onClick={handleClick} to={process.env.PUBLIC_URL + "/checkout"}>
+                                        <Link
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                proceedOrderHandler();
+                                            }}
+                                            to={process.env.PUBLIC_URL + "/checkout"}>
                                             Proceed to Checkout
                                         </Link>
                                     </div>

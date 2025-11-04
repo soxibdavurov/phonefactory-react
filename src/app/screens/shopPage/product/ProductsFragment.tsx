@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
 import { Product } from "../../../../lib/types/product";
 import { CartItem } from "../../../../lib/types/search";
 import ProductGridListSingle from "./ProductGridListSingle";

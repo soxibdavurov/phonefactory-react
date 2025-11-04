@@ -8,7 +8,6 @@ import IconGroup from "./menus/IconGroup";
 import MobileNavMenu from "./menus/MobileNavMenu";
 import MobileMenu from "./menus/MobileMenu";
 import { CartItem } from "../../../lib/types/search";
-import Basket from "./Basket";
 
 interface HeaderProps {
   cartItems: CartItem[];

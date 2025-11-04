@@ -3,7 +3,10 @@ import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteFromCart } from "../../../stores/slices/cart-slice";
 import { CartItem } from "../../../../lib/types/search";
-import { serverApi } from "../../../../lib/config";
+import { Messages, serverApi } from "../../../../lib/config";
+import { useGlobals } from "../../../stores/slices/useGlobals";
+import OrderService from "../../../services/OrdersService";
+import { sweetErrorHandling } from "../../../../lib/sweetAlert";
 
 interface MenuCartProps {
   cartItems: CartItem[];
@@ -14,8 +17,9 @@ interface MenuCartProps {
 }
 
 export default function MenuCart(props: MenuCartProps) {
-  const { cartItems, onAdd, onRemove, onDelete } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
   const dispatch = useDispatch();
+  const { authMember, setOrderBuilder } = useGlobals();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -24,9 +28,25 @@ export default function MenuCart(props: MenuCartProps) {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const proceedOrderHandler = async () => {
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+
+      const order = new OrderService();
+      await order.createOrder(cartItems);
+
+      onDeleteAll();
+      setOrderBuilder(new Date());
+      //Refresh via context
+      history.push("/orders");
+
+
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err).then();
+    }
+  }
+
 
   // 🧮 1️⃣ Umumiy narx (chegirmasiz)
   const originalTotal = cartItems.reduce(
@@ -164,7 +184,12 @@ export default function MenuCart(props: MenuCartProps) {
             <Link className="default-btn" to="/cart">
               View Cart
             </Link>
-            <Link className="default-btn" to="/checkout">
+            <Link className="default-btn" to="/checkout"
+              onClick={(e) => {
+                e.preventDefault();
+                proceedOrderHandler();
+              }}
+            >
               Checkout
             </Link>
           </div>

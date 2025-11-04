@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { useLocation, Link } from "react-router-dom";
-import { deleteFromCompare } from "../../hooks/compare-slice";
-import { RootState } from "../../store";
+import { deleteFromCompare } from "../../stores/slices/compare-slice";
+import { RootState } from "../../stores/store";
 import ProductRating from "../homePage/productRating1";
 import { Fragment } from "react";
 import { CartItem } from "../../../lib/types/search";

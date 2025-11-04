@@ -1,30 +1,36 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ProductsPageState } from "../../../lib/types/screen";
-import { stat } from "fs";
+import { Product } from "../../../lib/types/product"; // sizdagi product tipi
 
+// 🧩 Boshlang‘ich holat
 const initialState: ProductsPageState = {
     mobileshop: null,
     chosenProduct: null,
     products: [],
 };
 
+// 🧱 Slice
 const productsPageSlice = createSlice({
     name: "productsPage",
     initialState,
     reducers: {
-        setMobileshop: (state, action) => {
+        setMobileshop: (state, action: PayloadAction<any>) => {
             state.mobileshop = action.payload;
         },
-        setChosenProduct: (state, action) => {
+        setChosenProduct: (state, action: PayloadAction<Product | null>) => {
             state.chosenProduct = action.payload;
         },
-        setProducts: (state, action) => {
+        setProducts: (state, action: PayloadAction<Product[]>) => {
             state.products = action.payload;
         },
+        // ⚡ optional: productsni tozalash yoki reset qilish uchun
+        resetProductsPage: () => initialState,
     },
 });
 
-export const { setMobileshop, setChosenProduct, setProducts } = productsPageSlice.actions;
+// 🔹 Actions
+export const { setMobileshop, setChosenProduct, setProducts, resetProductsPage } =
+    productsPageSlice.actions;
 
-const ProductsPageReducer = productsPageSlice.reducer;
-export default ProductsPageReducer;
+// 🔹 Reducer
+export default productsPageSlice.reducer;

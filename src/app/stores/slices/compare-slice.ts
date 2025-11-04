@@ -1,7 +1,7 @@
 // src/stores/slices/compare-slice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import cogoToast from "cogo-toast";
-import { CompareItem } from "../../lib/types/compare";
+import { CompareItem } from "../../../lib/types/compare";
 
 type CompareState = {
   compareItems: CompareItem[];

@@ -25,17 +25,18 @@ import { CartItem } from "../../../lib/types/search";
 import { serverApi } from "../../../lib/config";
 import clsx from "clsx";
 import ProductRating from "../homePage/productRating1";
-import { RootState } from "../../store";
-import { addToCompare } from "../../hooks/compare-slice";
+import { RootState } from "../../stores/store";
+import { addToCompare } from "../../stores/slices/compare-slice";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import ProductGridListSingle from "./product/ProductGridListSingle";
-
+import SingleProductGrid from "../homePage/SingleProductGrid";
+import { retrieveRelatedProducts } from "./selector";
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
     setMobileshop: (data: Member) => dispatch(setMobileshop(data)),
     setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
-
+    // setRelatedProducts: (data: Product) => dispatch(setRelatedProducts(data)),
 });
 
 const chosenProductRetriever = createSelector(retrieveChosenProduct, (chosenProduct) => ({
@@ -48,6 +49,8 @@ interface ChosenProductsProps {
     onAdd: (item: CartItem) => void;
 }
 
+
+
 export default function ChosenProduct(props: ChosenProductsProps) {
     const { onAdd } = props;
     const history = useHistory();
@@ -58,6 +61,10 @@ export default function ChosenProduct(props: ChosenProductsProps) {
     const [quantityCount, setQuantityCount] = useState(1);
     const compareItems = useSelector((state: RootState) => state.comparison.compareItems) ?? [];
     const compareItem = compareItems.find((item) => item._id === chosenProduct?._id);
+    const relatedProducts = useSelector(retrieveRelatedProducts);
+
+
+
     useEffect(() => {
         if (!productId) return;
 
@@ -87,7 +94,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
     // Asosiy galereya uchun Swiper sozlamalari
     const gallerySwiperParams = {
         spaceBetween: 10,
-        loop: false,
+        loop: true,
         effect: "fade" as const,
         fadeEffect: { crossFade: true },
         modules: [EffectFade, Thumbs],
@@ -96,7 +103,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
     };
 
     const settings = {
-        loop: false,
+        loop: true,
         slidesPerView: 4,
         grabCursor: true,
         spaceBetween: 30,
@@ -122,7 +129,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
         spaceBetween: 10,
         slidesPerView: 4,
         touchRatio: 0.2,
-        loop: false,
+        loop: true,
         slideToClickedSlide: true,
         direction: "vertical" as const,
         breakpoints: {
@@ -628,16 +635,15 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                         <div className={clsx("section-title", "text-center", "mb-50")}>
                             <h2>Related Products</h2>
                         </div>
-                        {/* {prods?.length ? (
+                        {relatedProducts?.length ? (
                             <Swiper {...settings}>
-                                {prods.map(product => (
-                                    <SwiperSlide key={product.id}>
-                                        <ProductGridListSingle
-                                        />
+                                {relatedProducts.map(ele => (
+                                    <SwiperSlide key={ele._id}>
+                                        <SingleProductGrid ele={ele} onAdd={onAdd} />
                                     </SwiperSlide>
                                 ))}
                             </Swiper>
-                        ) : null} */}
+                        ) : null}
                     </div>
                 </div>
             </Fragment>

@@ -1,11 +1,11 @@
 import { createContext, useContext } from "react";
-import { Member } from "../../lib/types/member";
+import { Member } from "../../../lib/types/member";
 
 interface GlobalInterface {
   authMember: Member | null;
   setAuthMember: (member: Member | null) => void;
   orderBuilder: Date;
-  setOrderBuilder: (input: Date) => void; 
+  setOrderBuilder: (input: Date) => void;
 }
 
 export const GlobalContext = createContext<GlobalInterface | undefined>(

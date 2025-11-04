@@ -4,8 +4,8 @@ import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
 import MemberService from "./services/MemberService";
 import AuthenticationModal from "./components/auth";
-import { useGlobals } from "./hooks/useGlobals";
-import useBasket from "./hooks/useBasket";
+import { useGlobals } from "./stores/slices/useGlobals";
+import useBasket from "./stores/slices/useBasket";
 import Footer from "./components/footer";
 import ScrollToTop from "./components/scroll-to-top";
 
@@ -90,7 +90,11 @@ function App() {
           </Route>
 
           <Route path="/cart">
-            <CartPage />
+            <CartPage cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll} />
           </Route>
 
           <Route path="/compare">

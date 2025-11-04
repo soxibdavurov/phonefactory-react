@@ -1,4 +1,4 @@
-import useScrollTop from "../../hooks/use-scroll-top";
+import useScrollTop from "../../stores/slices/use-scroll-top";
 
 const ScrollToTop = () => {
   const { stick, onClickHandler } = useScrollTop();

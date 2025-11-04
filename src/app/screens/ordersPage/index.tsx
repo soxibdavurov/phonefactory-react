@@ -14,7 +14,7 @@ import { setPausedOrders, setProcessOrders, setFinishedOrders } from "./slice";
 import { Order, OrderInquiry } from "../../../lib/types/order";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrdersService";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../stores/slices/useGlobals";
 import { useHistory } from "react-router-dom";
 import "../../../css/order.css";
 import { serverApi } from "../../../lib/config";
@@ -111,9 +111,10 @@ export default function OrdersPage() {
               </div>
               <div className="order-user-icon-box">
                 <img
+                  style={{ objectFit: "cover" }}
                   src={
                     authMember?.memberType === MemberType.MOBILESHOP
-                      ? "/icons/restaurant.svg"
+                      ? "/icons/favicon.png"
                       : "/icons/user-badge.svg"
                   }
                   className="order-user-prof-img"

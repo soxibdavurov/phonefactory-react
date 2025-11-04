@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import Button from "@mui/material/Button";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../stores/slices/useGlobals";
 import { useState } from "react";
 import { MemberUpdateInput } from "../../../lib/types/member";
 import { T } from "../../../lib/types/common";
@@ -80,13 +80,13 @@ export function Settings() {
     const fileType = file.type,
       validateImageType = ["image/jpg", "image/jpeg", "image/png"];
 
-    if (!validateImageType.includes(fileType)){
+    if (!validateImageType.includes(fileType)) {
       sweetErrorHandling(Messages.error5).then()
 
-    }else{
-      if(file) {
+    } else {
+      if (file) {
         memberUpdateInput.memberImage = file
-        setMemberUpdateInput({...memberUpdateInput})
+        setMemberUpdateInput({ ...memberUpdateInput })
         setMemberImage(URL.createObjectURL(file))
       }
     }

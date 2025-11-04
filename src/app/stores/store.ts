@@ -5,10 +5,10 @@ import {
   Action,
   getDefaultMiddleware,
 } from "@reduxjs/toolkit";
-import HomePageReducer from "./screens/homePage/slice";
-import ProductPageReducer from "./screens/shopPage/slice";
+import HomePageReducer from "../screens/homePage/slice";
+import ProductPageReducer from "../screens/shopPage/slice";
 import reduxLogger from "redux-logger";
-import OrdersPageReducer from "./screens/ordersPage/slice";
+import OrdersPageReducer from "../screens/ordersPage/slice";
 import {
   persistStore,
   persistReducer,
@@ -20,14 +20,14 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import productReducer from "./stores/slices/product-slice";
-import currencyReducer from "./stores/slices/currency-slice";
-import cartReducer from "./stores/slices/cart-slice";
-import comparisonReducer from "./hooks/compare-slice";
-import wishlistReducer from "./stores/slices/wishlist-slice";
+import productReducer from "./slices/product-slice";
+import currencyReducer from "./slices/currency-slice";
+import cartReducer from "./slices/cart-slice";
+import comparisonReducer from "./slices/compare-slice";
+import wishlistReducer from "./slices/wishlist-slice";
 
 const persistConfig = {
-  key: "flone",
+  key: "phonefactory",
   version: 1.1,
   storage,
   blacklist: ["product"],

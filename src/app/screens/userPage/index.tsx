@@ -6,7 +6,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import { Settings } from "./Settings";
 import "../../../css/userPage.css";
 import { useHistory } from "react-router-dom";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../stores/slices/useGlobals";
 import { serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
 
@@ -37,6 +37,7 @@ export default function UserPage() {
               >
                 <div className={"order-user-img"}>
                   <img
+                    alt="memberphoto"
                     src={
                       authMember?.memberImage
                         ? `${serverApi}/${authMember.memberImage}`
@@ -46,9 +47,10 @@ export default function UserPage() {
                   />
                   <div className={"order-user-icon-box"}>
                     <img
+                      alt="memberphoto"
                       src={
                         authMember?.memberType === MemberType.MOBILESHOP
-                          ? "/icons/restaurant.svg"
+                          ? "/icons/favicon.png"
                           : "/icons/user-badge.svg"
                       }
                     />

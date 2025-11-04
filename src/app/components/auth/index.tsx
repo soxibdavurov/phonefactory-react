@@ -11,7 +11,7 @@ import { Messages } from "../../../lib/config";
 import MemberService from "../../services/MemberService";
 import { LoginInput, MemberInput } from "../../../lib/types/member";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../stores/slices/useGlobals";
 import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";

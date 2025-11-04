@@ -11,7 +11,7 @@ import { Order, OrderItem, OrderUpdateInput } from "../../../lib/types/order";
 import { T } from "../../../lib/types/common";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { OrderStatus } from "../../../lib/enums/order.enum";
-import { useGlobals } from "../../hooks/useGlobals";
+import { useGlobals } from "../../stores/slices/useGlobals";
 import OrderService from "../../services/OrdersService";
 
 

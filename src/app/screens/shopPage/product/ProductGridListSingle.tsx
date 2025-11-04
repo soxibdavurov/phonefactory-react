@@ -8,8 +8,8 @@ import { CartItem } from "../../../../lib/types/search";
 import { serverApi } from "../../../../lib/config";
 import { Badge } from "@mui/material";
 import ProductRating from "../../homePage/productRating1";
-import { addToCompare } from "../../../hooks/compare-slice";
-import { RootState } from "../../../store"; // loyihangizdagi to'g'ri yo'l
+import { addToCompare } from "../../../stores/slices/compare-slice";
+import { RootState } from "../../../stores/store"; // loyihangizdagi to'g'ri yo'l
 
 type Props = {
     product: Product;
@@ -20,6 +20,7 @@ type Props = {
 const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
     const compareItems = useSelector((state: RootState) => state.comparison.compareItems) ?? [];
     const compareItem = compareItems.find((item) => item._id === product._id);
+
     const dispatch = useDispatch();
 
     const [modalShow, setModalShow] = useState(false);

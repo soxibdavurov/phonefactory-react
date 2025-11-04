@@ -19,7 +19,7 @@ export default function NotFoundPage() {
                         <div className="row justify-content-center">
                             <div className="col-xl-7 col-lg-8 text-center">
                                 <div className="error">
-                                    <h1>404</h1>
+                                    <img src="../../img/404page.jpg" height={"300px"} /> <br />
                                     <h2>OPPS! PAGE NOT FOUND</h2>
                                     <p>
                                         Sorry but the page you are looking for does not exist, have
@@ -45,7 +45,7 @@ export default function NotFoundPage() {
                         </div>
                     </div>
                 </div>
-            </Fragment>
+            </Fragment >
         </>
     );
 

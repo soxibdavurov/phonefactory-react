@@ -7,8 +7,8 @@ import { Badge } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import ProductRating from "./productRating1";
-import { RootState } from "../../store";
-import { addToCompare } from "../../hooks/compare-slice";
+import { RootState } from "../../stores/store";
+import { addToCompare } from "../../stores/slices/compare-slice";
 type Props = {
     ele: Product;
     onAdd: (item: CartItem) => void;

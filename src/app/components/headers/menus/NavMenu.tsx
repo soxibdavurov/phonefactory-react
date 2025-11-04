@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useGlobals } from "../../../hooks/useGlobals";
+import { useGlobals } from "../../../stores/slices/useGlobals";
 
 const NavMenu: React.FC = () => {
 

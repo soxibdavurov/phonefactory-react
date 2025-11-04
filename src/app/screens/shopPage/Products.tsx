@@ -28,7 +28,7 @@ interface ProductsProps {
 
 
 export default function Products(props: ProductsProps) {
-  const [layout, setLayout] = useState("list");
+  const [layout, setLayout] = useState("grid three-column");
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
@@ -95,9 +95,7 @@ export default function Products(props: ProductsProps) {
     setProductSearch((prev) => ({ ...prev, order: value }));
   };
   const [activeTab, setActiveTab] = useState<"three-column" | "list-ul" | "two-column">("three-column");
-  const chooSeSMARTPHONEHandler = (id: string) => {
-    history.push(`/shop/${id}`);
-  };
+
   const getLayout = (layout: any) => {
     setLayout(layout);
   };
@@ -210,7 +208,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler(ProductCollection.OTHER)}
                           >
                             <span className="checkmark" />
-                            Other
+                            Services
                           </button>
                         </div>
                       </li>
@@ -321,7 +319,7 @@ export default function Products(props: ProductsProps) {
                       <option value="productViews">Sort by View</option>
                     </select>
                   </div>
-                  <p>Showing {products.length} {products.length > 1 ? 'results' : 'result'} </p>
+                  <p>Showing {products.length} {products.length > 1 ? 'results' : 'result'} of {products.length} </p>
                 </div>
 
                 <div className="shop-tab">
@@ -335,20 +333,21 @@ export default function Products(props: ProductsProps) {
                   </button>
                   <button
                     onClick={e => {
-                      getLayout("list");
-                      setActiveLayout(e);
-                    }}
-                  >
-                    <i className="fa fa-list-ul" />
-                  </button>
-                  <button
-                    onClick={e => {
                       getLayout("grid three-column");
                       setActiveLayout(e);
                     }}
                   >
                     <i className="fa fa-th" />
                   </button>
+                  <button
+                    onClick={e => {
+                      getLayout("list");
+                      setActiveLayout(e);
+                    }}
+                  >
+                    <i className="fa fa-list-ul" />
+                  </button>
+
 
                 </div>
               </div>
