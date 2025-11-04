@@ -112,11 +112,11 @@ export default function PausedOrders(props: PausedOrdersProps) {
                                     <Link className="product-name" to={`shop/${product._id}`}>
                                        <p className={"title-dish"}>{product.productName}</p></Link>
                                     <Box className={"price-box"}>
-                                       <p>{item.itemPrice}</p>
-                                       < img src={"/icons/close.svg"} />
-                                       <p>{item.itemQuantity}</p>
-                                       < img src={"/icons/pause.svg"} />
-                                       <p style={{ marginLeft: "15px" }}>${item.itemQuantity * item.itemPrice}</p>
+                                       <p>{item.itemPrice} ₩</p>
+                                       <p>< img src={"/icons/close.svg"} /></p>
+                                       <p>{item.itemQuantity} </p>
+                                       <p>< img src={"/icons/pause.svg"} /></p>
+                                       <p style={{ marginLeft: "15px", paddingBottom: "12px" }}>{item.itemQuantity * item.itemPrice} ₩</p>
                                     </Box>
                                  </Stack>
                               </Box>
@@ -126,16 +126,16 @@ export default function PausedOrders(props: PausedOrdersProps) {
 
                      <Box className={"total-price-box"}>
                         <Box className={"box-total"}>
-                           <p>Product price</p>
-                           <p>${order.orderTotal - order.orderDelivery}</p>
-                           <img src={"/icons/plus.svg"} style={{ marginLeft: "20px" }} />
-                           <p>${order.orderDelivery}</p>
-                           <img
+                           <p>Products price</p>
+                           <p>{(order.orderTotal - order.orderDelivery).toLocaleString()} ₩</p>
+                           <p><img src={"/icons/plus.svg"} style={{ marginLeft: "20px" }} /></p>
+                           <p>{order.orderDelivery} ₩</p>
+                           <p><img
                               src={"/icons/pause.svg"}
                               style={{ marginLeft: "20px" }}
-                           />
-                           <p>Total</p>
-                           <p>${order.orderTotal}</p>
+                           /></p>
+                           <p>Total {(order.orderTotal).toLocaleString()} ₩</p>
+                           <p></p>
                         </Box>
                         <Button
                            variant="contained"

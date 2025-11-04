@@ -8,31 +8,31 @@ const BlogPost = () => {
                 <div className="blog-details-img">
                     <img
                         alt=""
-                        src={process.env.PUBLIC_URL + "/assets/img/blog/blog-5.jpg"}
+                        src={process.env.PUBLIC_URL + "../img/blog/sim.png"}
                     />
                 </div>
                 <div className="blog-details-content">
                     <div className="blog-meta-2">
                         <ul>
-                            <li>22 April, 2018</li>
+                            <li>5 November, 2025</li>
                             <li>
                                 <Link to={process.env.PUBLIC_URL + "/blog-details"}>
-                                    4 <i className="fa fa-comments-o" />
+                                    2 <i className="fa fa-comments-o" />
                                 </Link>
                             </li>
                         </ul>
                     </div>
-                    <h3>14 Emerging Fashion Influencers Who Are Going to Own 2018</h3>
+                    <h3>Buying a SIM Card or eSIM for your comfort</h3>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                        ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprhendit
-                        in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qei
-                        officia deser mollit anim id est laborum. Sed ut perspiciatis unde
-                        omnis iste natus error sit voluptatem accusantium doloremque
-                        laudantium, totam rem aperiam.{" "}
+                        There are three cell networks in South Korea: LG U+, SK Telecom, and KT. You’ll get excellent LTE coverage in any major town or city with all providers, and shouldn’t have much of a problem with service anywhere unless you’re heading well off the beaten track.
+
+                        Several resellers also sell SIMs that use one of these networks, typically with slower speeds, cheaper prices, and a delay of a few hours between purchase and activation.
+
+                        Unlike many parts of the world, if you’re planning to buy a physical SIM, I’d recommend getting it at the airport when you land. This is simply due to the language barrier and registration/activation challenges that you’ll find when buying elsewhere, which can be significant.
+
+                        While you may find someone who speaks enough English at a phone store to help you out in touristy parts of Seoul like Hongdae or Myeongdong, there are no guarantees, and it’s much less likely elsewhere in the city and country.
+
+                        At the airport, however, staff are very used to registering SIMs for foreign visitors. I had no problems at the LG+ booth, and because I’d ordered in advance, the process of collecting, swapping, and testing my SIM card only took a few minutes.{" "}
                     </p>
                     <blockquote>
                         Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do
@@ -84,18 +84,18 @@ const BlogPost = () => {
                 <div className="dec-tag">
                     <ul>
                         <li>
-                            <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
+                            <Link to={process.env.PUBLIC_URL + "/blog-details"}>
                                 lifestyle ,
                             </Link>
                         </li>
                         <li>
-                            <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
-                                interior ,
+                            <Link to={process.env.PUBLIC_URL + "/blog-details"}>
+                                SIM ,
                             </Link>
                         </li>
                         <li>
-                            <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
-                                outdoor
+                            <Link to={process.env.PUBLIC_URL + "/blog-details"}>
+                                connection
                             </Link>
                         </li>
                     </ul>
