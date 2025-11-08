@@ -123,7 +123,7 @@ export default function IconGroup({
       {/* Account */}
       <div className="same-style account-setting">  {/*  d-none d-lg-block ni qo'shsam mobileda ko'rinmaydi */}
         {!authMember ? (<><button className="account-setting-active" onClick={handleClick}>
-          <i className="pe-7s-user-female" />
+          <i className="pe-7s-users" />
         </button></>) : (<>
           <button className="account-setting-active" onClick={handleClick}>
             <img
@@ -190,7 +190,7 @@ export default function IconGroup({
 
       {/* Mobile Cart */}
       <div className="same-style cart-wrap d-block d-lg-none">
-        <Link className="icon-cart" to="/orders">
+        <Link className="icon-cart" to="/cart">
           <i className="pe-7s-shopbag" />
           <span className="count-style">{cartItems.length}</span>
         </Link>

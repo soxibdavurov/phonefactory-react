@@ -14,7 +14,7 @@ const teamMemberData = [
         "fbLink": "//www.facebook.com",
         "twitterLink": "//www.twitter.com",
         "instagramLink": "//www.instagram.com",
-        "name": "Kim Te Yang",
+        "name": "Kim Tae Yang",
         "position": "Manager"
     },
     {

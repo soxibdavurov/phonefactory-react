@@ -16,7 +16,7 @@ export default function HomePageSlider() {
     modules: [EffectFade],
     loop: true,
     speed: 2000,
-    navigation: true,
+    navigation: false,
     autoHeight: true,
   };
 

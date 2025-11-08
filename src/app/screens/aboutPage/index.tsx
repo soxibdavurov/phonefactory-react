@@ -81,7 +81,7 @@ export default function AboutPage() {
                       delayedCall
                     >
                       <CountUp end={didViewCountUp ? single.countNum : 0} />
-                    </VisibilitySensor>+
+                    </VisibilitySensor>
                   </h2>
                   <span>{single.title}</span>
                 </div>
