@@ -20,7 +20,7 @@ yarn run build
 # pm2 delete BURAK-REACT 2>/dev/null || true
 
 # pm2 orqali yarn scriptni ishga tushirish
-pm2 start "yarn run start:prod" --name=BURAK-REACT
+pm2 start "yarn run start:prod" --name=PhoneFactory-React
 
 # # pm2 configni saqlab qo'yish (server qayta yoqilganda ham ishlashi uchun, agar pm2 startup qilgan bo'lsang)
 # pm2 save
