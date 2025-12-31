@@ -8,19 +8,16 @@ const MobileNavMenu = () => {
           <Link to={"/"}>Home</Link>
         </li>
         <li>
-          <Link to={"/products"}>Shop</Link>
-        </li>
-        <li>
-          <Link to={"/product/1"}>ProductDetails</Link>
+          <Link to={"/shop"}>Shop</Link>
         </li>
         <li>
           <Link to={"/not-found"}>404</Link>
         </li>
         <li className="menu-item-has-children">
-          <Link to={"/blog-standard"}>Blog</Link>
+          <Link to={"/blog"}>Blog</Link>
           <ul className="sub-menu">
             <li>
-              <Link to={"/blog-standard"}> Blog Standard</Link>
+              <Link to={"/blog"}> Blog Standard</Link>
             </li>
             <li>
               <Link to={"/blog-details"}>Blog Details Standard</Link>
