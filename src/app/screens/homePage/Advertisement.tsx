@@ -10,9 +10,11 @@ export default function Advertisement() {
         loop
         muted
         playsInline
+        preload="metadata"
+        poster="/video/pf1.jpg"
         data-video-media=""
       >
-        <source type="video/mp4" src="video/pf1.mp4" />
+        <source type="video/mp4" src="/video/pf1.mp4" />
       </video>{" "}
       <video
         className={"ads-video"}
@@ -20,9 +22,11 @@ export default function Advertisement() {
         loop
         muted
         playsInline
+        preload="metadata"
+        poster="/video/pf2.jpg"
         data-video-media=""
       >
-        <source type="video/mp4" src="video/pf2.mp4" />
+        <source type="video/mp4" src="/video/pf2.mp4" />
       </video>
     </div>
   );

@@ -30,7 +30,7 @@ const MobileMenu = () => {
         closeMobileMenu();
       });
     }
-  });
+  }, []); // faqat bir marta: aks holda har renderda yangi span va listener qo'shiladi
 
   const sideMenuExpand = (e) => {
     e.currentTarget.parentElement.classList.toggle("active");
