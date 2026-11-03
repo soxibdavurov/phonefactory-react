@@ -5,7 +5,7 @@ import { Member } from "../../../lib/types/member";
 
 const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const cookies = new Cookies();
-    if (!cookies.get("accessToken")) localStorage.removeItem("memberData");
+    if (!cookies.get("isLoggedIn")) localStorage.removeItem("memberData");
 
     const [authMember, setAuthMember] = useState<Member | null>(
         localStorage.getItem("memberData")
