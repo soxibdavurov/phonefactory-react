@@ -4,6 +4,7 @@ import Products from "./Products";
 // import "../../../css/products.css";
 import { CartItem } from "../../../lib/types/search";
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
+import { useTranslation } from "react-i18next";
 
 
 interface ProductsPageProps {
@@ -12,6 +13,7 @@ interface ProductsPageProps {
 
 export default function ShopPage(props: ProductsPageProps) {
     let { pathname } = useLocation();
+    const { t } = useTranslation();
     const { onAdd } = props;
     const shop = useRouteMatch();
     console.log("prod:", shop);
@@ -20,8 +22,8 @@ export default function ShopPage(props: ProductsPageProps) {
         <>
             <BreadcrumbWrap
                 pages={[
-                    { label: "Home", path: process.env.PUBLIC_URL + "/" },
-                    { label: "Shop page", path: process.env.PUBLIC_URL + pathname },
+                    { label: String(t("nav.home")), path: process.env.PUBLIC_URL + "/" },
+                    { label: String(t("shop.page")), path: process.env.PUBLIC_URL + pathname },
                 ]} />
             {/* <div className={"products-page"}> */}
             <Switch>

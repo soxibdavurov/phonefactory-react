@@ -412,6 +412,10 @@
   button {
     font-size: 20px;
 
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
     padding: 0;
 
     border: none;
@@ -419,6 +423,10 @@
     &:hover,
     &.active {
       color: $theme-color;
+    }
+
+    span {
+      font-size: 14px;
     }
   }
 }

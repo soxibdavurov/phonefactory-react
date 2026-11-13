@@ -1,16 +1,18 @@
 import { BreadcrumbWrap } from "../../components/helpers/breadcrumbWrap";
 import { useLocation, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ContactUs() {
     const { pathname } = useLocation();
+    const { t } = useTranslation();
 
     return (
         <>
             <div>
                 <BreadcrumbWrap
                     pages={[
-                        { label: "Home", path: process.env.PUBLIC_URL + "/" },
-                        { label: "Contact us", path: process.env.PUBLIC_URL + pathname },
+                        { label: String(t("nav.home")), path: process.env.PUBLIC_URL + "/" },
+                        { label: String(t("contact.title")), path: process.env.PUBLIC_URL + pathname },
                     ]}
                 />
             </div>
@@ -64,7 +66,7 @@ export default function ContactUs() {
                                     </div>
                                 </div>
                                 <div className="contact-social text-center">
-                                    <h3>Follow Us</h3>
+                                    <h3>{t("contact.follow")}</h3>
                                     <ul>
                                         <li>
                                             <a href="//facebook.com">
@@ -98,27 +100,27 @@ export default function ContactUs() {
                         <div className="col-12 col-lg-8 col-md-7">
                             <div className="contact-form">
                                 <div className="contact-title mb-30">
-                                    <h2>Get In Touch</h2>
+                                    <h2>{t("contact.touch")}</h2>
                                 </div>
                                 <form className="contact-form-style">
                                     <div className="row">
                                         <div className="col-lg-6">
-                                            <input name="name" placeholder="Name*" type="text" />
+                                            <input name="name" placeholder={String(t("contact.name"))} type="text" />
                                         </div>
                                         <div className="col-lg-6">
-                                            <input name="email" placeholder="Email*" type="email" />
+                                            <input name="email" placeholder={String(t("contact.email"))} type="email" />
                                         </div>
                                         <div className="col-lg-12">
-                                            <input name="subject" placeholder="Subject*" type="text" />
+                                            <input name="subject" placeholder={String(t("contact.subject"))} type="text" />
                                         </div>
                                         <div className="col-lg-12">
                                             <textarea
                                                 name="message"
-                                                placeholder="Your Message*"
+                                                placeholder={String(t("contact.message"))}
                                                 defaultValue=""
                                             />
                                             <button className="submit" type="submit">
-                                                SEND
+                                                {t("contact.send")}
                                             </button>
                                         </div>
                                     </div>

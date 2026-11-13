@@ -524,6 +524,20 @@
         border-right: 1px solid rgba(255, 255, 255, 0.2);
       }
 
+      .pro-compare {
+        width: 96px;
+
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+
+        button {
+          font-size: 13px;
+        }
+      }
+
+      &:has(.pro-compare) .pro-cart {
+        width: calc(100% - 96px - 48px);
+      }
+
       .pro-cart {
         font-size: 14px;
 
@@ -1271,9 +1285,15 @@
 
       a,
       button {
-        font-size: 18px;
+        font-size: 14px;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
 
         margin-left: 25px;
+
+        white-space: nowrap;
 
         color: #000;
         border: none;

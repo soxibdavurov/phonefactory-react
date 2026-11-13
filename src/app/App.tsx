@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation, Redirect } from "react-router-dom";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
 import MemberService from "./services/MemberService";
@@ -9,6 +9,7 @@ import useBasket from "./stores/slices/useBasket";
 import Footer from "./components/footer";
 import ScrollToTop from "./components/scroll-to-top";
 import ScrollToTop2 from "./components/helpers/scroll-top";
+import { useTranslation } from "react-i18next";
 
 const HomePage = lazy(() => import("./screens/homePage"));
 const OrdersPage = lazy(() => import("./screens/ordersPage"));
@@ -33,6 +34,7 @@ const Header = lazy(() => import("./components/headers/Header"));
 
 function App() {
   const location = useLocation();
+  const { t } = useTranslation();
   const { setAuthMember } = useGlobals();
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
   const [signupOpen, setSignupOpen] = useState<boolean>(false);
@@ -55,7 +57,7 @@ function App() {
       const member = new MemberService();
       await member.logout();
 
-      await sweetTopSuccessAlert("Logged out", 1000);
+      await sweetTopSuccessAlert(String(t("account.loggedOut")), 1000);
       setAuthMember(null);
     } catch (err) {
       console.log(err);
@@ -124,12 +126,16 @@ function App() {
             <AboutPage />
           </Route>
 
-          <Route path="/blog">
-            <BlogStandard />
+          <Route path="/blog-details/:blogId">
+            <BlogDetails />
           </Route>
 
-          <Route path="/blog-details">
-            <BlogDetails />
+          <Route exact path="/blog-details">
+            <Redirect to="/blog" />
+          </Route>
+
+          <Route path="/blog">
+            <BlogStandard />
           </Route>
 
           <Route exact path="/">

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
 import { Product } from "../../../lib/types/product";
 import { serverApi } from "../../../lib/config";
+import { LikeButton } from "../../components/engagement/Engagement";
 import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@mui/material";
 import { useHistory } from "react-router-dom";
@@ -9,12 +10,14 @@ import { CartItem } from "../../../lib/types/search";
 import ProductRating from "./productRating1";
 import { RootState } from "../../stores/store";
 import { addToCompare } from "../../stores/slices/compare-slice";
+import { useTranslation } from "react-i18next";
 type Props = {
     ele: Product;
     onAdd: (item: CartItem) => void;
 };
 
 const SingleProductGrid = ({ ele, onAdd }: Props) => {
+    const { t } = useTranslation();
     const compareItems = useSelector((state: RootState) => state.comparison.compareItems) ?? [];
     const compareItem = compareItems.find((item) => item._id === ele._id);
 
@@ -45,28 +48,24 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                 ) : (
                     ""
                 )}
-                {ele.productDiscount || ele.isNew ? (
+                {Number(ele.productDiscount) > 0 || ele.isNew ? (
                     <div className="product-img-badges">
-                        {ele.productDiscount ? (
-                            <span className="pink">-{ele.productDiscount.toLocaleString()}₩</span>
-                        ) : (
-                            ""
-                        )}
-                        {ele.isNew ? <span className="purple">New</span> : ""}
+                        {Number(ele.productDiscount) > 0 ? (
+                            <span className="pink">-{Number(ele.productDiscount).toLocaleString()}₩</span>
+                        ) : null}
+                        {ele.isNew ? <span className="purple">{t("product.new")}</span> : null}
                     </div>
-                ) : (
-                    ""
-                )}
+                ) : null}
 
                 <div className="product-action">
-                    <div className="pro-same-action pro-wishlist">
+                    <div className="pro-same-action pro-compare">
                         <button
                             className={compareItem !== undefined ? "active" : ""}
                             disabled={compareItem !== undefined}
                             title={
                                 compareItem !== undefined
-                                    ? "Added to compare"
-                                    : "Add to compare"
+                                    ? String(t("product.addedCompare"))
+                                    : String(t("product.addCompare"))
                             }
                             onClick={() => dispatch(addToCompare(
                                 {
@@ -80,13 +79,16 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                                 }
                             ))}
                         >
-                            <i className="pe-7s-shuffle" />
+                            {compareItem !== undefined ? t("product.added") : t("product.compare")}
                         </button>
                     </div>
                     <div className="pro-same-action pro-cart">
                         <button
+                            disabled={ele.productLeftCount <= 0}
+                            title={ele.productLeftCount > 0 ? String(t("product.addToCart")) : String(t("product.outOfStock"))}
                             onClick={(e) => {
                                 e.stopPropagation();
+                                if (ele.productLeftCount <= 0) return;
                                 onAdd({
                                     _id: ele._id,
                                     quantity: 1,
@@ -103,7 +105,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                     <div className="pro-same-action pro-quickview">
 
                         <button className="view-btn"
-                            title="Quick View"
+                            title={String(t("product.quickView"))}
                             onClick={() => setModalShow(true)}
                         >   <Badge
                             badgeContent={ele.productViews}
@@ -121,7 +123,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                                 >
                                   <i className="fa fa-shopping-cart" />
                                 </button> */}
-                </div>
+                    </div>
             </div>
 
             <div className="product-content text-center">
@@ -135,7 +137,7 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                     <ProductRating ratingValue={ele.productRate ?? 0} />
                 </div>
                 <div className="product-price">
-                    {ele.productDiscount !== 0 || null ? (
+                    {Number(ele.productDiscount) > 0 ? (
                         <Fragment>
                             <span>{(ele.productPrice - ele.productDiscount).toLocaleString()}₩</span>{" "}
                             <span className="old">
@@ -145,6 +147,17 @@ const SingleProductGrid = ({ ele, onAdd }: Props) => {
                     ) : (
                         <span>{ele.productPrice.toLocaleString()}₩</span>
                     )}
+                </div>
+                <div className="pf-card-actions">
+                    <LikeButton
+                        targetId={ele._id}
+                        targetType="PRODUCT"
+                        initialLiked={ele.liked}
+                        initialCount={ele.likeCount}
+                    />
+                    <Link to={`/shop/${ele._id}`}>
+                        <i className="fa fa-comments-o" /> {ele.commentCount || 0}
+                    </Link>
                 </div>
                 {/* </div> */}
             </div>

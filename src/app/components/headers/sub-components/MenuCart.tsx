@@ -6,6 +6,7 @@ import { Messages, serverApi } from "../../../../lib/config";
 import { useGlobals } from "../../../stores/slices/useGlobals";
 import OrderService from "../../../services/OrdersService";
 import { sweetErrorHandling } from "../../../../lib/sweetAlert";
+import { useTranslation } from "react-i18next";
 
 interface MenuCartProps {
   cartItems: CartItem[];
@@ -20,6 +21,7 @@ export default function MenuCart(props: MenuCartProps) {
   const dispatch = useDispatch();
   const { authMember, setOrderBuilder } = useGlobals();
   const history = useHistory();
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -97,7 +99,7 @@ export default function MenuCart(props: MenuCartProps) {
                     </h4>
 
                     <h6 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      Qty:
+                      {t("cart.qty")}:
                       <button
                         onClick={() => onRemove(item)}
                         style={{ position: "relative", top: "2px" }}
@@ -106,7 +108,7 @@ export default function MenuCart(props: MenuCartProps) {
                       </button>
                       {item.quantity}
                       <button
-                        onClick={() => onAdd(item)}
+                        onClick={() => onAdd({ ...item, quantity: 1 })}
                         style={{ position: "relative", top: "2px" }}
                       >
                         +
@@ -142,7 +144,7 @@ export default function MenuCart(props: MenuCartProps) {
           {/* 🔹 Chegirmalar va total summani ko‘rsatish qismi */}
           <div className="shopping-cart-total">
             <h4>
-              Subtotal:{" "}
+              {t("cart.subtotal")}:{" "}
               <span className="shop-total">
                 {originalTotal.toLocaleString()} ₩
               </span>
@@ -150,7 +152,7 @@ export default function MenuCart(props: MenuCartProps) {
 
             {totalDiscount > 0 && (
               <h4 style={{ color: "#ff3d3d" }}>
-                Discount:{" "}
+                {t("cart.discount")}:{" "}
                 <span className="shop-total">
                   -{totalDiscount.toLocaleString()} ₩
                 </span>
@@ -158,18 +160,18 @@ export default function MenuCart(props: MenuCartProps) {
             )}
 
             <h4>
-              Shipping:{" "}
+              {t("cart.shipping")}:{" "}
               <span className="shop-total">
                 {shippingCost > 0
                   ? `${shippingCost.toLocaleString()} ₩`
-                  : "Free"}
+                  : t("cart.free")}
               </span>
             </h4>
 
             <hr />
 
             <h4>
-              Total
+              {t("cart.grand")}
               <span className="shop-total" style={{ fontWeight: 700 }}>
                 {grandTotal.toLocaleString()} ₩
               </span>
@@ -181,20 +183,20 @@ export default function MenuCart(props: MenuCartProps) {
             style={{ display: "flex", justifyContent: "center", gap: "5px" }}
           >
             <Link className="default-btn" to="/cart">
-              View Cart
+              {t("cart.view")}
             </Link>
-            <Link className="default-btn" to="/checkout"
+            <Link className="default-btn" to="/orders"
               onClick={(e) => {
                 e.preventDefault();
                 proceedOrderHandler();
               }}
             >
-              Checkout
+              {t("cart.place")}
             </Link>
           </div>
         </Fragment>
       ) : (
-        <p className="text-center">No items added to cart</p>
+        <p className="text-center">{t("cart.empty")}</p>
       )}
     </div>
   );

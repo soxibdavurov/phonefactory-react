@@ -9,10 +9,12 @@ import { useHistory } from "react-router-dom";
 import { useGlobals } from "../../stores/slices/useGlobals";
 import { serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
+import { useTranslation } from "react-i18next";
 
 export default function UserPage() {
   const history = useHistory();
   const { authMember } = useGlobals();
+  const { t } = useTranslation();
 
   if (!authMember) history.push("/");
   return (
@@ -21,7 +23,7 @@ export default function UserPage() {
         <Stack className={"my-page-frame"}>
           <Stack className={"my-page-left"}>
             <Box display={"flex"} flexDirection={"column"}>
-              <Box className={"menu-name"}>Modify Member Details</Box>
+              <Box className={"menu-name"}>{t("account.modify")}</Box>
               <Box className={"menu-content"}>
                 <Settings />
               </Box>
@@ -65,7 +67,7 @@ export default function UserPage() {
                 <span className={"order-user-prof"}>
                   {authMember?.memberAddress
                     ? authMember.memberAddress
-                    : "no address"}
+                    : t("account.noAddress")}
                 </span>
               </Box>
               <Box className={"user-media-box"}>
@@ -77,7 +79,7 @@ export default function UserPage() {
               <p className={"user-desc"}>
                 {authMember?.memberDesc
                   ? authMember.memberDesc
-                  : "no description"}
+                  : t("account.noDescription")}
               </p>
             </Box>
           </Stack>

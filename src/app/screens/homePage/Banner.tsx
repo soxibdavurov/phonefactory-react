@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const bannerData = [
     {
@@ -28,6 +29,8 @@ const bannerData = [
 ];
 
 const Banner = () => {
+    const { t } = useTranslation();
+    const titles = ["home.headphones", "home.accessories", "home.robotics"];
     return (
         <div className={"banner-area pb-60"}>
             <div className="row no-gutters">
@@ -38,9 +41,9 @@ const Banner = () => {
                                 <img src={process.env.PUBLIC_URL + data.image} alt="" />
                             </Link>
                             <div className="banner-content-2 banner-content-2--style3">
-                                <h3>{data.title}</h3>
+                                <h3>{t(titles[key] || "home.headphones")}</h3>
                                 <h4>
-                                    {data.subtitle}
+                                    {t("home.choose")}
                                 </h4>
                                 <Link to={process.env.PUBLIC_URL + data.link}>
                                     <i className="fa fa-long-arrow-right" />

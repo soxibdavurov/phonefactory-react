@@ -6,10 +6,12 @@ import { Link, useHistory } from "react-router-dom";
 import { Product } from "../../../../lib/types/product";
 import { CartItem } from "../../../../lib/types/search";
 import { serverApi } from "../../../../lib/config";
+import { LikeButton } from "../../../components/engagement/Engagement";
 import { Badge } from "@mui/material";
 import ProductRating from "../../homePage/productRating1";
 import { addToCompare } from "../../../stores/slices/compare-slice";
-import { RootState } from "../../../stores/store"; // loyihangizdagi to'g'ri yo'l
+import { RootState } from "../../../stores/store";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     product: Product;
@@ -18,6 +20,7 @@ type Props = {
 };
 
 const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
+    const { t } = useTranslation();
     const compareItems = useSelector((state: RootState) => state.comparison.compareItems) ?? [];
     const compareItem = compareItems.find((item) => item._id === product._id);
 
@@ -50,28 +53,24 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                     ) : (
                         ""
                     )}
-                    {product.productDiscount || product.isNew ? (
+                    {Number(product.productDiscount) > 0 || product.isNew ? (
                         <div className="product-img-badges">
-                            {product.productDiscount ? (
-                                <span className="pink">-{product.productDiscount.toLocaleString()}₩</span>
-                            ) : (
-                                ""
-                            )}
-                            {product.isNew ? <span className="purple">New</span> : ""}
+                            {Number(product.productDiscount) > 0 ? (
+                                <span className="pink">-{Number(product.productDiscount).toLocaleString()}₩</span>
+                            ) : null}
+                            {product.isNew ? <span className="purple">{t("product.new")}</span> : null}
                         </div>
-                    ) : (
-                        ""
-                    )}
+                    ) : null}
 
                     <div className="product-action">
-                        <div className="pro-same-action pro-wishlist">
+                        <div className="pro-same-action pro-compare">
                             <button
                                 className={compareItem !== undefined ? "active" : ""}
                                 disabled={compareItem !== undefined}
                                 title={
                                     compareItem !== undefined
-                                        ? "Added to compare"
-                                        : "Add to compare"
+                                        ? String(t("product.addedCompare"))
+                                        : String(t("product.addCompare"))
                                 }
                                 onClick={() => dispatch(addToCompare(
                                     {
@@ -85,13 +84,16 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                     }
                                 ))}
                             >
-                                <i className="pe-7s-shuffle" />
+                                {compareItem !== undefined ? t("product.added") : t("product.compare")}
                             </button>
                         </div>
                         <div className="pro-same-action pro-cart">
                             <button
+                                disabled={product.productLeftCount <= 0}
+                                title={product.productLeftCount > 0 ? String(t("product.addToCart")) : String(t("product.outOfStock"))}
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    if (product.productLeftCount <= 0) return;
                                     onAdd({
                                         _id: product._id,
                                         quantity: 1,
@@ -108,7 +110,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                         <div className="pro-same-action pro-quickview">
 
                             <button className="view-btn"
-                                title="Quick View"
+                                title={String(t("product.quickView"))}
                                 onClick={() => setModalShow(true)}
                             >   <Badge
                                 badgeContent={product.productViews}
@@ -138,7 +140,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                         <ProductRating ratingValue={product.productRate ?? 0} />
                     </div>
                     <div className="product-price">
-                        {product.productDiscount !== 0 || null ? (
+                        {Number(product.productDiscount) > 0 ? (
                             <Fragment>
                                 <span>{(product.productPrice - product.productDiscount).toLocaleString()}₩</span>{" "}
                                 <span className="old">
@@ -148,6 +150,17 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                         ) : (
                             <span>{product.productPrice.toLocaleString()}₩</span>
                         )}
+                    </div>
+                    <div className="pf-card-actions">
+                        <LikeButton
+                            targetId={product._id}
+                            targetType="PRODUCT"
+                            initialLiked={product.liked}
+                            initialCount={product.likeCount}
+                        />
+                        <Link to={`/shop/${product._id}`}>
+                            <i className="fa fa-comments-o" /> {product.commentCount || 0}
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -172,18 +185,14 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                 ) : (
                                     ""
                                 )}
-                                {product.productDiscount || product.isNew ? (
+                                {Number(product.productDiscount) > 0 || product.isNew ? (
                                     <div className="product-img-badges">
-                                        {product.productDiscount ? (
-                                            <span className="pink">-{product.productDiscount.toLocaleString()}₩</span>
-                                        ) : (
-                                            ""
-                                        )}
-                                        {product.isNew ? <span className="purple">New</span> : ""}
+                                        {Number(product.productDiscount) > 0 ? (
+                                            <span className="pink">-{Number(product.productDiscount).toLocaleString()}₩</span>
+                                        ) : null}
+                                        {product.isNew ? <span className="purple">{t("product.new")}</span> : null}
                                     </div>
-                                ) : (
-                                    ""
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -195,7 +204,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                 </Link>
                             </h3>
                             <div className="product-list-price">
-                                {product.productDiscount !== 0 || null ? (
+                                {Number(product.productDiscount) > 0 ? (
                                     <Fragment>
                                         <span>{(product.productPrice - product.productDiscount).toLocaleString()}₩</span>{" "}
                                         <span className="old">
@@ -222,8 +231,10 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                             <div className="shop-list-actions d-flex align-items-center">
                                 <div className="shop-list-btn btn-hover">
                                     <button
+                                        disabled={product.productLeftCount <= 0}
                                         onClick={(e) => {
                                             e.stopPropagation();
+                                            if (product.productLeftCount <= 0) return;
                                             onAdd({
                                                 _id: product._id,
                                                 quantity: 1,
@@ -234,7 +245,7 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                             });
                                         }}
                                     >
-                                        Add to cart
+                                        {product.productLeftCount > 0 ? t("product.addToCart") : t("product.outOfStock")}
                                     </button>
                                 </div>
                                 <div className="shop-list-compare ml-10">
@@ -243,8 +254,8 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                         disabled={compareItem !== undefined}
                                         title={
                                             compareItem !== undefined
-                                                ? "Added to compare"
-                                                : "Add to compare"
+                                                ? String(t("product.addedCompare"))
+                                                : String(t("product.addCompare"))
                                         }
                                         onClick={() => dispatch(addToCompare(
                                             {
@@ -259,7 +270,16 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                         ))}
                                     >
                                         <i className="pe-7s-shuffle" />
+                                        <span>{compareItem !== undefined ? t("product.added") : t("product.compare")}</span>
                                     </button>
+                                </div>
+                                <div className="ml-10">
+                                    <LikeButton
+                                        targetId={product._id}
+                                        targetType="PRODUCT"
+                                        initialLiked={product.liked}
+                                        initialCount={product.likeCount}
+                                    />
                                 </div>
 
                                 {/* <div className="shop-list-wishlist ml-10">
@@ -282,8 +302,8 @@ const ProductGridListSingle = ({ product, onAdd, imageHeight }: Props) => {
                                         disabled={compareItem !== undefined}
                                         title={
                                             compareItem !== undefined
-                                                ? "Added to compare"
-                                                : "Add to compare"
+                                                ? String(t("product.addedCompare"))
+                                                : String(t("product.addCompare"))
                                         }
                                         onClick={() => dispatch(addToCompare(product))}
                                     >

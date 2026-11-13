@@ -8,10 +8,14 @@ import CountUp from "react-countup";
 import VisibilitySensor from "react-visibility-sensor";
 import { useState } from "react";
 import BrandLogoSlider from "../homePage/BrandLogoSlider";
+import { useTranslation } from "react-i18next";
 
 
 export default function AboutPage() {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
+  const aboutKeys = ["vision", "mission", "goal"];
+  const factKeys = ["fact1", "fact2", "fact3", "fact4"];
   const [didViewCountUp, setDidViewCountUp] = useState(false);
 
   const onVisibilityChange = (isVisible: any) => {
@@ -23,8 +27,8 @@ export default function AboutPage() {
     <>
       <BreadcrumbWrap
         pages={[
-          { label: "Home", path: process.env.PUBLIC_URL + "/" },
-          { label: "About Us", path: process.env.PUBLIC_URL + pathname },
+          { label: String(t("nav.home")), path: process.env.PUBLIC_URL + "/" },
+          { label: String(t("nav.about")), path: process.env.PUBLIC_URL + pathname },
         ]}
       />
 
@@ -32,14 +36,9 @@ export default function AboutPage() {
       <div className={"welcome-area pt-100 pb-95"}>
         <div className="container">
           <div className="welcome-content text-center">
-            <h5>Who Are We</h5>
-            <h1>Welcome To PhoneFactory</h1>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt labor et dolore magna aliqua. Ut enim ad
-              minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commo consequat irure{" "}
-            </p>
+            <h5>{t("about.who")}</h5>
+            <h1>{t("about.welcome")}</h1>
+            <p>{t("about.lead")}</p>
           </div>
         </div>
       </div>
@@ -55,8 +54,8 @@ export default function AboutPage() {
               <div className="col-lg-4 col-md-4" key={key}>
 
                 <div className={"single-mission mb-30"}>
-                  <h3>{single.title}</h3>
-                  <p>{single.text}</p>
+                  <h3>{t(`about.${aboutKeys[key]}`)}</h3>
+                  <p>{t(`about.${aboutKeys[key]}Text`)}</p>
                 </div>
               </div>
             ))}
@@ -83,7 +82,7 @@ export default function AboutPage() {
                       <CountUp end={didViewCountUp ? single.countNum : 0} />
                     </VisibilitySensor>
                   </h2>
-                  <span>{single.title}</span>
+                  <span>{t(`about.${factKeys[key]}`)}</span>
                 </div>
               </div>
             ))}
@@ -96,8 +95,8 @@ export default function AboutPage() {
       <div className={"team-area pt-95 pb-70"}>
         <div className="container">
           <div className="section-title-2 text-center mb-60">
-            <h2>PhoneShop Members</h2>
-            <p>Lorem ipsum dolor sit amet conse ctetu.</p>
+            <h2>{t("about.members")}</h2>
+            <p>{t("about.membersLead")}</p>
           </div>
 
           <div className="row">

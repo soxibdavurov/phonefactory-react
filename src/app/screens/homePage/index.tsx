@@ -17,6 +17,7 @@ import Banner from "./Banner";
 import BlogFeatured from "./BlogFeatured";
 import BrandLogoSlider from "./BrandLogoSlider";
 import HomePageSlider from "./homePageSlider1";
+import { useContentLang } from "../../../lib/lang";
 
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -30,6 +31,7 @@ interface ProductsPageProps {
 }
 export default function HomePage(props: ProductsPageProps) {
   const { onAdd } = props;
+  const lang = useContentLang();
   const { setPopularProducts, setSaleItems, setNewProducts, setTopUsers } = actionDispatch(
     useDispatch()
   );
@@ -58,7 +60,7 @@ export default function HomePage(props: ProductsPageProps) {
         order: "isNew",
       })
       .then((data) => {
-        setNewProducts(data);
+        setNewProducts(data.filter((item) => item.isNew));
       })
       .catch((err) => console.log(err));
     // Slice: Date => Store
@@ -71,13 +73,13 @@ export default function HomePage(props: ProductsPageProps) {
         order: "productDiscount",
       })
       .then((data) => {
-        setSaleItems(data);
+        setSaleItems(data.filter((item) => Number(item.productDiscount) > 0));
       })
       .catch((err) => console.log(err));
 
     const member = new MemberService();
     member.getTopUsers().then((data) => setTopUsers(data));
-  }, []);
+  }, [lang]);
 
   return (
     <div className={"homepage"}>

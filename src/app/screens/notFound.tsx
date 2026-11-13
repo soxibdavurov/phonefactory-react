@@ -1,17 +1,19 @@
 import { Fragment } from "react";
 import { BreadcrumbWrap } from "../components/helpers/breadcrumbWrap";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function NotFoundPage() {
     const { pathname } = useLocation();
+    const { t } = useTranslation();
     return (
         <>
             <Fragment>
                 {/* breadcrumb */}
                 <BreadcrumbWrap
                     pages={[
-                        { label: "Home", path: process.env.PUBLIC_URL + "/" },
-                        { label: "Not found", path: process.env.PUBLIC_URL + pathname }
+                        { label: String(t("nav.home")), path: process.env.PUBLIC_URL + "/" },
+                        { label: String(t("notFound.title")), path: process.env.PUBLIC_URL + pathname }
                     ]}
                 />
                 <div className="error-area pt-40 pb-100">
@@ -20,17 +22,14 @@ export default function NotFoundPage() {
                             <div className="col-xl-7 col-lg-8 text-center">
                                 <div className="error">
                                     <img src="../../img/404page.jpg" height={"300px"} /> <br />
-                                    <h2>OPPS! PAGE NOT FOUND</h2>
-                                    <p>
-                                        Sorry but the page you are looking for does not exist, have
-                                        been removed, name changed or is temporarity unavailable.
-                                    </p>
+                                    <h2>{t("notFound.oops")}</h2>
+                                    <p>{t("notFound.text")}</p>
                                     <form className="searchform mb-50">
                                         <input
                                             type="text"
                                             name="search"
                                             id="error_search"
-                                            placeholder="Search..."
+                                            placeholder={String(t("notFound.search"))}
                                             className="searchform__input"
                                         />
                                         <button type="submit" className="searchform__submit">
@@ -38,7 +37,7 @@ export default function NotFoundPage() {
                                         </button>
                                     </form>
                                     <Link to={process.env.PUBLIC_URL + "/"} className="error-btn">
-                                        Back to home page
+                                        {t("notFound.back")}
                                     </Link>
                                 </div>
                             </div>

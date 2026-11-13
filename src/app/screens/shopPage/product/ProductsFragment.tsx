@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Product } from "../../../../lib/types/product";
 import { CartItem } from "../../../../lib/types/search";
 import ProductGridListSingle from "./ProductGridListSingle";
+import { useTranslation } from "react-i18next";
 
 interface ProductsFragmentProps {
     layout: string;
@@ -11,6 +12,7 @@ interface ProductsFragmentProps {
 }
 
 const ProductsFragment: React.FC<ProductsFragmentProps> = ({ layout, products, onAdd }) => {
+    const { t } = useTranslation();
 
     return (
         <div className="shop-bottom-area mt-35">
@@ -28,7 +30,7 @@ const ProductsFragment: React.FC<ProductsFragmentProps> = ({ layout, products, o
                         })
                         : (
                             <div className="col-12 text-center">
-                                <p>No products found.</p>
+                                <p>{t("product.none")}</p>
                             </div>
                         )}
                 </Fragment>

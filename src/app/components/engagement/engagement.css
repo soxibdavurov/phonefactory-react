@@ -1,0 +1,112 @@
+.pf-engage-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+
+.pf-like-btn,
+.pf-share-btn,
+.pf-comment-delete {
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.pf-like-btn.active,
+.pf-like-btn.active i {
+  color: #e53935;
+  border-color: #ffcdd2;
+}
+
+.pf-share {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pf-share-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.pf-comment {
+  display: flex;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.pf-comment img,
+.pf-comment-fallback {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 58px;
+}
+
+.pf-comment-body h4 {
+  margin-bottom: 4px;
+}
+
+.pf-comment-body span {
+  display: block;
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.pf-comment-form textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid #e5e5e5;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.pf-comment-form button[type="submit"] {
+  background: #a749ff;
+  color: #fff;
+  border: 0;
+  padding: 10px 22px;
+  cursor: pointer;
+}
+
+.pf-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.pf-card-actions .pf-like-btn,
+.pf-card-actions .pf-share-btn {
+  padding: 2px 8px;
+}
+
+.pf-empty {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.pf-stock {
+  margin: 10px 0 0;
+  font-weight: 600;
+}
+
+.pf-stock.is-out {
+  color: #c0392b;
+}

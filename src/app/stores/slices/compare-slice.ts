@@ -1,6 +1,7 @@
 // src/stores/slices/compare-slice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import cogoToast from "cogo-toast";
+import i18n from "../../../i18n";
 import { CompareItem } from "../../../lib/types/compare";
 
 type CompareState = {
@@ -40,12 +41,12 @@ const compareSlice = createSlice({
         (it) => it._id === action.payload._id
       );
       if (exists) {
-        cogoToast.info("Already in Compare", { position: "bottom-left" });
+        cogoToast.info(String(i18n.t("toast.alreadyCompare")), { position: "bottom-left" });
         return;
       }
       state.compareItems.push(action.payload);
       writeToLS(state.compareItems);
-      cogoToast.success("Added to Compare", { position: "bottom-left" });
+      cogoToast.success(String(i18n.t("toast.addedCompare")), { position: "bottom-left" });
     },
 
     deleteFromCompare: (state, action: PayloadAction<string>) => {
@@ -53,7 +54,7 @@ const compareSlice = createSlice({
         (it) => it._id !== action.payload
       );
       writeToLS(state.compareItems);
-      cogoToast.error("Removed from Compare", { position: "bottom-left" });
+      cogoToast.error(String(i18n.t("toast.removedCompare")), { position: "bottom-left" });
     },
 
     clearCompare: (state) => {
@@ -61,7 +62,7 @@ const compareSlice = createSlice({
       try {
         localStorage.removeItem(LS_KEY);
       } catch { }
-      cogoToast.warn("Compare cleared", { position: "bottom-left" });
+      cogoToast.warn(String(i18n.t("toast.clearedCompare")), { position: "bottom-left" });
     },
 
     // ixtiyoriy: tashqaridan LS dagini qayta yuklash uchun

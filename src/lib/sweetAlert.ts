@@ -1,10 +1,20 @@
 /** SweetAlertHandling **/
 import Swal from "sweetalert2";
 import { Messages } from "./config";
+import i18n from "../i18n";
+
+const knownErrors: Record<string, string> = {
+  [Messages.error1]: "errors.generic",
+  [Messages.error2]: "errors.login",
+  [Messages.error3]: "errors.fill",
+  [Messages.error4]: "errors.empty",
+  [Messages.error5]: "errors.image",
+};
 
 export const sweetErrorHandling = async (err: any) => {
   const error = err.response?.data ?? err;
-  const message = error?.message ?? Messages.error1;
+  const raw = error?.message ?? Messages.error1;
+  const message = knownErrors[raw] ? String(i18n.t(knownErrors[raw])) : raw;
   await Swal.fire({
     icon: "error",
     text: message,

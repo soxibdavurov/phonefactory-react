@@ -12,8 +12,10 @@ import TabPanel from "@mui/lab/TabPanel";
 import "../../../css/help.css";
 import { faq } from "../../../lib/data/faq";
 import { terms } from "../../../lib/data/terms";
+import { useTranslation } from "react-i18next";
 
 export default function HelpPage() {
+  const { t } = useTranslation();
   const [value, setValue] = React.useState("1");
 
   /** HANDLERS **/
@@ -33,9 +35,9 @@ export default function HelpPage() {
                 aria-label="lab API tabs example"
                 className={"table_list"}
               >
-                <Tab label="TERMS" value={"1"} />
-                <Tab label="FAQ" value={"2"} />
-                <Tab label="CONTACT" value={"3"} />
+                <Tab label={String(t("help.terms"))} value={"1"} />
+                <Tab label={String(t("help.faq"))} value={"2"} />
+                <Tab label={String(t("help.contact"))} value={"3"} />
               </Tabs>
             </Box>
           </Box>
@@ -74,8 +76,8 @@ export default function HelpPage() {
                 <Stack className={"admin-letter-box"}>
                   <Stack className={"admin-letter-container"}>
                     <Box className={"admin-letter-frame"}>
-                      <span>Contact us!</span>
-                      <p>Fill out below form to send a message!</p>
+                      <span>{t("help.contactUs")}</span>
+                      <p>{t("help.fill")}</p>
                     </Box>
                     <form
                       action={"#"}
@@ -83,26 +85,26 @@ export default function HelpPage() {
                       className={"admin-letter-frame"}
                     >
                       <div className={"admin-input-box"}>
-                        <label>Your name</label>
+                        <label>{t("help.name")}</label>
                         <input
                           type={"text"}
                           name={"memberNick"}
-                          placeholder={"Type your name here"}
+                          placeholder={String(t("help.namePh"))}
                         />
                       </div>
                       <div className={"admin-input-box"}>
-                        <label>Your email</label>
+                        <label>{t("help.email")}</label>
                         <input
                           type={"text"}
                           name={"memberEmail"}
-                          placeholder={"Type your email here"}
+                          placeholder={String(t("help.emailPh"))}
                         />
                       </div>
                       <div className={"admin-input-box"}>
-                        <label>Message</label>
+                        <label>{t("help.message")}</label>
                         <textarea
                           name={"memberMsg"}
-                          placeholder={"Your message"}
+                          placeholder={String(t("help.messagePh"))}
                         ></textarea>
                       </div>
                       <Box
@@ -111,7 +113,7 @@ export default function HelpPage() {
                         sx={{ mt: "30px" }}
                       >
                         <Button type={"submit"} variant="contained">
-                          Send
+                          {t("help.send")}
                         </Button>
                       </Box>
                     </form>

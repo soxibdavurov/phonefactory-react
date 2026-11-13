@@ -3,8 +3,18 @@
 .blog-details-top {
   .blog-details-img {
     position: relative;
+    overflow: hidden;
+    background: #f3f3f3;
     img {
       width: 100%;
+      height: 460px;
+      object-fit: cover;
+      @media #{$md-layout} {
+        height: 360px;
+      }
+      @media #{$xs-layout} {
+        height: 240px;
+      }
     }
     .video-icon {
       position: absolute;
@@ -34,6 +44,10 @@
   }
   .blog-details-content {
     margin-top: 30px;
+    h3,
+    p {
+      overflow-wrap: anywhere;
+    }
     .blog-meta-2 {
       display: flex;
       ul {
@@ -155,6 +169,7 @@
     }
     ul {
       display: flex;
+      flex-wrap: wrap;
       li {
         position: relative;
 
@@ -198,6 +213,11 @@
   a {
     font-size: 15px;
 
+    display: block;
+    max-width: 46%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     text-transform: capitalize;
   }
 }

@@ -15,6 +15,7 @@ import { useGlobals } from "../../stores/slices/useGlobals";
 import { Link } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -51,6 +52,7 @@ interface AuthenticationModalProps {
 export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupOpen, handleLoginOpen, handleSignupClose, handleLoginClose } = props;
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const [memberNick, setMemberNick] = useState<string>("");
   const [memberPhone, setMemberPhone] = useState<string>("");
@@ -96,7 +98,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
       //Saving authenticated user
       setAuthMember(result);
-      sweetTopSuccessAlert("Signed up successfully", 2000);
+      sweetTopSuccessAlert(String(t("account.signedUp")), 2000);
       handleSignupClose();
     } catch (err) {
       console.log(err);
@@ -121,7 +123,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
       //Saving authenticated user
       setAuthMember(result);
-      sweetTopSuccessAlert("Signed in successfully", 1000);
+      sweetTopSuccessAlert(String(t("account.signedIn")), 1000);
       handleLoginClose();
     } catch (err) {
       console.log(err);
@@ -153,27 +155,27 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
             <div className="oynaliWrapper">
               <form>
-                <h2>Signup Form</h2>
+                <h2>{t("account.signupTitle")}</h2>
                 <div className="input-field">
                   <input type="text" required
 
                     onChange={handleUsername}
                   />
-                  <label>Enter your username</label>
+                  <label>{t("account.username")}</label>
                 </div>
                 <div className="input-field">
                   <input type="password" required
                     onChange={handlePassword}
                     onKeyDown={handlePasswordKeyDown}
                   />
-                  <label>Enter your password</label>
+                  <label>{t("account.password")}</label>
                 </div>
                 <div className="input-field">
                   <input type="text" required
 
                     onChange={handlePhone}
                   />
-                  <label>Enter your phone number</label>
+                  <label>{t("account.phone")}</label>
                 </div>
                 <button
                   type="submit"
@@ -181,16 +183,16 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                     e.preventDefault();
                     handleSignupRequest();
                   }}>
-                  Signup
+                  {t("account.signup")}
                 </button>
                 <div className="register">
                   <p>
-                    Already have an account? <a href="#"
+                    {t("account.haveAccount")} <a href="#"
                       onClick={(e) => {
                         e.preventDefault();
                         handleSignupClose();   // avval login oynasini yopamiz
                         handleLoginOpen();   // so‘ng signup modalni ochamiz
-                      }}>Login</a>
+                      }}>{t("account.login")}</a>
                   </p>
                 </div>
               </form>
@@ -289,29 +291,29 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
             direction={"row"}>
             <div className="oynaliWrapper">
               <form>
-                <h2>Sign in here</h2>
+                <h2>{t("account.signin")}</h2>
                 <div className="input-field">
                   <input type="text" required
 
                     onChange={handleUsername}
                   />
-                  <label>Enter your username</label>
+                  <label>{t("account.username")}</label>
                 </div>
                 <div className="input-field">
                   <input type="password" required
                     onChange={handlePassword}
                     onKeyDown={handlePasswordKeyDown}
                   />
-                  <label>Enter your password</label>
+                  <label>{t("account.password")}</label>
                 </div>
                 <div className="forget">
                   <label htmlFor="remember">
                     <input type="checkbox"
 
                       id="remember" />
-                    <p>Remember</p>
+                    <p>{t("account.remember")}</p>
                   </label>
-                  <a href="#">Forgot password?</a>
+                  <a href="#">{t("account.forgot")}</a>
                 </div>
                 <button
                   type="submit"
@@ -319,16 +321,16 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                     e.preventDefault();
                     handleLoginRequest();
                   }}>
-                  Login
+                  {t("account.login")}
                 </button>
                 <div className="register">
                   <p>
-                    Don't have an account? <a href="#"
+                    {t("account.noAccount")} <a href="#"
                       onClick={(e) => {
                         e.preventDefault();
                         handleLoginClose();   // avval login oynasini yopamiz
                         handleSignupOpen();   // so‘ng signup modalni ochamiz
-                      }}>Register</a>
+                      }}>{t("account.register")}</a>
                   </p>
                 </div>
               </form>

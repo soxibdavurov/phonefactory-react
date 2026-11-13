@@ -9,6 +9,7 @@ import { useGlobals } from "../../../stores/slices/useGlobals";
 import { serverApi } from "../../../../lib/config";
 import { ListItemIcon } from "@mui/material";
 import { Logout } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 interface IconGroupProps {
   cartItems: CartItem[];
@@ -31,6 +32,7 @@ export default function IconGroup({
   setLoginOpen,
   handleLogoutRequest
 }: IconGroupProps) {
+  const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation(); // ⬅️ joriy yo‘l
   const { authMember } = useGlobals();
@@ -112,7 +114,7 @@ export default function IconGroup({
         </button>
         <div className="search-content">
           <form>
-            <input type="text" placeholder="Search" />
+            <input type="text" placeholder={String(t("account.search"))} />
             <button className="button-search" type="button">
               <i className="pe-7s-search" />
             </button>
@@ -143,13 +145,13 @@ export default function IconGroup({
         )}
         <div className="account-dropdown">
           <ul>{!authMember ? (<>
-            <li><Link onClick={() => setLoginOpen(true)} to="#">Login</Link></li>
-            <li><Link onClick={() => setSignupOpen(true)} to="#">Register</Link></li>
+            <li><Link onClick={() => setLoginOpen(true)} to="#">{t("account.login")}</Link></li>
+            <li><Link onClick={() => setSignupOpen(true)} to="#">{t("account.register")}</Link></li>
           </>
           ) : (
             <>
-              <li><Link to="/member-page">My Account</Link></li>
-              <li><Link to="" onClick={handleLogoutRequest}><Logout fontSize="small" style={{ color: 'blue' }} />Logout</Link></li>
+              <li><Link to="/member-page">{t("account.my")}</Link></li>
+              <li><Link to="" onClick={handleLogoutRequest}><Logout fontSize="small" style={{ color: 'blue' }} />{t("account.logout")}</Link></li>
             </>
           )}
           </ul>

@@ -18,6 +18,7 @@ import { useLocation, Link } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import cogoToast from "cogo-toast";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { useTranslation } from "react-i18next";
 
 interface CartPageProps {
     cartItems: CartItem[];
@@ -30,6 +31,7 @@ interface CartPageProps {
 export default function CartPage(props: CartPageProps) {
     const { pathname } = useLocation();
     const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+    const { t } = useTranslation();
     const { authMember, setOrderBuilder } = useGlobals();
     const history = useHistory();
     const [value, setValue] = useState("1");
@@ -42,9 +44,12 @@ export default function CartPage(props: CartPageProps) {
     // 
     const proceedOrderHandler = async () => {
         try {
-            if (!authMember) cogoToast.warn("Please, login first!", {
-                position: "bottom-left",
-            });
+            if (!authMember) {
+                cogoToast.warn(t("cart.loginFirst"), {
+                    position: "bottom-left",
+                });
+                return;
+            }
 
             const order = new OrderService();
             await order.createOrder(cartItems);
@@ -96,8 +101,8 @@ export default function CartPage(props: CartPageProps) {
             <div>
                 <BreadcrumbWrap
                     pages={[
-                        { label: "Home", path: process.env.PUBLIC_URL + "/" },
-                        { label: "Cart", path: process.env.PUBLIC_URL + pathname },
+                        { label: String(t("nav.home")), path: process.env.PUBLIC_URL + "/" },
+                        { label: String(t("cart.page")), path: process.env.PUBLIC_URL + pathname },
                     ]}
                 />
             </div>
@@ -106,19 +111,19 @@ export default function CartPage(props: CartPageProps) {
                 <div className="container">
                     {cartItems && cartItems.length >= 1 ? (
                         <Fragment>
-                            <h3 className="cart-page-title">Your cart items</h3>
+                            <h3 className="cart-page-title">{t("cart.title")}</h3>
                             <div className="row">
                                 <div className="col-12">
                                     <div className="table-content table-responsive cart-table-content">
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Image</th>
-                                                    <th>Product Name</th>
-                                                    <th>Unit Price</th>
-                                                    <th>Qty</th>
-                                                    <th>Subtotal</th>
-                                                    <th>action</th>
+                                                    <th>{t("cart.image")}</th>
+                                                    <th>{t("cart.name")}</th>
+                                                    <th>{t("cart.unit")}</th>
+                                                    <th>{t("cart.qty")}</th>
+                                                    <th>{t("cart.subtotal")}</th>
+                                                    <th>{t("cart.action")}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -179,10 +184,10 @@ export default function CartPage(props: CartPageProps) {
                                                                 {cartItem.discount > 0 ? (
                                                                     <Fragment>
                                                                         <span className="amount old">
-                                                                            {discountedPrice.toLocaleString()} ₩{" "}
+                                                                            {cartItem.price.toLocaleString()} ₩
                                                                         </span>
                                                                         <span className="amount">
-                                                                            {cartItem.price.toLocaleString()} ₩
+                                                                            {discountedPrice.toLocaleString()} ₩
                                                                         </span>
                                                                     </Fragment>
                                                                 ) : (
@@ -205,7 +210,7 @@ export default function CartPage(props: CartPageProps) {
                                                                     />
                                                                     <button
                                                                         className="inc qtybutton"
-                                                                        onClick={() => onAdd(cartItem)}
+                                                                        onClick={() => onAdd({ ...cartItem, quantity: 1 })}
                                                                     >
                                                                         +
                                                                     </button>
@@ -245,12 +250,12 @@ export default function CartPage(props: CartPageProps) {
                                             <Link
                                                 to={process.env.PUBLIC_URL + "/shop"}
                                             >
-                                                Continue Shopping
+                                                {t("cart.continue")}
                                             </Link>
                                         </div>
                                         <div className="cart-clear">
                                             <button onClick={() => onDeleteAll()}>
-                                                Clear Shopping Cart
+                                                {t("cart.clear")}
                                             </button>
                                         </div>
                                     </div>
@@ -262,28 +267,32 @@ export default function CartPage(props: CartPageProps) {
                                     <div className="grand-totall">
                                         <div className="title-wrap">
                                             <h4 className="cart-bottom-title section-bg-gary-cart">
-                                                Cart Total
+                                                {t("cart.totalTitle")}
                                             </h4>
                                         </div>
                                         <h5>
-                                            Subtotal:{" "}
+                                            {t("cart.subtotal")}:{" "}
                                             <span className="shop-total">
                                                 {originalTotal.toLocaleString()} ₩
                                             </span>
                                         </h5>
                                         {totalDiscount > 0 && (
                                             <h5 style={{ color: "#ff3d3d" }}>
-                                                Discount:{" "}
+                                                {t("cart.discount")}:{" "}
                                                 <span className="shop-total">
                                                     -{totalDiscount.toLocaleString()} ₩
                                                 </span>
                                             </h5>
                                         )}
-
-
+                                        <h5>
+                                            {t("cart.shipping")}:{" "}
+                                            <span className="shop-total">
+                                                {shippingCost > 0 ? `${shippingCost.toLocaleString()} ₩` : t("cart.free")}
+                                            </span>
+                                        </h5>
 
                                         <h4 className="grand-totall-title">
-                                            Grand Total{" "}
+                                            {t("cart.grand")}{" "}
                                             <span>
                                                 {grandTotal.toLocaleString()} ₩
                                             </span>
@@ -293,8 +302,8 @@ export default function CartPage(props: CartPageProps) {
                                                 e.preventDefault();
                                                 proceedOrderHandler();
                                             }}
-                                            to={process.env.PUBLIC_URL + "/checkout"}>
-                                            Proceed to Checkout
+                                            to={process.env.PUBLIC_URL + "/orders"}>
+                                            {t("cart.place")}
                                         </Link>
                                     </div>
                                 </div>
@@ -308,9 +317,9 @@ export default function CartPage(props: CartPageProps) {
                                         <i className="pe-7s-cart"></i>
                                     </div>
                                     <div className="item-empty-area__text">
-                                        No items found in cart <br />{" "}
+                                        {t("cart.empty")} <br />{" "}
                                         <Link to={process.env.PUBLIC_URL + "/shop"}>
-                                            Shop Now
+                                            {t("cart.shopNow")}
                                         </Link>
                                     </div>
                                 </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CartItem } from "../../../lib/types/search";
 import cogoToast from "cogo-toast";
+import i18n from "../../../i18n";
 
 const useBasket = () => {
   const cartJson: string | null = localStorage.getItem("cartData");
@@ -8,22 +9,23 @@ const useBasket = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>(currentCart);
 
   const onAdd = (input: CartItem) => {
+    const addQty = input.quantity > 0 ? input.quantity : 1;
     const exist: any = cartItems.find(
       (item: CartItem) => item._id === input._id
     );
     if (exist) {
       const cartUpdate = cartItems.map((item: CartItem) =>
         item._id === input._id
-          ? { ...exist, quantity: exist.quantity + 1 }
+          ? { ...exist, quantity: exist.quantity + addQty }
           : item
       );
       setCartItems(cartUpdate);
-      cogoToast.success("Quantity increased", { position: "bottom-left" });
+      cogoToast.success(String(i18n.t("toast.qtyUp")), { position: "bottom-left" });
       localStorage.setItem("cartData", JSON.stringify(cartUpdate));
     } else {
       const cartUpdate = [...cartItems, { ...input }];
       setCartItems(cartUpdate);
-      cogoToast.success("Added to cart", { position: "bottom-left" });
+      cogoToast.success(String(i18n.t("toast.added")), { position: "bottom-left" });
       localStorage.setItem("cartData", JSON.stringify(cartUpdate));
     }
   };
@@ -36,7 +38,7 @@ const useBasket = () => {
         (item: CartItem) => item._id !== input._id
       );
       setCartItems(cartUpdate);
-      cogoToast.error("Product removed", { position: "bottom-left" });
+      cogoToast.error(String(i18n.t("toast.removed")), { position: "bottom-left" });
       localStorage.setItem("cartData", JSON.stringify(cartUpdate));
     } else {
       const cartUpdate = cartItems.map((item: CartItem) =>
@@ -46,7 +48,7 @@ const useBasket = () => {
       );
       setCartItems(cartUpdate);
       localStorage.setItem("cartData", JSON.stringify(cartUpdate));
-      cogoToast.warn("Product Decremented", { position: "bottom-left" });
+      cogoToast.warn(String(i18n.t("toast.qtyDown")), { position: "bottom-left" });
     }
   };
   const onDelete = (input: CartItem) => {
@@ -54,13 +56,13 @@ const useBasket = () => {
       (item: CartItem) => item._id !== input._id
     );
     setCartItems(cartUpdate);
-    cogoToast.error("Product removed", { position: "bottom-left" });
+    cogoToast.error(String(i18n.t("toast.removed")), { position: "bottom-left" });
     localStorage.setItem("cartData", JSON.stringify(cartUpdate));
   };
   const onDeleteAll = () => {
     setCartItems([]);
     localStorage.removeItem("cartData");
-    cogoToast.info("All items cleared from cart", { position: "bottom-left" });
+    cogoToast.info(String(i18n.t("toast.cleared")), { position: "bottom-left" });
   };
   return {
     cartItems,

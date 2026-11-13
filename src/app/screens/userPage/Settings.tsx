@@ -11,9 +11,11 @@ import {
 } from "../../../lib/sweetAlert";
 import { Messages, serverApi } from "../../../lib/config";
 import MemberService from "../../services/MemberService";
+import { useTranslation } from "react-i18next";
 
 export function Settings() {
   const { authMember, setAuthMember } = useGlobals();
+  const { t } = useTranslation();
   const [memberImage, setMemberImage] = useState<string>(
     authMember?.memberImage
       ? `${serverApi}/${authMember.memberImage}`
@@ -67,7 +69,7 @@ export function Settings() {
       const result = await member.updateMember(memberUpdateInput);
       setAuthMember(result);
 
-      await sweetTopSuccessAlert("Modified Successfully", 700);
+      await sweetTopSuccessAlert(String(t("account.saved")), 700);
     } catch (err) {
       console.log(err);
       sweetErrorHandling(err).then();
@@ -98,8 +100,8 @@ export function Settings() {
       <Box className={"member-media-frame"}>
         <img src={memberImage} className={"mb-image"} />
         <div className={"media-change-box"}>
-          <span>Upload image</span>
-          <p>JPG, JPEG, PNG formats only!</p>
+          <span>{t("account.upload")}</span>
+          <p>{t("account.formats")}</p>
           <div className={"up-del-box"}>
             <Button component="label" onChange={handleImageViewer}>
               <CloudDownloadIcon />
@@ -110,7 +112,7 @@ export function Settings() {
       </Box>
       <Box className={"input-frame"}>
         <div className={"long-input"}>
-          <label className={"spec-label"}>Username</label>
+          <label className={"spec-label"}>{t("account.usernameLabel")}</label>
           <input
             className={"spec-input mb-nick"}
             type="text"
@@ -123,7 +125,7 @@ export function Settings() {
       </Box>
       <Box className={"input-frame"}>
         <div className={"short-input"}>
-          <label className={"spec-label"}>Phone</label>
+          <label className={"spec-label"}>{t("account.phoneLabel")}</label>
           <input
             className={"spec-input mb-phone"}
             type="text"
@@ -134,14 +136,14 @@ export function Settings() {
           />
         </div>
         <div className={"short-input"}>
-          <label className={"spec-label"}>Address</label>
+          <label className={"spec-label"}>{t("account.address")}</label>
           <input
             className={"spec-input  mb-address"}
             type="text"
             placeholder={
               authMember?.memberAddress
                 ? authMember.memberAddress
-                : "no address"
+                : String(t("account.noAddress"))
             }
             value={memberUpdateInput.memberAddress}
             name="memberAddress"
@@ -151,13 +153,13 @@ export function Settings() {
       </Box>
       <Box className={"input-frame"}>
         <div className={"long-input"}>
-          <label className={"spec-label"}>Description</label>
+          <label className={"spec-label"}>{t("account.description")}</label>
           <textarea
             className={"spec-textarea mb-description"}
             placeholder={
               authMember?.memberAddress
                 ? authMember.memberAddress
-                : "no description"
+                : String(t("account.noDescription"))
             }
             value={memberUpdateInput.memberDesc}
             name="memberDesc"
@@ -167,7 +169,7 @@ export function Settings() {
       </Box>
       <Box className={"save-box"}>
         <Button variant={"contained"} onClick={handleSubmitButton}>
-          Save
+          {t("account.save")}
         </Button>
       </Box>
     </Box>

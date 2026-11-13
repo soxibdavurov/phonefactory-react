@@ -2,6 +2,7 @@ import Swiper, { SwiperSlide } from "../../components/swiper";
 import { Link } from "react-router-dom";
 
 import { categoryData } from "../../../lib/data/category"
+import { useTranslation } from "react-i18next";
 
 // swiper slider settings
 const settings = {
@@ -25,6 +26,7 @@ const settings = {
 };
 
 export default function CategoryOneSlider() {
+  const { t } = useTranslation();
   return (
     <div className={"collections-area pb-0"}>
       <div className="container">
@@ -45,10 +47,10 @@ export default function CategoryOneSlider() {
                         style={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }}
                         className="collection-content-2 text-center"
                       >
-                        <span>{single.subtitle}</span>
+                        <span>{t(`home.cat.${single.id}.sub`)}</span>
                         <h4>
                           <Link to={process.env.PUBLIC_URL + single.link}>
-                            {single.title}
+                            {t(`home.cat.${single.id}.title`)}
                           </Link>
                         </h4>
                       </div>

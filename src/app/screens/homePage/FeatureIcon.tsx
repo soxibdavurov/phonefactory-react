@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 const featureIconData = [
     {
         "id": 1,
@@ -26,6 +28,13 @@ const featureIconData = [
 ];
 
 const FeatureIcon = () => {
+    const { t } = useTranslation();
+    const copy = [
+        { title: "home.freeShipping", subtitle: "home.freeShippingSub" },
+        { title: "home.support", subtitle: "home.supportSub" },
+        { title: "home.returns", subtitle: "home.returnsSub" },
+        { title: "home.discount", subtitle: "home.discountSub" },
+    ];
     return (
         <div className={"support-area pt-100 pb-60"}>
             <div className="container">
@@ -41,8 +50,8 @@ const FeatureIcon = () => {
                                     />
                                 </div>
                                 <div className="support-content">
-                                    <h5>{singleFeature.title}</h5>
-                                    <p>{singleFeature.subtitle}</p>
+                                    <h5>{t(copy[singleFeature.id - 1].title)}</h5>
+                                    <p>{t(copy[singleFeature.id - 1].subtitle)}</p>
                                 </div>
                             </div>
                         </div>

@@ -32,6 +32,13 @@ import Nav from "react-bootstrap/Nav";
 import ProductGridListSingle from "./product/ProductGridListSingle";
 import SingleProductGrid from "../homePage/SingleProductGrid";
 import { retrieveRelatedProducts } from "./selector";
+import {
+    EngagementBar,
+    EngagementComments,
+    useEngagement,
+} from "../../components/engagement/Engagement";
+import { useTranslation } from "react-i18next";
+import { useContentLang } from "../../../lib/lang";
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
     setMobileshop: (data: Member) => dispatch(setMobileshop(data)),
@@ -53,6 +60,8 @@ interface ChosenProductsProps {
 
 export default function ChosenProduct(props: ChosenProductsProps) {
     const { onAdd } = props;
+    const { t } = useTranslation();
+    const lang = useContentLang();
     const history = useHistory();
     const dispatch = useDispatch();
     const { productId } = useParams<{ productId: string }>();
@@ -77,7 +86,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
         member.getMobileshop()
             .then((data) => dispatch(setMobileshop(data)))
             .catch(console.log);
-    }, [productId, dispatch]); // ✅ faqat productId va dispatch
+    }, [productId, dispatch, lang]);
 
     // ======= ProductImageDescription (gallery+thumbs) tanasi =======
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
@@ -144,6 +153,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
     // ===============================================================
 
     const imagePath = `${serverApi}/${chosenProduct?.productImages}`;
+    const engagement = useEngagement(productId, "PRODUCT");
     if (!chosenProduct) return null;
 
     const discountedPrice =
@@ -169,18 +179,14 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                             className={"col-xl-10"}
                                         >
                                             <div className="product-large-image-wrapper">
-                                                {chosenProduct.productDiscount || chosenProduct.isNew ? (
+                                                {Number(chosenProduct.productDiscount) > 0 || chosenProduct.isNew ? (
                                                     <div className="product-img-badges">
-                                                        {chosenProduct.productDiscount ? (
-                                                            <span className="pink">-{chosenProduct.productDiscount}won</span>
-                                                        ) : (
-                                                            ""
-                                                        )}
-                                                        {chosenProduct.isNew ? <span className="purple">New</span> : ""}
+                                                        {Number(chosenProduct.productDiscount) > 0 ? (
+                                                            <span className="pink">-{Number(chosenProduct.productDiscount).toLocaleString()}₩</span>
+                                                        ) : null}
+                                                        {chosenProduct.isNew ? <span className="purple">New</span> : null}
                                                     </div>
-                                                ) : (
-                                                    ""
-                                                )}
+                                                ) : null}
                                                 {chosenProduct?.productImages?.length ? (
                                                     <Swiper {...gallerySwiperParams}>
                                                         {chosenProduct?.productImages.map((single, key) => (
@@ -246,7 +252,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                 <div className="product-details-content ml-70">
                                     <h2>{chosenProduct.productName}</h2>
                                     <div className="product-details-price">
-                                        {chosenProduct.productDiscount !== 0 || null ? (
+                                        {Number(chosenProduct.productDiscount) > 0 ? (
                                             <Fragment>
                                                 <span>{(chosenProduct.productPrice - chosenProduct.productDiscount).toLocaleString()}₩</span>{" "}
                                                 <span className="old">
@@ -263,70 +269,44 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                                 <ProductRating ratingValue={chosenProduct.productRate} />
                                             </div>
                                         </div>
-                                    ) : (
-                                        ""
-                                    )}
-                                    <div className="pro-details-list">
-                                        <p>{chosenProduct.productDesc}</p>
-                                    </div>
-
-                                    {chosenProduct.productSize ? (
-                                        <div className="pro-details-size-color">
-
-                                            <div className="pro-details-size">
-                                                <span>  {chosenProduct.productCollection === "TARIFF" ?
-                                                    "TariffType" : "Size/Storage"}</span>
-                                                <div className="pro-details-size-content">
-
-                                                    <label
-                                                        className={`pro-details-size-content--single`}
-
-                                                    >
-                                                        <input
-                                                            type="radio"
-                                                            value={chosenProduct.productSize}
-                                                            checked
-
-                                                        />
-                                                        <span className="size-name">{chosenProduct.productSize}</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        ""
-                                    )}
+                                    ) : null}
+                                    <p className={chosenProduct.productLeftCount > 0 ? "pf-stock" : "pf-stock is-out"}>
+                                        {chosenProduct.productLeftCount > 0
+                                            ? t("product.inStock", { count: chosenProduct.productLeftCount })
+                                            : t("product.outOfStock")}
+                                    </p>
 
                                     <div className="pro-details-quality">
-                                        <div className="cart-plus-minus">
-                                            <button
-
-                                                onClick={() =>
-                                                    setQuantityCount(quantityCount > 1 ? quantityCount - 1 : 1)
-                                                }
-                                                className="dec qtybutton"
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="cart-plus-minus-box"
-                                                type="text"
-                                                value={quantityCount}
-                                                readOnly
-                                            />
-                                            <button
-                                                onClick={() =>
-                                                    setQuantityCount(
-                                                        quantityCount < chosenProduct.productLeftCount
-                                                            ? quantityCount + 1
-                                                            : quantityCount
-                                                    )
-                                                }
-                                                className="inc qtybutton"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
+                                        {chosenProduct.productLeftCount > 0 ? (
+                                            <div className="cart-plus-minus">
+                                                <button
+                                                    onClick={() =>
+                                                        setQuantityCount(quantityCount > 1 ? quantityCount - 1 : 1)
+                                                    }
+                                                    className="dec qtybutton"
+                                                >
+                                                    -
+                                                </button>
+                                                <input
+                                                    className="cart-plus-minus-box"
+                                                    type="text"
+                                                    value={quantityCount}
+                                                    readOnly
+                                                />
+                                                <button
+                                                    onClick={() =>
+                                                        setQuantityCount(
+                                                            quantityCount < chosenProduct.productLeftCount
+                                                                ? quantityCount + 1
+                                                                : quantityCount
+                                                        )
+                                                    }
+                                                    className="inc qtybutton"
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        ) : null}
                                         <div className="pro-details-cart btn-hover">
                                             {chosenProduct.productLeftCount > 0 ? (
                                                 <button
@@ -341,37 +321,21 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                                             image: chosenProduct.productImages[0],
                                                         });
                                                     }}
-                                                    disabled={quantityCount >= chosenProduct.productLeftCount}
                                                 >
-                                                    {" "}
-                                                    Add To Cart{" "}
+                                                    {t("product.addToCart")}
                                                 </button>
                                             ) : (
-                                                <button disabled>Out of Stock</button>
+                                                <button disabled>{t("product.outOfStock")}</button>
                                             )}
                                         </div>
-                                        {/* <div className="pro-details-wishlist">
-                                                <button
-                                                    className={wishlistItem !== undefined ? "active" : ""}
-                                                    disabled={wishlistItem !== undefined}
-                                                    title={
-                                                        wishlistItem !== undefined
-                                                            ? "Added to wishlist"
-                                                            : "Add to wishlist"
-                                                    }
-                                                    onClick={() => dispatch(addToWishlist(product))}
-                                                >
-                                                    <i className="pe-7s-like" />
-                                                </button>
-                                            </div> */}
                                         <div className="pro-details-compare">
                                             <button
                                                 className={compareItem !== undefined ? "active" : ""}
                                                 disabled={compareItem !== undefined}
                                                 title={
                                                     compareItem !== undefined
-                                                        ? "Added to compare"
-                                                        : "Add to compare"
+                                                        ? String(t("product.addedCompare"))
+                                                        : String(t("product.addCompare"))
                                                 }
                                                 onClick={() => dispatch(addToCompare(
                                                     {
@@ -386,16 +350,32 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                                 ))}
                                             >
                                                 <i className="pe-7s-shuffle" />
+                                                <span>{compareItem !== undefined ? t("product.added") : t("product.compare")}</span>
                                             </button>
                                         </div>
                                     </div>
 
+                                    {chosenProduct.productSize ? (
+                                        <div className="pro-details-meta">
+                                            <span>{chosenProduct.productCollection === "TARIFF" ? t("product.tariff") : t("product.storage")} :</span>
+                                            <ul>
+                                                <li>{chosenProduct.productSize}</li>
+                                            </ul>
+                                        </div>
+                                    ) : null}
+
+                                    {chosenProduct.productDesc ? (
+                                        <div className="pro-details-list">
+                                            <p>{chosenProduct.productDesc}</p>
+                                        </div>
+                                    ) : null}
+
                                     <div className="pro-details-meta">
-                                        <span>Categories :</span>
+                                        <span>{t("product.categories")} :</span>
                                         <ul>
-                                            <li >
+                                            <li>
                                                 <Link to={process.env.PUBLIC_URL + "/shop"}>
-                                                    {chosenProduct.productCollection}
+                                                    {t(`shop.collections.${String(chosenProduct.productCollection).toLowerCase()}`, { defaultValue: chosenProduct.productCollection })}
                                                 </Link>
                                             </li>
                                         </ul>
@@ -421,35 +401,13 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                     )}
                                    */}
 
-                                    <div className="pro-details-social">
-                                        <ul>
-                                            <li>
-                                                <a href="//facebook.com">
-                                                    <i className="fa fa-facebook" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="//dribbble.com">
-                                                    <i className="fa fa-dribbble" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="//pinterest.com">
-                                                    <i className="fa fa-pinterest-p" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="//twitter.com">
-                                                    <i className="fa fa-twitter" />
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="//linkedin.com">
-                                                    <i className="fa fa-linkedin" />
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <EngagementBar
+                                        state={engagement.state}
+                                        title={chosenProduct.productName}
+                                        sharePath={`/shop/${chosenProduct._id}`}
+                                        onLike={engagement.onLike}
+                                        onShare={engagement.onShare}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -465,14 +423,16 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                 <Nav variant="pills" className="description-review-topbar">
                                     <Nav.Item>
                                         <Nav.Link eventKey="additionalInfo">
-                                            Additional Information
+                                            {t("product.additional")}
                                         </Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item>
-                                        <Nav.Link eventKey="productDescription">Description</Nav.Link>
+                                        <Nav.Link eventKey="productDescription">{t("product.description")}</Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item>
-                                        <Nav.Link eventKey="productReviews">Reviews(2)</Nav.Link>
+                                        <Nav.Link eventKey="productReviews">
+                                            {t("product.reviews")}({engagement.state.commentCount})
+                                        </Nav.Link>
                                     </Nav.Item>
                                 </Nav>
                                 <Tab.Content className="description-review-bottom">
@@ -480,18 +440,36 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                         <div className="product-anotherinfo-wrapper">
                                             <ul>
                                                 <li>
-                                                    <span>Weight</span> 400 g
+                                                    <span>{t("product.category")}</span> {t(`shop.collections.${String(chosenProduct.productCollection).toLowerCase()}`, { defaultValue: chosenProduct.productCollection })}
                                                 </li>
+                                                {chosenProduct.productBrand ? (
+                                                    <li>
+                                                        <span>{t("product.brand")}</span> {chosenProduct.productBrand}
+                                                    </li>
+                                                ) : null}
+                                                {chosenProduct.productSize ? (
+                                                    <li>
+                                                        <span>{t("product.storage")}</span> {chosenProduct.productSize}
+                                                    </li>
+                                                ) : null}
+                                                {chosenProduct.tariffType ? (
+                                                    <li>
+                                                        <span>{t("product.tariff")}</span> {chosenProduct.tariffType}
+                                                    </li>
+                                                ) : null}
                                                 <li>
-                                                    <span>Dimensions</span>10 x 10 x 15 cm{" "}
+                                                    <span>{t("product.stock")}</span> {chosenProduct.productLeftCount}
                                                 </li>
-                                                <li>
-                                                    <span>Materials</span> 60% cotton, 40% polyester
-                                                </li>
-                                                <li>
-                                                    <span>Other Info</span> American heirloom jean shorts pug
-                                                    seitan letterpress
-                                                </li>
+                                                {Number(chosenProduct.productDiscount) > 0 ? (
+                                                    <li>
+                                                        <span>{t("product.discount")}</span> {Number(chosenProduct.productDiscount).toLocaleString()}₩
+                                                    </li>
+                                                ) : null}
+                                                {chosenProduct.isNew ? (
+                                                    <li>
+                                                        <span>{t("product.label")}</span> {t("product.new")}
+                                                    </li>
+                                                ) : null}
                                             </ul>
                                         </div>
                                     </Tab.Pane>
@@ -499,129 +477,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                                         {chosenProduct.productDesc}
                                     </Tab.Pane>
                                     <Tab.Pane eventKey="productReviews">
-                                        <div className="row">
-                                            <div className="col-lg-7">
-                                                <div className="review-wrapper">
-                                                    <div className="single-review">
-                                                        <div className="review-img">
-                                                            <img
-                                                                src={
-                                                                    process.env.PUBLIC_URL +
-                                                                    "/assets/img/testimonial/1.jpg"
-                                                                }
-                                                                alt=""
-                                                            />
-                                                        </div>
-                                                        <div className="review-content">
-                                                            <div className="review-top-wrap">
-                                                                <div className="review-left">
-                                                                    <div className="review-name">
-                                                                        <h4>White Lewis</h4>
-                                                                    </div>
-                                                                    <div className="review-rating">
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="review-left">
-                                                                    <button>Reply</button>
-                                                                </div>
-                                                            </div>
-                                                            <div className="review-bottom">
-                                                                <p>
-                                                                    Vestibulum ante ipsum primis aucibus orci
-                                                                    luctustrices posuere cubilia Curae Suspendisse
-                                                                    viverra ed viverra. Mauris ullarper euismod
-                                                                    vehicula. Phasellus quam nisi, congue id nulla.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="single-review child-review">
-                                                        <div className="review-img">
-                                                            <img
-                                                                src={
-                                                                    process.env.PUBLIC_URL +
-                                                                    "/assets/img/testimonial/2.jpg"
-                                                                }
-                                                                alt=""
-                                                            />
-                                                        </div>
-                                                        <div className="review-content">
-                                                            <div className="review-top-wrap">
-                                                                <div className="review-left">
-                                                                    <div className="review-name">
-                                                                        <h4>White Lewis</h4>
-                                                                    </div>
-                                                                    <div className="review-rating">
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                        <i className="fa fa-star" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="review-left">
-                                                                    <button>Reply</button>
-                                                                </div>
-                                                            </div>
-                                                            <div className="review-bottom">
-                                                                <p>
-                                                                    Vestibulum ante ipsum primis aucibus orci
-                                                                    luctustrices posuere cubilia Curae Suspendisse
-                                                                    viverra ed viverra. Mauris ullarper euismod
-                                                                    vehicula. Phasellus quam nisi, congue id nulla.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-5">
-                                                <div className="ratting-form-wrapper pl-50">
-                                                    <h3>Add a Review</h3>
-                                                    <div className="ratting-form">
-                                                        <form action="#">
-                                                            <div className="star-box">
-                                                                <span>Your rating:</span>
-                                                                <div className="ratting-star">
-                                                                    <i className="fa fa-star" />
-                                                                    <i className="fa fa-star" />
-                                                                    <i className="fa fa-star" />
-                                                                    <i className="fa fa-star" />
-                                                                    <i className="fa fa-star" />
-                                                                </div>
-                                                            </div>
-                                                            <div className="row">
-                                                                <div className="col-md-6">
-                                                                    <div className="rating-form-style mb-10">
-                                                                        <input placeholder="Name" type="text" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-md-6">
-                                                                    <div className="rating-form-style mb-10">
-                                                                        <input placeholder="Email" type="email" />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-md-12">
-                                                                    <div className="rating-form-style form-submit">
-                                                                        <textarea
-                                                                            name="Your Review"
-                                                                            placeholder="Message"
-                                                                            defaultValue={""}
-                                                                        />
-                                                                        <input type="submit" defaultValue="Submit" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <EngagementComments {...engagement} />
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Tab.Container>
@@ -633,7 +489,7 @@ export default function ChosenProduct(props: ChosenProductsProps) {
                 <div className={clsx("related-product-area", "pb-95")}>
                     <div className="container">
                         <div className={clsx("section-title", "text-center", "mb-50")}>
-                            <h2>Related Products</h2>
+                            <h2>{t("product.related")}</h2>
                         </div>
                         {relatedProducts?.length ? (
                             <Swiper {...settings}>

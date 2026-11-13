@@ -8,6 +8,7 @@ import { Fragment } from "react";
 import { CartItem } from "../../../lib/types/search";
 import { CompareItem } from "../../../lib/types/compare";
 import { serverApi } from "../../../lib/config";
+import { useTranslation } from "react-i18next";
 
 interface ComparePageProps {
     cartItems: CartItem[];
@@ -16,6 +17,7 @@ interface ComparePageProps {
 
 export default function ComparePage(props: ComparePageProps) {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const { pathname } = useLocation();
     const { cartItems, onAdd } = props;
     const compareItems = useSelector((s: RootState) => s.comparison.compareItems);
@@ -24,8 +26,8 @@ export default function ComparePage(props: ComparePageProps) {
         <div>
             <BreadcrumbWrap
                 pages={[
-                    { label: "Home", path: process.env.PUBLIC_URL + "/" },
-                    { label: "Compare", path: process.env.PUBLIC_URL + pathname },
+                    { label: String(t("nav.home")), path: process.env.PUBLIC_URL + "/" },
+                    { label: String(t("compare.title")), path: process.env.PUBLIC_URL + pathname },
                 ]}
             />
 
@@ -39,7 +41,7 @@ export default function ComparePage(props: ComparePageProps) {
                                         <table className="table table-bordered mb-0">
                                             <tbody>
                                                 <tr>
-                                                    <th className="title-column">Product Info</th>
+                                                    <th className="title-column">{t("compare.info")}</th>
                                                     {compareItems.map((compareItem) => {
                                                         const cartItem = cartItems.find(
                                                             (ci) => ci._id === compareItem._id
@@ -87,9 +89,9 @@ export default function ComparePage(props: ComparePageProps) {
                                                                         }
                                                                         className={cartItem && cartItem.quantity > 0 ? "active" : ""}
                                                                         disabled={!!(cartItem && cartItem.quantity > 0)}
-                                                                        title={cartItem && cartItem.quantity > 0 ? "Added to cart" : "Add to cart"}
+                                                                        title={cartItem && cartItem.quantity > 0 ? String(t("compare.addedCart")) : String(t("product.addToCart"))}
                                                                     >
-                                                                        {cartItem && cartItem.quantity > 0 ? "Added" : "Add to cart"}
+                                                                        {cartItem && cartItem.quantity > 0 ? t("product.added") : t("product.addToCart")}
                                                                     </button>
                                                                 </div>
                                                             </td>
@@ -98,7 +100,7 @@ export default function ComparePage(props: ComparePageProps) {
                                                 </tr>
 
                                                 <tr>
-                                                    <th className="title-column">Price</th>
+                                                    <th className="title-column">{t("compare.price")}</th>
                                                     {compareItems.map((compareItem) => {
                                                         const hasDiscount = !!compareItem.discount;
                                                         const finalPrice = compareItem.price - (compareItem.discount || 0);
@@ -124,16 +126,16 @@ export default function ComparePage(props: ComparePageProps) {
                                                 </tr>
 
                                                 <tr>
-                                                    <th className="title-column">Description</th>
+                                                    <th className="title-column">{t("compare.description")}</th>
                                                     {compareItems.map((compareItem) => (
                                                         <td className="product-desc" key={compareItem._id}>
-                                                            <p>{compareItem.description ?? "N/A"}</p>
+                                                            <p>{compareItem.description ?? t("compare.na")}</p>
                                                         </td>
                                                     ))}
                                                 </tr>
 
                                                 <tr>
-                                                    <th className="title-column">Rating</th>
+                                                    <th className="title-column">{t("compare.rating")}</th>
                                                     {compareItems.map((compareItem) => (
                                                         <td className="product-rating" key={compareItem._id}>
                                                             <ProductRating ratingValue={compareItem.rating ?? 0} />
@@ -154,8 +156,8 @@ export default function ComparePage(props: ComparePageProps) {
                                         <i className="pe-7s-shuffle"></i>
                                     </div>
                                     <div className="item-empty-area__text">
-                                        No items found in compare <br />
-                                        <Link to={process.env.PUBLIC_URL + "/shop"}>Add Items</Link>
+                                        {t("compare.empty")} <br />
+                                        <Link to={process.env.PUBLIC_URL + "/shop"}>{t("compare.addItems")}</Link>
                                     </div>
                                 </div>
                             </div>

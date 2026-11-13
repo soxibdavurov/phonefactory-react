@@ -2,8 +2,10 @@ import { EffectFade } from "swiper";
 import Swiper, { SwiperSlide } from "../../components/swiper";
 import { Link } from "react-router-dom";
 import { homePageSliderData } from "../../../lib/data/homePageSliderData";
+import { useTranslation } from "react-i18next";
 
 export default function HomePageSlider() {
+  const { t } = useTranslation();
   const params = {
     effect: "fade",
     autoplay: {
@@ -43,18 +45,15 @@ export default function HomePageSlider() {
                             textAlign: "center",
                           }}
                         >
-                          <h3 className="animated no-style">{data.title}</h3>
-                          <h1
-                            className="animated"
-                            dangerouslySetInnerHTML={{ __html: data.subtitle }}
-                          />
-                          <p className="animated">{data.text}</p>
+                          <h3 className="animated no-style">{t(`home.slide.${data.id}.title`)}</h3>
+                          <h1 className="animated">{t(`home.slide.${data.id}.subtitle`)}</h1>
+                          <p className="animated">{t(`home.slide.${data.id}.text`)}</p>
                           <div className="slider-btn btn-hover">
                             <Link
                               className="animated rounden-btn"
                               to={process.env.PUBLIC_URL + data.url}
                             >
-                              SHOP NOW
+                              {t("home.shopNow")}
                             </Link>
                           </div>
                         </div>

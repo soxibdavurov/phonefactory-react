@@ -8,6 +8,8 @@ import IconGroup from "./menus/IconGroup";
 import MobileNavMenu from "./menus/MobileNavMenu";
 import MobileMenu from "./menus/MobileMenu";
 import { CartItem } from "../../../lib/types/search";
+import { useTranslation } from "react-i18next";
+import LanguageMenu from "./LanguageMenu";
 
 interface HeaderProps {
   cartItems: CartItem[];
@@ -27,6 +29,7 @@ export default function Header(props: HeaderProps) {
     setLoginOpen,
     handleLogoutRequest
   } = props;
+  const { t } = useTranslation();
   const [scroll, setScroll] = useState(0);
   const [headerTop, setHeaderTop] = useState(0);
 
@@ -48,7 +51,7 @@ export default function Header(props: HeaderProps) {
     <header className={"header-area clearfix"}>
       <div
         className={
-          "header-top-area header-padding-1 d-none d-lg-block fluid-border"
+          "header-top-area header-padding-1 fluid-border"
         }
       >
         <div className={"container-fluid"}>
@@ -56,11 +59,11 @@ export default function Header(props: HeaderProps) {
 
           <div className={"header-top-wap fluid-border"}>
             {/* Header callLine */}
-            <div className="language-currency-wrap">
+            <div className="language-currency-wrap d-none d-lg-block">
               <div className="same-language-currency use-style">
                 <span>
                   <a href="tel:+821055058800">
-                    Call Us +821055058800 <i className="fa fa-phone"></i>
+                    {t("callUs")} <i className="fa fa-phone"></i>
                   </a>
                 </span>
               </div>
@@ -68,8 +71,9 @@ export default function Header(props: HeaderProps) {
 
             <div className="header-offer">
               <p>
-                Free delivery on order over <span> 50.000₩</span>
+                {t("offer")} <span>50.000₩</span>
               </p>
+              <LanguageMenu />
             </div>
           </div>
         </div>

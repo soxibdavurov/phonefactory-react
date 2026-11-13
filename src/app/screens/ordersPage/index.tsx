@@ -1,13 +1,11 @@
 import TabContext from "@mui/lab/TabContext";
-import { Box, Button, Container, Input, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import { SyntheticEvent, useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import PausedOrders from "./PausedOrders";
 import ProcessOrders from "./ProcessOrders";
 import FinishedOrders from "./FinishedOrders";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Divider from "../../components/divider";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import { setPausedOrders, setProcessOrders, setFinishedOrders } from "./slice";
@@ -19,32 +17,42 @@ import { useHistory } from "react-router-dom";
 import "../../../css/order.css";
 import { serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
+import { retrieveFinishedOrders, retrievePausedOrders, retrieveProcessOrders } from "./selector";
+import { useTranslation } from "react-i18next";
 
-/* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
   setPausedOrders: (data: Order[]) => dispatch(setPausedOrders(data)),
   setProcessOrders: (data: Order[]) => dispatch(setProcessOrders(data)),
   setFinishedOrders: (data: Order[]) => dispatch(setFinishedOrders(data)),
-
 });
 
-export default function OrdersPage() {
+const roleLabel = (type: string | undefined, t: (key: string) => string) => {
+  if (type === MemberType.MOBILESHOP) return t("orders.shop");
+  if (type === MemberType.USER) return t("orders.customer");
+  return type || "";
+};
 
-  const { setPausedOrders, setProcessOrders, setFinishedOrders }
-    = actionDispatch(useDispatch());
+export default function OrdersPage() {
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } = actionDispatch(useDispatch());
   const { authMember, orderBuilder } = useGlobals();
   const history = useHistory();
+  const { t } = useTranslation();
   const [value, setValue] = useState("1");
-  const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
+  const [orderInquiry] = useState<OrderInquiry>({
     page: 1,
     limit: 5,
     orderStatus: OrderStatus.PAUSE,
   });
-
-
-  if (!authMember) history.push("/");
+  const pausedOrders = useSelector(retrievePausedOrders);
+  const processOrders = useSelector(retrieveProcessOrders);
+  const finishedOrders = useSelector(retrieveFinishedOrders);
 
   useEffect(() => {
+    if (!authMember) history.replace("/");
+  }, [authMember, history]);
+
+  useEffect(() => {
+    if (!authMember) return;
     const order = new OrderService();
 
     order
@@ -61,114 +69,77 @@ export default function OrdersPage() {
       .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.FINISH })
       .then((data) => setFinishedOrders(data))
       .catch((err) => console.log(err));
+  }, [orderInquiry, orderBuilder, authMember]);
 
-  }, [orderInquiry, orderBuilder]);
-
-
-  /* Handlers */
-  const handleChange = (e: SyntheticEvent, newValue: string) => {
+  const handleChange = (_e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  if (!authMember) return null;
+
+  const count = (list: Order[] | null) => (list?.length ? ` (${list.length})` : "");
+
   return (
     <div className="order-page">
-      <Container className="order-container">
-        <Stack className="order-left">
-          <TabContext value={value}>
-            <Box className={"order-nav-frame"}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider", paddingBottom: 3, paddingLeft: 3 }}>
+      <div className="order-wrap">
+        <header className="order-head">
+          <h1>{t("orders.title")}</h1>
+          <p>{t("orders.lead")}</p>
+        </header>
+
+        <div className="order-layout">
+          <section className="order-main">
+            <TabContext value={value}>
+              <Box className="order-nav-frame">
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label="basic tabs example"
-                  className={"table_list"}
+                  aria-label="Order status"
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  className="order-tabs"
                 >
-                  <Tab label="PAUSED ORDERS" value={"1"} />
-                  <Tab label="PROCESS ORDERS" value={"2"} />
-                  <Tab label="FINISHED ORDERS" value={"3"} />
+                  <Tab label={`${t("orders.toPay")}${count(pausedOrders)}`} value="1" />
+                  <Tab label={`${t("orders.progress")}${count(processOrders)}`} value="2" />
+                  <Tab label={`${t("orders.finished")}${count(finishedOrders)}`} value="3" />
                 </Tabs>
               </Box>
-            </Box>
-            <Stack className={"order-main-content"}>
               <PausedOrders setValue={setValue} />
               <ProcessOrders setValue={setValue} />
               <FinishedOrders />
-            </Stack>
-          </TabContext>
-        </Stack>
+            </TabContext>
+          </section>
 
-        <Stack className="order-right">
-          <Box className="order-info-box">
-            <Box className="member-box">
-              <div className="order-user-img">
-                <img
-                  src={
-                    authMember?.memberImage
-                      ? `${serverApi}/${authMember.memberImage}`
-                      : "/icons/default-user.svg"
-                  }
-                  className="order-user-avatar"
-                />
-              </div>
-              <div className="order-user-icon-box">
-                <img
-                  style={{ objectFit: "cover" }}
-                  src={
-                    authMember?.memberType === MemberType.MOBILESHOP
-                      ? "/icons/favicon.png"
-                      : "/icons/user-badge.svg"
-                  }
-                  className="order-user-prof-img"
-                />
-              </div>
-              <span className="order-user-name">  {authMember?.memberNick} </span>
-              <span className="order-user-prof">  {authMember?.memberType}</span>
-            </Box>
-            <div className="liner"></div>
-            <Stack className="location-box">
-              <img src="/icons/location.svg" className="location-icon" />
-              <Box className="location-name"> {authMember?.memberAddress
-                ? authMember.memberAddress
-                : "Do not exist"}</Box>
-            </Stack>
-          </Box>
-          <Stack className="order-right-bottom">
-            <input
-              type={"text"}
-              name={"cardPeriod"}
-              placeholder={"Card number : 5243 4090 2002 7495"}
-              className={"order-input1"}
-            />
-
-            <Stack className="order-input-stack">
-              <input
-                type={"text"}
-                name={"cardPeriod"}
-                placeholder={"07 / 24"}
-                className={"order-input2"}
+          <aside className="order-side">
+            <div className="order-profile">
+              <img
+                src={
+                  authMember.memberImage
+                    ? `${serverApi}/${authMember.memberImage}`
+                    : "/icons/default-user.svg"
+                }
+                alt=""
+                className="order-avatar"
               />
-              <input
-                type={"text"}
-                name={"cardPeriod"}
-                placeholder={"CVV : 010"}
-                className={"order-input2"}
-              />
-            </Stack>
-
-            <input
-              type={"text"}
-              name={"cardPeriod"}
-              placeholder={"Justin Robertson"}
-              className={"order-input3"}
-            />
-            <Stack className="order-cards">
-              <img src="/icons/western-card.svg" className="img-cards" />
-              <img src="/icons/master-card.svg" className="img-cards" />
-              <img src="/icons/paypal-card.svg" className="img-cards" />
-              <img src="/icons/visa-card.svg" className="img-cards" />
-            </Stack>
-          </Stack>
-        </Stack>
-      </Container>
+              <div>
+                <p className="order-profile-name">{authMember.memberNick}</p>
+                <p className="order-profile-role">{roleLabel(authMember.memberType, t)}</p>
+                <p className="order-profile-address">
+                  {authMember.memberAddress || t("orders.noAddress")}
+                </p>
+              </div>
+            </div>
+            <div className="order-steps">
+              <h2>{t("orders.how")}</h2>
+              <ol>
+                <li><strong>{t("orders.toPay")}.</strong> {t("orders.stepPay")}</li>
+                <li><strong>{t("orders.progress")}.</strong> {t("orders.stepProgress")}</li>
+                <li><strong>{t("orders.finished")}.</strong> {t("orders.stepFinished")}</li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

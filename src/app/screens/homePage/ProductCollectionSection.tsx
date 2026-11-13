@@ -13,6 +13,7 @@ import { CartItem } from "../../../lib/types/search";
 import { retrieveProducts } from "../shopPage/selector";
 import SingleProductGrid from "./SingleProductGrid";
 import { Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 /* REDUX SLIC & SELECTOR */
 const productsRetriever = createSelector(retrieveProducts, (products) => ({ products, }));
 const newProductsRetriever = createSelector(retrieveNewProducts, (newProducts) => ({ newProducts, }));
@@ -24,6 +25,7 @@ interface ProductsProps {
 
 export default function ProductCollectionSection(props: ProductsProps) {
   const { onAdd } = props;
+  const { t } = useTranslation();
   const { products } = useSelector(productsRetriever);
   // HOOKLAR KOMPONENT ICHIDA
   const [modalShow, setModalShow] = useState(false);
@@ -38,8 +40,8 @@ export default function ProductCollectionSection(props: ProductsProps) {
       <div className="container">
         {/* section title */}
         <div className="section-title-8 text-center mb-30 bottom-border">
-          <h2>Products Collection</h2>
-          <p>Marhamat</p>
+          <h2>{t("home.collection")}</h2>
+          <p>{t("home.welcome")}</p>
         </div>
 
         <Tab.Container defaultActiveKey="popularProducts">
@@ -49,17 +51,17 @@ export default function ProductCollectionSection(props: ProductsProps) {
           >
             <Nav.Item>
               <Nav.Link eventKey="newArrival">
-                <h4>New Arrivals</h4>
+                <h4>{t("home.newArrivals")}</h4>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="popularProducts">
-                <h4>Popular products</h4>
+                <h4>{t("home.popular")}</h4>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="saleItems">
-                <h4>Sale Items</h4>
+                <h4>{t("home.sale")}</h4>
               </Nav.Link>
             </Nav.Item>
           </Nav>
@@ -79,7 +81,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
                     );
                   })
                   : (
-                    <Box className="no-data">Product are not available</Box>
+                    <Box className="no-data">{t("product.none")}</Box>
                   )}
               </div>
             </Tab.Pane>
@@ -99,7 +101,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
                     );
                   })
                   : (
-                    <Box className="no-data">Product are not available</Box>
+                    <Box className="no-data">{t("product.none")}</Box>
                   )}
               </div>
 
@@ -118,7 +120,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
                     );
                   })
                   : (
-                    <Box className="no-data">Product are not available</Box>
+                    <Box className="no-data">{t("product.none")}</Box>
                   )}
               </div>
 
@@ -128,7 +130,7 @@ export default function ProductCollectionSection(props: ProductsProps) {
       </div>
 
       <div className="view-more text-center mt-20 toggle-btn6 col-12">
-        <Link className="loadMore6" to="/shop">VIEW MORE PRODUCTS</Link>
+        <Link className="loadMore6" to="/shop">{t("home.viewMore")}</Link>
       </div>
     </div>
   );

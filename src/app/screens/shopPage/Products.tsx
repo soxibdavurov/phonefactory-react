@@ -12,6 +12,8 @@ import { serverApi } from "../../../lib/config";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import ProductsFragment from "./product/ProductsFragment";
+import { useContentLang } from "../../../lib/lang";
+import { useTranslation } from "react-i18next";
 
 /* REDUX SLIC & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -30,6 +32,7 @@ interface ProductsProps {
 export default function Products(props: ProductsProps) {
   const [layout, setLayout] = useState("grid three-column");
   const { onAdd } = props;
+  const { t } = useTranslation();
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
   const [productSearch, setProductSearch] = useState<ProductInquiry>({
@@ -50,11 +53,13 @@ export default function Products(props: ProductsProps) {
 
   const [searchText, setSearchText] = useState<string>("");
   const history = useHistory();
+  const lang = useContentLang();
   useEffect(() => {
     const product = new ProductService();
     product.getProducts(productSearch)
-      .then((data) => setProducts(data)).catch((err) => console.log(err));
-  }, [productSearch]);
+      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .catch(() => setProducts([]));
+  }, [productSearch, lang]);
 
   useEffect(() => {
     if (searchText === "") {
@@ -117,20 +122,20 @@ export default function Products(props: ProductsProps) {
               {/* shop sidebar */}
               <div className="sidebar-style mr-30">
                 <div className="sidebar-widget">
-                  <h4 className="pro-sidebar-title">Search </h4>
+                  <h4 className="pro-sidebar-title">{t("shop.search")}</h4>
                   <div className="pro-sidebar-search mb-50 mt-25">
                     <div className="pro-sidebar-search-form">
                       <input
                         type="search"
                         name="singleResearch"
-                        placeholder="Type here"
+                        placeholder={String(t("shop.typeHere"))}
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") searchProductHandler();
                         }}
                       />
-                      <button type="submit" aria-label="Search" onClick={searchProductHandler}>
+                      <button type="submit" aria-label={String(t("shop.search"))} onClick={searchProductHandler}>
                         <i className="pe-7s-search" />
                       </button>
                     </div>
@@ -138,7 +143,7 @@ export default function Products(props: ProductsProps) {
                 </div>
 
                 <div className="sidebar-widget">
-                  <h4 className="pro-sidebar-title">Categories</h4>
+                  <h4 className="pro-sidebar-title">{t("shop.categories")}</h4>
                   <div className="sidebar-widget-list mt-30">
                     <ul>
                       <li>
@@ -148,7 +153,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler("ALL")}
                           >
                             <span className="checkmark" />
-                            All categories
+                            {t("shop.allCategories")}
                           </button>
                         </div>
                       </li>
@@ -160,7 +165,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler(ProductCollection.SMARTPHONE)}
                           >
                             <span className="checkmark" />
-                            Smartphones
+                            {t("shop.collections.smartphone")}
                           </button>
                         </div>
                       </li>
@@ -172,7 +177,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler(ProductCollection.TARIFF)}
                           >
                             <span className="checkmark" />
-                            Tariff
+                            {t("shop.collections.tariff")}
                           </button>
                         </div>
                       </li>
@@ -184,7 +189,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler(ProductCollection.AUDIO)}
                           >
                             <span className="checkmark" />
-                            Audio
+                            {t("shop.collections.audio")}
                           </button>
                         </div>
                       </li>
@@ -196,7 +201,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler(ProductCollection.CHARGER)}
                           >
                             <span className="checkmark" />
-                            Charger
+                            {t("shop.collections.charger")}
                           </button>
                         </div>
                       </li>
@@ -208,7 +213,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchCollectionHandler(ProductCollection.OTHER)}
                           >
                             <span className="checkmark" />
-                            Services
+                            {t("shop.collections.other")}
                           </button>
                         </div>
                       </li>
@@ -217,7 +222,7 @@ export default function Products(props: ProductsProps) {
                   </div>
                 </div>
                 <div className="sidebar-widget mt-40">
-                  <h4 className="pro-sidebar-title">Brand/Companies</h4>
+                  <h4 className="pro-sidebar-title">{t("shop.brands")}</h4>
                   <div className="sidebar-widget-list mt-20">
                     <ul>
                       <li>
@@ -227,7 +232,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchBrandHandler("ALL")}
                           >
                             <span className="checkmark" />
-                            All
+                            {t("shop.all")}
                           </button>
                         </div>
                       </li>
@@ -299,7 +304,7 @@ export default function Products(props: ProductsProps) {
                             onClick={() => searchBrandHandler(ProductBrand.OTHER)}
                           >
                             <span className="checkmark" />
-                            Other
+                            {t("shop.other")}
                           </button>
                         </div>
                       </li>
@@ -314,12 +319,12 @@ export default function Products(props: ProductsProps) {
                 <div className="select-shoing-wrap">
                   <div className="shop-select">
                     <select value={productSearch.order} onChange={handleOrderChange}>
-                      <option value="createdAt">Sort by Newest</option>
-                      <option value="productPrice">Sort by Price</option>
-                      <option value="productViews">Sort by View</option>
+                      <option value="createdAt">{t("shop.sortNewest")}</option>
+                      <option value="productPrice">{t("shop.sortPrice")}</option>
+                      <option value="productViews">{t("shop.sortViews")}</option>
                     </select>
                   </div>
-                  <p>Showing {products.length} {products.length > 1 ? 'results' : 'result'} of {products.length} </p>
+                  <p>{t("shop.showing", { count: products.length })}</p>
                 </div>
 
                 <div className="shop-tab">
@@ -367,7 +372,7 @@ export default function Products(props: ProductsProps) {
                           paginationHandler(e as any, productSearch.page - 1);
                         }
                       }}
-                      aria-label="Previous"
+                      aria-label={String(t("shop.previous"))}
                     >
                       <i className="fa fa-angle-double-left" />
                     </a>
@@ -406,7 +411,7 @@ export default function Products(props: ProductsProps) {
                           paginationHandler(e as any, productSearch.page + 1);
                         }
                       }}
-                      aria-label="Next"
+                      aria-label={String(t("shop.next"))}
                     >
                       <i className="fa fa-angle-double-right" />
                     </a>
