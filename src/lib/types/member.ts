@@ -1,6 +1,5 @@
 
 import { MemberStatus, MemberType } from "../enums/member.enum";
-import { Request } from "express";
 
 export interface Member {
     _id: string;
